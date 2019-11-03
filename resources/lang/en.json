@@ -1,0 +1,26 @@
+{
+
+    "Login":"Login",
+    "Confirm Password": "Confirm Password",
+    "Please confirm your password before continuing.": "Please confirm your password before continuing.",
+    "Password": "Password",
+    "Forgot Your Password?": "Forgot Your Password?",
+    "Reset Password": "Reset Password",
+    "E-Mail Address": "E-Mail Address",
+    "Send Password Reset Link": "Send Password Reset Link",
+    "Remember Me": "Remember Me",
+    "Register": "Register",
+    "Name": "Name",
+    "Verify Your Email Address": "Verify Your Email Address",
+    "A fresh verification link has been sent to your email address.": "A fresh verification link has been sent to your email address.",
+    "Before proceeding, please check your email for a verification link.": "Before proceeding, please check your email for a verification link.",
+    "If you did not receive the email": "If you did not receive the email",
+    "click here to request another": "click here to request another",
+    "Toggle navigation": "Toggle navigation",
+    "Logout": "Logout",
+    "Dashboard": "Dashboard",
+    "You are logged in!": "You are logged in!"
+
+
+
+}
