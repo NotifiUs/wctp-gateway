@@ -1,11 +1,18 @@
 
-# WCTPd
+# WCTP Gateway
 
-An implementation of a basic WCTP carrier gateway for use with enterprise hosts.
+WCTP Gateway is a Laravel-based web-application that implements a WCTP Carrier Gateway.
+
+It can send and receive messages to any standards compliant WCTP Enterprise Host (like Amtelco's 2-Way WCTP SMS aggregator API )
+and can send messages over carriers like Twilio, ThinQ, and more. 
+
+It can also send/receive JSON Webhooks to implement your own "carrier."
 
 ## Localization
 
-See `resources/lang/en.json` as an example. 
+See `resources/lang/en.json` for (American) English translations. 
+
+Please help translate!
 
 ## Create admin user
 
@@ -20,7 +27,16 @@ Since there is no registration route, you can create the initial user by running
 
 ## Features
 
-### Web Interface
+### Dashboard
+### Analytics
+### Carriers
+### Enterprise Host
+### Sticky Numbers
+### Message Queue
+### System Settings
+### Events
+
+## Notes
 - Security
     - Minimum 8 characters
     - No Maximum
@@ -62,6 +78,10 @@ Since there is no registration route, you can create the initial user by running
 - Unsolicited Messages - wctp-SubmitRequest
 - Server Capabilities - wctp-VersionQuery
 
+> Can we use miscInfo to map to a specific carrier? 
+> Then you can setup multiple integrations, all pointing to the same wctp-gateway.
+> This also requires supporting multiple enterprise hosts? (for sending inbound messages to?)
+
 Not implemented:
 
     wctp-LookupResponse
@@ -82,8 +102,6 @@ Not implemented:
     wctp-LookupSubscriber
 
       
-
-
 ## License
 
 This software is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).

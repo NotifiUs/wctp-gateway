@@ -17,7 +17,7 @@
                 <a href="/home" class="list-group-item list-group-item-action @if( request()->path() == 'home' ) {{ " active " }} @endif">
                     <i class="fas fa-tachometer-alt text-primary"></i> {{ __('Dashboard') }}
                 </a>
-                <a href="/events" class="list-group-item list-group-item-action @if( request()->path() == 'analytics' ) {{ " active " }} @endif">
+                <a href="/analytics" class="list-group-item list-group-item-action @if( request()->path() == 'analytics' ) {{ " active " }} @endif">
                     <i class="fas fa-chart-bar text-primary"></i> {{ __('Analytics') }}
                 </a>
                 <a href="/carriers" class="list-group-item list-group-item-action @if( request()->path() == 'carriers' ) {{ " active " }} @endif">
@@ -25,6 +25,9 @@
                 </a>
                 <a href="/hosts" class="list-group-item list-group-item-action @if( request()->path() == 'hosts' ) {{ " active " }} @endif">
                     <i class="fas fa-cube text-primary"></i> {{ __('Enterprise Host') }}
+                </a>
+                <a href="/sticky" class="list-group-item list-group-item-action @if( request()->path() == 'sticky' ) {{ " active " }} @endif">
+                    <i class="fas fa-magnet text-primary"></i> {{ __('Sticky Numbers') }}
                 </a>
                 <a href="/queue" class="list-group-item list-group-item-action">
                     <i class="fas fa-exchange-alt text-primary"></i> {{ __('Message Queue') }}
@@ -41,22 +44,22 @@
             <h5 class="text-muted-light mt-4">{{ __('System Information') }}</h5>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <i class="fas fa-server text-indigo"></i> {{ __('Server') }} <span class="float-right text-muted">hostname.local</span>
+                    <i class="fas fa-server text-info"></i> {{ __('Server') }} <span class="float-right text-muted">hostname.local</span>
                 </li>
                 <li class="list-group-item">
-                    <i class="fas fa-ethernet text-indigo"></i> {{ __('IP Address') }} <span class="float-right text-muted">192.168.10.10</span>
+                    <i class="fas fa-ethernet text-info"></i> {{ __('IP Address') }} <span class="float-right text-muted">192.168.10.10</span>
                 </li>
                 <li class="list-group-item">
-                    <i class="fas fa-database text-indigo"></i> {{ __('Database') }} <span class="float-right text-muted">{{ mt_rand(5,100) }}MB</span>
+                    <i class="fas fa-database text-info"></i> {{ __('Database') }} <span class="float-right text-muted">{{ mt_rand(5,100) }}MB</span>
                 </li>
                 <li class="list-group-item">
-                    <i class="fas fa-microchip text-indigo"></i> {{ __('CPU') }} <span class="float-right text-muted">{{ mt_rand(2,4) }}.5Ghz</span>
+                    <i class="fas fa-microchip text-info"></i> {{ __('CPU') }} <span class="float-right text-muted">{{ mt_rand(2,4) }}.5Ghz</span>
                 </li>
                 <li class="list-group-item">
-                    <i class="fas fa-memory text-indigo"></i> {{ __('Memory') }} <span class="float-right text-muted">{{ mt_rand(8,8) }}GB</span>
+                    <i class="fas fa-memory text-info"></i> {{ __('Memory') }} <span class="float-right text-muted">{{ mt_rand(8,8) }}GB</span>
                 </li>
                 <li class="list-group-item">
-                    <i class="fas fa-hdd text-indigo"></i> {{ __('Disk Space') }} <span class="float-right text-muted">{{ mt_rand(5,100) }}GB</span>
+                    <i class="fas fa-hdd text-info"></i> {{ __('Disk Space') }} <span class="float-right text-muted">{{ mt_rand(5,100) }}GB</span>
                 </li>
 
             </ul>
@@ -113,15 +116,15 @@
                             <dl class="row">
 
                                 <dt class="col-sm-12 col-md-4">
-                                    WCTP Actor (Acting as)
+                                    {{ __('WCTP Actor (Acting as)') }}
                                 </dt>
                                 <dd class="col-sm-12 col-md-8 text-muted">
-                                    Carrier Gateway
+                                    {{ __('Carrier Gateway') }}
                                 </dd>
 
 
                                 <dt class="col-sm-12 col-md-4">
-                                    Version Support
+                                    {{ __('Version Support') }}
                                 </dt>
                                 <dd class="col-sm-12 col-md-8 text-muted">
                                     <a href="http://www.wctp.org/release/wctp-v1r3_update1.pdf">
@@ -131,28 +134,28 @@
 
 
                                 <dt class="col-sm-12 col-md-4">
-                                    Carrier Gateway Endpoint
+                                    {{ __('Carrier Gateway Endpoint') }}
                                 </dt>
                                 <dd class="col-sm-12 col-md-8 text-muted">
                                     https://<span class="font-weight-bold">gateway.test/wctp</span>
                                 </dd>
 
                                 <dt class="col-sm-12 col-md-4">
-                                    Enterprise Host Endpoint
+                                    {{ __('Enterprise Host Endpoint') }}
                                 </dt>
                                 <dd class="col-sm-12 col-md-8 text-muted">
                                     https://<span class="font-weight-bold">enterprise.test/wctp</span>
                                 </dd>
 
                                 <dt class="col-sm-12 col-md-4">
-                                    Security Information
+                                    {{ __('Security Information') }}
                                 </dt>
                                 <dd class="col-sm-12 col-md-8 text-muted">
-                                    <i class="fas fa-lock"></i> TLS Required &middot; <i class="fas fa-user-lock"></i> Password Protected
+                                    <i class="fas fa-lock"></i> {{ __('TLS Required') }} &middot; <i class="fas fa-user-lock"></i> {{__('securityCode Required')}}
                                 </dd>
 
                                 <dt class="col-sm-12 col-md-4">
-                                    Network Ports
+                                    {{ __('Network Ports') }}
                                 </dt>
                                 <dd class="col-sm-12 col-md-8 text-muted">
                                      443/TCP
@@ -161,7 +164,7 @@
                             </dl>
 
                             <small class="text-muted">
-                                <i class="fas fa-question-circle"></i> Learn how to <a href="#">configure</a> your WCTP integration
+                                <i class="fas fa-question-circle"></i> {{ __('Learn how to') }} <a href="#">{{ __('configure')}}</a> {{ __('your WCTP integration') }}
                             </small>
                         </div>
                     </div>

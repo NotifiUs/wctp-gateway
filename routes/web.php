@@ -16,3 +16,10 @@ Auth::routes(['register' => false]);
 Route::get('/', 'HomeController@redirect');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/analytics', 'UnderConstructionController@index');
+Route::get('/carriers', 'UnderConstructionController@index');
+Route::get('/hosts', 'UnderConstructionController@index');
+Route::get('/events', 'UnderConstructionController@index');
+Route::get('/sticky', 'UnderConstructionController@index');
+Route::get('/system', 'UnderConstructionController@index');

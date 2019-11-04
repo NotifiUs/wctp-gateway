@@ -27,18 +27,18 @@
                 @else
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                            <i class="fas fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                            <a class="dropdown-item" href="/account">
-                                <i class="fas fa-user-circle text-muted"></i> Account
+                            <a class="dropdown-item text-dark" href="/account">
+                                <i class="fas fa-user-cog text-muted"></i> {{ __('Account') }}
                             </a>
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item text-dark" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                 <i class="fas fa-power-off text-muted"></i> {{ __('Logout') }}
