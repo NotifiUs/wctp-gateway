@@ -11,11 +11,17 @@
 |
 */
 
-Auth::routes(['register' => false]);
+Auth::routes(['register' => false, 'verify' => true ]);
 
 Route::get('/', 'HomeController@redirect');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::namespace('Account')->group(function () {
+    Route::get('/account', 'ShowAccount');
+    Route::get('/account/verify-email', 'VerifyEmail')->middleware('verified');
+});
+
 
 Route::get('/analytics', 'UnderConstructionController@index');
 Route::get('/carriers', 'UnderConstructionController@index');
