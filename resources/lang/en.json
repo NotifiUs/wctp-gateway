@@ -19,8 +19,17 @@
     "Toggle navigation": "Toggle navigation",
     "Logout": "Logout",
     "Dashboard": "Dashboard",
-    "You are logged in!": "You are logged in!"
-
-
-
+    "You are logged in!": "You are logged in!",
+    "Navigation": "Navigation",
+    "Quick Glance": "Quick Glance",
+    "Queue Status": "Queue Status",
+    "Running": "Running",
+    "Active Carrier": "Active Carrier",
+    "Enterprise Host": "Enterprise Host",
+    "System Configuration": "System Configuration",
+    "Message Queue": "Message Queue",
+    "Carrier Setup": "Carrier Setup",
+    "Description": "Description",
+    "Timestamp": "Timestamp",
+    "Source": "Source"
 }

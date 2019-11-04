@@ -1,4 +1,16 @@
 
 
-.card{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
+.card, .list-group, .table{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
 .card-body{ margin-top: 2em; margin-bottom: 2em;}
+
+.list-group-item.active {
+    z-index: 2;
+    color: #343a40;
+    background-color: rgba(0,0,0,.025);
+    border-color: rgba(0,0,0,.07)
+}
+
+.text-indigo{ color: $indigo; }
+a.text-indigo:focus{ color: #505ca4; }
+a.text-indigo:hover{ color: #505ca4; }
+

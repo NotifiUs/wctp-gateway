@@ -7,6 +7,13 @@ An implementation of a basic WCTP carrier gateway for use with enterprise hosts.
 
 See `resources/lang/en.json` as an example. 
 
+## Create admin user
+
+Since there is no registration route, you can create the initial user by running the following command:
+
+    php artisan make:admin
+    
+   
 ## Log out other sessions
 
     Auth::logoutOtherDevices($password);

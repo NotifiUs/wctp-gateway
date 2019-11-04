@@ -22,6 +22,7 @@ require('./bootstrap');
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 
+require('@fortawesome/fontawesome-free/js/fontawesome')
 require('@fortawesome/fontawesome-free/js/solid');
 
 /**
