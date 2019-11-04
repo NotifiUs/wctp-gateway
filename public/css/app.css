@@ -11118,6 +11118,10 @@ a.text-dark:focus {
   border-color: rgba(0, 0, 0, 0.07);
 }
 
+.text-muted-light {
+  color: #adb5bd;
+}
+
 .text-indigo {
   color: #6574cd;
 }

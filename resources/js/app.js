@@ -24,7 +24,7 @@ require('./bootstrap');
 
 require('@fortawesome/fontawesome-free/js/fontawesome')
 require('@fortawesome/fontawesome-free/js/solid');
-
+require('@fortawesome/fontawesome-free/js/brands');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
