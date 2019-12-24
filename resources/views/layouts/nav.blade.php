@@ -30,7 +30,7 @@
                             <i class="fas fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
 
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-right shadow-sm" aria-labelledby="navbarDropdown">
 
                             <a class="dropdown-item text-dark" href="/account">
                                 <i class="fas fa-user-cog text-muted"></i> {{ __('Account') }}

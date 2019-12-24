@@ -8,6 +8,10 @@ and can send messages over carriers like Twilio, ThinQ, and more.
 
 It can also send/receive JSON Webhooks to implement your own "carrier."
 
+## Requirements
+
+Some of the PHP functions used are only available on linux. 
+
 ## Localization
 
 See `resources/lang/en.json` for (American) English translations. 
@@ -28,8 +32,19 @@ Since there is no registration route, you can create the initial user by running
 ## Features
 
 ### Dashboard
+
+#### Server Statistics
+
+These values are updated hourly in redis. 
+
 ### Analytics
 ### Carriers
+Twilio
+- Nickname?
+- Account SID
+- Auth Token
+- Use all numbers or select numbers?
+
 ### Enterprise Host
 ### Sticky Numbers
 ### Message Queue
