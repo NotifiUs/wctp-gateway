@@ -5,6 +5,11 @@
 @push('scripts')
 @endpush
 
+@php
+
+    $messageCount = number_format( mt_rand(0, 25000) );
+    $errorCount = number_format( mt_rand( 0, 1000) );
+@endphp
 @section('content')
     <h5 class="text-muted-light mt-2 mt-md-0">{{ __('Quick Glance') }}</h5>
     <div class="row justify-content-center mb-2">
@@ -27,18 +32,18 @@
         <div class="col-md-4">
             <div class="card mb-2">
                 <div class="card-body text-center my-0">
-                    <i class="fas fa-3x fa-sim-card text-primary"></i>
-                    <h5 class="text-muted mt-2 mb-0">{{__('Active Carrier')}}</h5>
-                    <a href="/carriers" class="text-primary">{{ __('Twilio') }}</a>
+                    <i class="fas fa-3x fa-comments text-info"></i>
+                    <h5 class="text-muted mt-2 mb-0">{{ $messageCount }}</h5>
+                    <a href="/analytics" class="text-info">Recent Messages</a>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card mb-2">
                 <div class="card-body text-center my-0">
-                    <i class="fas fa-3x fa-cube text-primary"></i>
-                    <h5 class="text-muted mt-2 mb-0">{{ __('Enterprise Host') }}</h5>
-                    <a href="/hosts" class="text-primary">NotifiUs</a>
+                    <i class="fas fa-3x fa-dumpster-fire text-danger"></i>
+                    <h5 class="text-muted mt-2 mb-0">{{ $errorCount }}</h5>
+                    <a href="/errors" class="text-danger">Recent Errors</a>
                 </div>
             </div>
         </div>
@@ -51,7 +56,7 @@
 
         <div class="col">
             <div class="card mb-2">
-                <div class="card-body my-0">
+                <div class="card-body my-0 border-bottom">
                     <dl class="row">
 
                         <dt class="col-sm-12 col-md-4">
@@ -70,6 +75,7 @@
                                 WCTP v1r3 Update 1 <small><i class="fas fa-external-link-alt"></i></small>
                             </a>
                         </dd>
+                   
 
 
                         <dt class="col-sm-12 col-md-4">
@@ -78,27 +84,33 @@
                         <dd class="col-sm-12 col-md-8 text-muted">
                             https://<span class="font-weight-bold">gateway.test/wctp</span>
                         </dd>
+                        <dt class="col-sm-12 col-md-4">
+                            {{ __('Network Ports') }}
+                        </dt>
+                        <dd class="col-sm-12 col-md-8 text-muted">
+                            <strong>443</strong> &frasl; <span class="text-muted-light">TCP</span>
+                        </dd>
 
+                        <!-- Need to support more than 1 endpoint -->
+                        <!--
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Enterprise Host Endpoint') }}
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
                             https://<span class="font-weight-bold">enterprise.test/wctp</span>
                         </dd>
+                        -->
 
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Security Information') }}
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
-                            <i class="fas fa-lock"></i> {{ __('TLS Required') }} &middot; <i class="fas fa-user-lock"></i> {{__('securityCode Required')}}
+                            <span class="text-success"><i class="fas fa-lock"></i> {{ __('SSL/TLS required') }}</span>
+                            <br>
+                            <span class="text-indigo"><i class="fas fa-shield-alt"></i> <code class="text-indigo font-weight-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
                         </dd>
 
-                        <dt class="col-sm-12 col-md-4">
-                            {{ __('Network Ports') }}
-                        </dt>
-                        <dd class="col-sm-12 col-md-8 text-muted">
-                             443/TCP
-                        </dd>
+
 
                     </dl>
 

@@ -11,12 +11,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-12">
+            <h5 class="text-muted-light">{{ __('Email Verification') }}</h5>
             <div class="card">
-                <div class="card-header text-muted">
-                   {{ __('Verify Your Email Address') }}
-                </div>
-
                 <div class="card-body">
                     @if (session('resent'))
                         <div class="alert alert-success" role="alert">
@@ -24,7 +21,10 @@
                         </div>
                     @endif
 
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
+                    <strong class="text-dark">
+                        {{ __('Before proceeding, please check your email for a verification link.') }}
+                    </strong>
+                        <br><br>
                     {{ __('If you did not receive the email') }},
                     <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                         @csrf

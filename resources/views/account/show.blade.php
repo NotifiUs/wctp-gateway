@@ -13,7 +13,7 @@
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <h5 class="text-muted-light mt-2">{{ __('Account Actions') }}</h5>
-                <ul class="list-group">
+                <ul class="list-group rounded">
                     <a class="list-group-item list-group-item-action" href="#">
                         <i class="fas fa-user text-primary"></i> {{ __('Change your name') }}
                     </a>
@@ -47,9 +47,11 @@
                 <h5 class="text-muted-light mt-2">{{ __('Account Profile') }}</h5>
                 <div class="card">
                     <div class="card-body text-center">
-                        <img alt="{{ $user->name }}" title="Gravatar for {{ $user->name }}" class="rounded-circle img-thumbnail shadow-sm" src="https://www.gravatar.com/avatar/{{ md5( $user->email )  }}" />
+                        <img alt="{{ $user->name }}" title="Gravatar for {{ $user->name }}" class="rounded-circle img-thumbnail shadow-sm" src="https://www.gravatar.com/avatar/{{ md5( $user->email )  }}?d=mp" />
                         <h3 class="display-4 text-primary mb-3">
-                            {{ $user->name }}
+                            <small>
+                                {{ $user->name }}
+                            </small>
                         </h3>
                         <h5 class="text-muted">
                             <strong class="text-dark"><i class="fas fa-envelope text-muted"></i></strong> {{ $user->email }}
@@ -57,7 +59,7 @@
                                 <i title="Verified Email" class="fas fa-check-circle text-success"></i>
                             @else
                                 <a class="btn-link" href="/account/verify-email">
-                                    <i title="Verify your email" class="fas fa-exclamation-circle text-muted-light"></i>
+                                    <i title="Verify your email" class="fas fa-exclamation-circle text-danger"></i>
                                 </a>
                             @endif
                         </h5>

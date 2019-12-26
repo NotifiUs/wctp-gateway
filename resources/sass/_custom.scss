@@ -1,18 +1,23 @@
 
 
-.card, .list-group, .table{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
-.card-body{ margin-top: 2em; margin-bottom: 2em;}
+.card, .list-group, .table, .alert{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
+.card-body{ margin-top: 3.5em; margin-bottom: 2em; background: transparent;}
+.card-header{ background-color: transparent; border-bottom: none; font-weight: bolder; }
+.card-footer{ background-color: transparent; border-top: none; }
+.navbar { border-bottom: 1px solid rgba(0,0,0,.18); }
+.alert { font-style: italic;  }
+
+label{ font-weight:bold; color: $gray-600; }
 
 .list-group-item.active {
     z-index: 2;
     color: #343a40;
-    background-color: rgba(0,0,0,.025);
-    border-color: rgba(0,0,0,.07)
+    background-color: #EDF2F7; //rgba(0,0,0,.005);
+    border-color:rgba(0,0,0,0.075);//border-color: rgba(0,0,0,.005);
+    font-weight: bold;
 }
 
-.text-muted-light{
-    color: $gray-500;
-}
+.text-muted-light{ color: $gray-500; }
 
 .text-indigo{ color: $indigo; }
 a.text-indigo:focus{ color: #505ca4; }

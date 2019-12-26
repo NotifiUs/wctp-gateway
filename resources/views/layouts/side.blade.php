@@ -1,6 +1,6 @@
 
     <h5 class="text-muted-light">{{ __('Navigation') }}</h5>
-    <ul class="list-group">
+    <ul class="list-group rounded">
         <a href="/home" class="list-group-item list-group-item-action @if( request()->path() == 'home' ) {{ " active " }} @endif">
             <i class="fas fa-tachometer-alt text-primary"></i> {{ __('Dashboard') }}
         </a>
@@ -8,16 +8,19 @@
             <i class="fas fa-sim-card text-primary"></i> {{ __('Carriers') }}
         </a>
         <a href="/hosts" class="list-group-item list-group-item-action @if( request()->path() == 'hosts' ) {{ " active " }} @endif">
-            <i class="fas fa-cube text-primary"></i> {{ __('Enterprise Host') }}
+            <i class="fas fa-cube text-primary"></i> {{ __('Enterprise Hosts') }}
         </a>
+        <!-- To simply, let's remove this for now. Revisit and remove this when content! -->
+        <!--
         <a href="/queue" class="list-group-item list-group-item-action">
             <i class="fas fa-exchange-alt text-primary"></i> {{ __('Message Queue') }}
         </a>
+        -->
     </ul>
 
 
     <h5 class="text-muted-light mt-4">{{ __('Under Construction') }}</h5>
-    <ul class="list-group">
+    <ul class="list-group rounded">
         <a href="/analytics" class="list-group-item list-group-item-action @if( request()->path() == 'analytics' ) {{ " active " }} @endif">
             <i class="fas fa-chart-bar text-danger"></i> {{ __('Analytics') }}
         </a>
@@ -35,7 +38,7 @@
 
     @if( isset( $server ) )
     <h5 class="text-muted-light mt-4">{{ __('System Information') }}</h5>
-    <ul class="list-group">
+    <ul class="list-group rounded">
         <li class="list-group-item">
             <i class="fas fa-server text-info"></i> {{ __('Server') }} <small class="float-right text-muted">{{ $server['hostname'] }}</small>
         </li>

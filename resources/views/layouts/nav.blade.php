@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md  navbar-light bg-white shadow-sm" style="border: 1px solid rgba(0,0,0,.125);">
+<nav class="navbar navbar-expand-sm  navbar-light bg-white shadow-sm">
     <div class="container">
         @include('layouts.brand')
 
@@ -17,7 +17,7 @@
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link font-weight-bold" href="{{ route('login') }}">{{ __('Login') }}</a>
                     </li>
                     @if (Route::has('register'))
                         <li class="nav-item">

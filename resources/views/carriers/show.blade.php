@@ -100,6 +100,7 @@
             </div>
         </div>
 
+        <!--
         <div class="col-md-6">
             <div class="card mb-4">
                 <h5 class="card-header bg-transparent text-center">
@@ -125,6 +126,26 @@
                 </div>
             </div>
         </div>
+        -->
+
+        <div class="col-md-6">
+            <div class="card mb-4 border-muted bg-light py-4">
+
+                <div class="card-body text-muted py-5 my-0 text-center">
+                    <a href="#">
+                        <i class="fas fa-3x fa-plus text-muted-light"></i>
+                    </a>
+
+                    <h5 class="my-3">
+                        <a href="#" class="text-muted">
+                            {{ __('Add Carrier') }}
+                        </a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!--
         <div class="col-md-6">
             <div class="card mb-4">
                 <h5 class="card-header bg-transparent text-center">
@@ -152,7 +173,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div>-->
 
 
     </div>
