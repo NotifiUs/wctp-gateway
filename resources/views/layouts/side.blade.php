@@ -5,7 +5,10 @@
             <i class="fas fa-tachometer-alt text-primary"></i> {{ __('Dashboard') }}
         </a>
         <a href="/carriers" class="list-group-item list-group-item-action @if( request()->path() == 'carriers' ) {{ " active " }} @endif">
-            <i class="fas fa-sim-card text-primary"></i> {{ __('Carriers') }}
+            <i class="fas fa-sim-card text-primary"></i> {{ __('Carrier APIs') }}
+        </a>
+        <a href="/numbers" class="list-group-item list-group-item-action @if( request()->path() == 'numbers' ) {{ " active " }} @endif">
+            <i class="fas fa-hashtag text-primary"></i> {{ __('Phone Numbers') }}
         </a>
         <a href="/hosts" class="list-group-item list-group-item-action @if( request()->path() == 'hosts' ) {{ " active " }} @endif">
             <i class="fas fa-cube text-primary"></i> {{ __('Enterprise Hosts') }}

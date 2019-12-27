@@ -34,6 +34,10 @@ Route::namespace('Carriers')->group(function () {
     Route::post('/carriers/verify', 'VerifyCarrier');
 });
 
+Route::namespace('Numbers')->group(function(){
+   Route::get('/numbers', 'ShowNumbers');
+});
+
 Route::namespace('EnterpriseHosts')->group(function(){
     Route::get('/hosts', 'ShowHosts');
     Route::post('/hosts', 'CreateHost');
