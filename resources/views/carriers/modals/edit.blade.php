@@ -13,20 +13,20 @@
                     <div class="form-group">
                         <label>Name</label>
                         <input type="text" required name="name" class="form-control" value="{{ $carrier->name }}">
-                        <small class="form-text text-muted">A friendly name to refer to this host.</small>
+                        <small class="form-text text-muted">A friendly name to refer to this carrier instance.</small>
                     </div>
                     <div class="form-group">
-                        <label>Url</label>
-                        <input type="text" required name="url" class="form-control" value="{{ $carrier->url }}">
+                        <label>Priority</label>
+                        <input type="text" required name="priority" class="form-control" value="{{ $carrier->priority }}">
                         <small class="form-text text-muted">
-                            The WCTP endpoint for this host. Must be SSL/TLS protected.<br>
-                            e.g. <i>https://example.com/wctp</i>
+                            The general system priority for this carrier.
+                            Like DNS MX records, lower values are higher priority. (10, 20, 30, etc.)
                         </small>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" role="button" class="btn btn-info">Update Host</button>
+                    <button type="submit" role="button" class="btn btn-info">Update Carrier</button>
                 </div>
             </form>
         </div>

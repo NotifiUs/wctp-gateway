@@ -9,23 +9,25 @@
             </div>
             <div class="modal-body">
                 <dl class="row">
-                    <dt class="text-dark col-4 text-center">
-                        @if( $carrier->api == 'twilio' )
-                            AccountID
-                        @else
-                            Account
-                        @endif
-                    </dt>
-                    <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ $carrier->account }}</code></dd>
 
-                    <dt class="text-dark col-4 text-center">
-                        @if( $carrier->api == 'twilio' )
-                            AuthToken
-                        @else
-                            Secret
-                        @endif
-                    </dt>
-                    <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ decrypt( $carrier->secret) }}</code></dd>
+                    @if( $carrier->api == 'twilio' )
+                        <dt class="text-dark col-4 text-center">AccountID</dt>
+                        <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ $carrier->twilio_account_sid}}</code></dd>
+
+                        <dt class="text-dark col-4 text-center">AuthToken </dt>
+                        <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ decrypt( $carrier->twilio_auth_token) }}</code></dd>
+
+                    @else
+                        <dt class="text-dark col-4 text-center">Account ID</dt>
+                        <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ $carrier->thinq_account_id }}</code></dd>
+
+                        <dt class="text-dark col-4 text-center">API Username </dt>
+                        <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ $carrier->thinq_api_username }}</code></dd>
+
+                        <dt class="text-dark col-4 text-center">API Token</dt>
+                        <dd class="col-8 text-left"><code class="text-muted bg-light border-light">{{ decrypt(  $carrier->thinq_api_token) }}</code></dd>
+
+                    @endif
                 </dl>
 
             </div>

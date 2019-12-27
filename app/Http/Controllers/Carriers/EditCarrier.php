@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Carriers;
 
 use Exception;
-use App\EnterpriseHost;
+use App\Carrier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,20 +14,20 @@ class EditCarrier extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, EnterpriseHost $host )
+    public function __invoke( Request $request, Carrier $carrier )
     {
         $this->validate( $request, [
-            'name' => "required|string|min:2|max:255|unique:enterprise_hosts,name,{$host->id}",
-            'url' => 'required|url|starts_with:https',
+            'name' => "required|string|min:2|max:255|unique:carriers,name,{$carrier->id}",
+            'priority' => 'required|integer',
         ]);
 
-        $host->name = $request->input('name');
-        $host->url = $request->input('url');
+        $carrier->name = $request->input('name');
+        $carrier->priority = $request->input('priority');
 
-        try{ $host->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to update host')]); }
+        try{ $carrier->save(); }catch( Exception $e ){ return redirect()->back()->withInput()->withErrors([__('Unable to update carrier')]); }
 
-        $statusHtml = "Enterprise host updated!";
-        return redirect()->back()
+        $statusHtml = "Carrier successfully updated!";
+        return redirect()->to('/carriers')
             ->with('status', $statusHtml);
     }
 }

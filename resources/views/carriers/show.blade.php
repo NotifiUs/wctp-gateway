@@ -28,8 +28,15 @@
 
                                 <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editCarrierModal{{ $carrier->id }}">{{ __('Edit Settings') }}</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#disableCarrierModal{{ $carrier->id }}">{{ __('Disable Carrier') }}</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#priorityCarrierModal{{ $carrier->id }}">{{ __('Change Priority') }}</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#credentialsCarrierModal{{ $carrier->id }}">{{ __('View Credentials') }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    @if( $carrier->enabled )
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#disableCarrierModal{{ $carrier->id }}">{{ __('Disable Carrier') }}</a>
+                                    @else
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#enableCarrierModal{{ $carrier->id }}">{{ __('Enable Carrier') }}</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#deleteCarrierModal{{ $carrier->id }}">{{ __('Delete Carrier') }}</a>
+                                    @endif
                                 </div>
                             </div>
                         </h5>
@@ -52,7 +59,7 @@
                                 <small>
                                     <strong class="text-muted">{{ $carrier->name }}</strong>
                                     <br>
-                                    <code class="bg-light text-dark p-1">{{ $carrier->account }}</code>
+                                    <code class="bg-light text-dark p-1">{{ $carrier->twilio_account_sid ?? $carrier->thinq_account_id }}</code>
                                 </small>
                             </p>
                         </div>
@@ -79,18 +86,18 @@
                     </div>
                 </div>
 
-                @include('enterprise_hosts.modals.create')
-                @include('enterprise_hosts.modals.credentials')
-                @include('enterprise_hosts.modals.delete')
-                @include('enterprise_hosts.modals.disable')
-                @include('enterprise_hosts.modals.edit')
-                @include('enterprise_hosts.modals.enable')
+                @include('carriers.modals.create')
+                @include('carriers.modals.credentials')
+                @include('carriers.modals.delete')
+                @include('carriers.modals.disable')
+                @include('carriers.modals.edit')
+                @include('carriers.modals.enable')
 
             @endforeach
         @endif
 
         <div class="col-md-6">
-            <div class="card mb-4 border-muted bg-light pt-5 pb-4">
+            <div class="card mb-4 border-muted bg-light py-5">
 
                 <div class="card-body text-muted py-5 my-0 text-center">
                     <a href="#" data-toggle="modal" data-target="#verifyCarrierModal">

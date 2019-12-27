@@ -11,6 +11,7 @@
         "php": "^7.2",
         "edwindayot/faker-provider-animals": "^1.0",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^6.5",
         "jzonta/faker-restaurant": "^1.1",
         "laravel/framework": "^6.2",
         "laravel/horizon": "^3.4",
@@ -18,7 +19,7 @@
         "laravel/vapor-cli": "^1.4",
         "laravel/vapor-core": "^2.2",
         "predis/predis": "^1.1",
-        "twilio/sdk": "^5.39"
+        "twilio/sdk": "^5.41"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

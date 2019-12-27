@@ -7,17 +7,17 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/hosts/{{ $carrier->id }}/delete" role="form">
+            <form method="POST" action="/carriers/{{ $carrier->id }}/delete" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
                     <h3>Are you sure you want to <strong class="text-danger">delete</strong> this Carrier?</h3>
                     <p class="text-muted">
-                        The host will be permanently deleted and you won't be able to retrieve any of the settings!
+                        The carrier will be permanently deleted and you won't be able to retrieve any of the settings.
                     </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete Host (forever)</button>
+                    <button type="submit" class="btn btn-danger">Delete Carrier (forever)</button>
                 </div>
             </form>
         </div>

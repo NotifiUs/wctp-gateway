@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Carriers;
 
 use Exception;
-use App\Carrier;
+use Twilio\Rest\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -24,20 +24,22 @@ class VerifyCarrier extends Controller
             'thinq_api_token' => 'required_with:thinq_api_username,thinq_account_id',
         ]);
 
-        if ($request->input('twilio_account_sid') && !$request->input('thinq_account_id'))
+        if( strlen( $request->input('twilio_account_sid')))
         {
-            //twilio account
-            dd( 'twilio!');
+            try {
+                $twilio = new Client( $request->input('twilio_account_sid'), $request->input('twilio_auth_token'));
+                $account = $twilio->api->v2010->accounts($request->input('twilio_account_sid'))->fetch();
+            }
+            catch( Exception $e )
+            {
+                return redirect()->to('/carriers')->withErrors(['Unable to connect to Twilio account']);
+            }
+
+            return view('carriers.twilio-verify')->with('account', $account->toArray() );
+
         }
-        elseif ($request->input('thinq_account_id') && !$request->input('twilio_account_sid'))
-        {
-            //thinq account
-            dd( 'thinq!');
-        }
-        else
-        {
-            return redirect()->back()->withErrors(['Unable to validate which carrier you intended to use.']);
-        }
+
+        return redirect()->to('/carriers');
 
     }
 }

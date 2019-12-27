@@ -7,17 +7,17 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/hosts/{{ $carrier->id }}/disable" role="form">
+            <form method="POST" action="/carriers/{{ $carrier->id }}/disable" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
                     <h3>Are you sure you want to <strong class="text-danger">disable</strong> this Carrier?</h3>
                     <p class="text-muted">
-                        This will disable processing of inbound and outbound messages for this host until re-enabled.
+                        This will disable processing of inbound and outbound messages for this carrier until re-enabled.
                     </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Disable Host</button>
+                    <button type="submit" class="btn btn-danger">Disable Carrier</button>
                 </div>
             </form>
         </div>
