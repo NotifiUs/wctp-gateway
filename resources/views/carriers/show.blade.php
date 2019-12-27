@@ -86,7 +86,6 @@
                     </div>
                 </div>
 
-                @include('carriers.modals.create')
                 @include('carriers.modals.credentials')
                 @include('carriers.modals.delete')
                 @include('carriers.modals.disable')
@@ -114,7 +113,6 @@
         </div>
 
         @include('carriers.modals.verify')
-        @include('carriers.modals.create')
 
     </div>
 
