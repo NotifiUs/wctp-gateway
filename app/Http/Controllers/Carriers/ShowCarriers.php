@@ -15,7 +15,7 @@ class ShowCarriers extends Controller
 
     public function __invoke(Request $request)
     {
-        $carriers = Carrier::all()->sortBy('enabled', null, true)->sortBy('priority');
+        $carriers = Carrier::all()->sortBy('priority')->sortBy('enabled', null, true);
 
         return view('carriers.show')->with('carriers', $carriers );
     }

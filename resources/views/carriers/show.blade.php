@@ -59,7 +59,7 @@
                                 <small>
                                     <strong class="text-muted">{{ $carrier->name }}</strong>
                                     <br>
-                                    <code class="bg-light text-dark p-1">{{ $carrier->twilio_account_sid ?? $carrier->thinq_account_id }}</code>
+                                    <code class="bg-light text-dark p-1">{{ $carrier->twilio_account_sid ?? ( $carrier->thinq_account_id . " / " . $carrier->thinq_api_username ) }}</code>
                                 </small>
                             </p>
                         </div>

@@ -19,7 +19,7 @@ class CreateCarrier extends Controller
         $this->validate( $request, [
             'name' => 'required|string|min:2|max:255|unique:carriers,name',
             'api' => 'required|in:twilio,thinq',
-            'priority' => 'required|integer',
+            'priority' => 'required|integer|unique:carriers,priority',
             'twilio_account_sid' => 'required_without:thinq_account_id',
             'twilio_auth_token' => 'required_with:twilio_account_sid',
             'thinq_account_id' => 'required_without:twilio_account_sid',
@@ -38,7 +38,26 @@ class CreateCarrier extends Controller
             $carrier->twilio_auth_token = encrypt( $request->input('twilio_auth_token') );
             $carrier->api = $request->input('api');
 
-            try{ $carrier->save(); }catch( Exception $e ){ return redirect()->back()->withInput()->withErrors([__('Unable to save carrier')]); }
+            try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier')]); }
+
+            $statusHtml = "Carrier successfully created!";
+            return redirect()->to('/carriers')
+                ->with('status', $statusHtml);
+
+        }
+        elseif( $request->input('api') == 'thinq')
+        {
+            $carrier = new Carrier;
+            $carrier->name = $request->input('name');
+            $carrier->enabled = 0;
+            $carrier->beta = 1;
+            $carrier->priority = $request->input('priority');
+            $carrier->thinq_account_id = $request->input('thinq_account_id');
+            $carrier->thinq_api_username = $request->input('thinq_api_username');
+            $carrier->thinq_api_token = encrypt( $request->input('thinq_api_token') );
+            $carrier->api = $request->input('api');
+
+            try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier'), $e->getMessage()]); }
 
             $statusHtml = "Carrier successfully created!";
             return redirect()->to('/carriers')

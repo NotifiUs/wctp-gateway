@@ -18,7 +18,7 @@ class EditCarrier extends Controller
     {
         $this->validate( $request, [
             'name' => "required|string|min:2|max:255|unique:carriers,name,{$carrier->id}",
-            'priority' => 'required|integer',
+            'priority' => "required|integer|unique:carriers,priority,{$carrier->id}",
         ]);
 
         $carrier->name = $request->input('name');
