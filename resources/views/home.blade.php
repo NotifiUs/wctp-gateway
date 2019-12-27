@@ -75,7 +75,7 @@
                                 WCTP v1r3 Update 1 <small><i class="fas fa-external-link-alt"></i></small>
                             </a>
                         </dd>
-                   
+
 
 
                         <dt class="col-sm-12 col-md-4">

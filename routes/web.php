@@ -26,10 +26,21 @@ Route::namespace('Account')->group(function () {
 
 Route::namespace('Carriers')->group(function () {
     Route::get('/carriers', 'ShowCarriers');
+    Route::post('/carriers', 'CreateCarrier');
+    Route::post('/carriers/{carrier}/edit', 'EditCarrier');
+    Route::post('/carriers/{carrier}/enable', 'EnableCarrier');
+    Route::post('/carriers/{carrier}/disable', 'DisableCarrier');
+    Route::post('/carriers/{carrier}/delete', 'DeleteCarrier');
+    Route::post('/carriers/verify', 'VerifyCarrier');
 });
 
 Route::namespace('EnterpriseHosts')->group(function(){
     Route::get('/hosts', 'ShowHosts');
+    Route::post('/hosts', 'CreateHost');
+    Route::post('/hosts/{host}/edit', 'EditHost');
+    Route::post('/hosts/{host}/enable', 'EnableHost');
+    Route::post('/hosts/{host}/disable', 'DisableHost');
+    Route::post('/hosts/{host}/delete', 'DeleteHost');
 });
 
 Route::namespace('WCTP')->group(function(){

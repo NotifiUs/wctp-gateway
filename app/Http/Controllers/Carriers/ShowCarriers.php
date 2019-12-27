@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Carriers;
 
+use App\Carrier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -12,14 +13,10 @@ class ShowCarriers extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke(Request $request)
     {
-        return view('carriers.show');
+        $carriers = Carrier::all()->sortBy('enabled', null, true)->sortBy('priority');
+
+        return view('carriers.show')->with('carriers', $carriers );
     }
 }
