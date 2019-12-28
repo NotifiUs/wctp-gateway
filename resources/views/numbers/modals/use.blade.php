@@ -13,7 +13,8 @@
                     <input type="hidden" name="e164" value="{{ $number['number'] }}">
                     <input type="hidden" name="identifier" value="{{ $number['id'] }}">
                     <input type="hidden" name="carrier_id" value="{{ $number['carrier']->id }}">
-                    <h3>Are you sure you want to use this number? <strong class="text-danger">{{ $number['number'] }}</strong></h3>
+                    <h3>Are you sure you want to use this number?</h3>
+                    <h4><strong class="text-danger">{{ $number['number'] }}</strong></h4>
                     <p class="text-muted">
                         Any existing SMS settings for this number will be removed completely.
                     </p>

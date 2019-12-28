@@ -43,7 +43,7 @@
     <h5 class="text-muted-light mt-4">{{ __('System Information') }}</h5>
     <ul class="list-group rounded">
         <li class="list-group-item">
-            <i class="fas fa-server text-info"></i> {{ __('Server') }} <small class="float-right text-muted">{{ $server['hostname'] }}</small>
+            <i class="fas fa-server text-info"></i> {{ __('Server') }} <small class="float-right font-weight-bold text-muted">{{ $server['hostname'] }}</small>
         </li>
         <li class="list-group-item">
             <i class="fas fa-ethernet text-info"></i> {{ __('IP Address') }} <small class="float-right text-muted">{{ $server['ip'] }}</small>

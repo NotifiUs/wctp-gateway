@@ -111,7 +111,7 @@
                                 <td>{{ $number['carrier']->name }}</td>
                                 <td class="">
                                     @if($number['sms_enabled'])
-                                        <a href="#" title="Number is available to use with the WCTP gateway" data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}" class="btn font-weight-bold btn-sm btn-success">
+                                        <a href="#" title="Number is available to use with the WCTP gateway" data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}" class="btn font-weight-bold btn-sm btn-outline-success">
                                             Available
                                         </a>
                                     @else

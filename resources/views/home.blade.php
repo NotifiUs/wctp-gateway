@@ -116,7 +116,7 @@
                             {{ __('Security Information') }}
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
-                            <span class="text-success"><i class="fas fa-lock"></i> {{ __('SSL/TLS required') }}</span>
+                            <span class="text-success"><i class="fas fa-lock"></i> <code class="text-success font-weight-bold">{{ __('SSL/TLS') }}</code> {{__( 'required')}}</span>
                             <br>
                             <span class="text-primary"><i class="fas fa-shield-alt"></i> <code class="text-primary font-weight-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
                         </dd>
