@@ -36,6 +36,10 @@ Route::namespace('Carriers')->group(function () {
 
 Route::namespace('Numbers')->group(function(){
    Route::get('/numbers', 'ShowNumbers');
+   Route::post('/numbers', 'CreateNumber');
+    Route::post('/numbers/{number}/enable', 'EnableNumber');
+    Route::post('/numbers/{number}/disable', 'DisableNumber');
+    Route::post('/numbers/{number}/delete', 'DeleteNumber');
 });
 
 Route::namespace('EnterpriseHosts')->group(function(){

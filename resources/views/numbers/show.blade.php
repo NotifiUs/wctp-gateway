@@ -23,25 +23,48 @@
                     <thead>
                     <tr>
                         <th class="font-weight-bold text-muted">{{ __('Phone Number') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Carrier API') }}</th>
+                        <th class="font-weight-bold text-muted">{{ __('Type') }}</th>
+                        <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
+                        <th class="font-weight-bold text-muted">{{ __('Status') }}</th>
                         <th class="w-25"></th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach( $active as $number )
+                        @php
+                            $c = \App\Carrier::find( $number['carrier_id'] );
+                        @endphp
                         <tr>
-                            <td class="text-muted">{{ $number['number'] }}</td>
-                            <td class="font-weight-bold">{{ ucwords( $number['api'] ) }}</td>
-                            <td class="">
-                                <a href="#" class="btn btn-sm btn-secondary">
-                                    <i class="fas fa-search"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-dark">
-                                    <i class="fas fa-pause"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-hand-paper"></i>
-                                </a>
+                            <td class="text-muted">{{ $number['e164'] }}</td>
+                            <td class="font-weight-bold">{{ ucwords( $c->api ) }}</td>
+                            <td class="">{{ $c->name  }}</td>
+                            <td>
+                                @if( $number['enabled'])
+                                    <span class="badge badge-success">Enabled</span>
+                                @else
+                                    <span class="badge badge-secondary">Disabled</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light" aria-labelledby="dropdownMenuLink">
+
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
+
+                                        <div class="dropdown-divider"></div>
+                                        @if( $number['enabled'] )
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
+                                        @else
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#enablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Enable Number') }}</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal"  data-target="#deletePhoneNumberModal{{ $number['identifier'] }}">{{ __('Release Number') }}</a>
+                                        @endif
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -87,9 +110,15 @@
                                 <td class="font-weight-bold">{{ ucwords( $number['api'] ) }}</td>
                                 <td>{{ $number['carrier']->name }}</td>
                                 <td class="">
-                                    <a href="#" data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}" class="btn btn-sm btn-secondary">
-                                        Use this number
-                                    </a>
+                                    @if($number['sms_enabled'])
+                                        <a href="#" title="Number is available to use with the WCTP gateway" data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}" class="btn font-weight-bold btn-sm btn-success">
+                                            Available
+                                        </a>
+                                    @else
+                                        <a title="Number is not provisioned or is not SMS enabled" class="btn btn-sm btn-secondary text-white font-weight-bold">
+                                            Invalid
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -106,6 +135,12 @@
 
     @foreach( $available as $number )
         @include('numbers.modals.use')
+    @endforeach
+    @foreach( $active as $number)
+        @include('numbers.modals.delete')
+        @include('numbers.modals.disable')
+        @include('numbers.modals.enable')
+        @include('numbers.modals.setup')
     @endforeach
 
 @endsection

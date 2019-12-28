@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Numbers;
 
 use Exception;
+use App\Number;
 use App\Carrier;
 use Twilio\Rest\Client;
 use Illuminate\Http\Request;
@@ -20,7 +21,8 @@ class ShowNumbers extends Controller
     public function __invoke(Request $request)
     {
         $carriers = Carrier::all();
-        $numbers = [];
+        $available = [];
+        $active = Number::all()->toArray();
 
         foreach( $carriers as $carrier )
         {
@@ -35,12 +37,14 @@ class ShowNumbers extends Controller
                     ), 100);
 
                     foreach ( $incomingPhoneNumbers as $record ) {
-                        $numbers[] = [
+
+                        $available[] = [
                             'id' => $record->sid,
                             'api' => $carrier->api,
                             'number' => $record->phoneNumber,
                             'carrier' => $carrier,
                             'details' => $record->toArray(),
+                            'sms_enabled' => $record->capabilities['sms'],
                         ];
                     }
                 }
@@ -52,9 +56,7 @@ class ShowNumbers extends Controller
             }
             elseif( $carrier->api == 'thinq')
             {
-                //https://api.thinq.com/origination/did/search2/did/{{account_id}}?rows=1&page=1
                 $url = "/origination/did/search2/did/{$carrier->thinq_account_id}";
-                //$url = "/account/{$carrier->thinq_account_id}/balance";
                 $guzzle = new Guzzle(
                     ['base_uri' => 'https://api.thinq.com',]
                 );
@@ -74,19 +76,30 @@ class ShowNumbers extends Controller
                 {
                     foreach( $thinq_numbers['rows'] as $thinq_number )
                     {
-                        $numbers[] = [
+                        $available[] = [
                             'id' => $thinq_number['id'],
                             'api' => $carrier->api,
                             'number' => "+{$thinq_number['id']}",
                             'carrier' => $carrier,
                             'details' => $thinq_number,
+                            'sms_enabled' => $thinq_number['provisioned']
                         ];
                     }
                 }
             }
         }
 
-        $active = [];
-        return view('numbers.show')->with('available', $numbers )->with('active', $active );
+        foreach( $available as $key => $avail )
+        {
+            foreach( $active as $inuse )
+            {
+                if( $avail['id'] == $inuse['identifier'] )
+                {
+                    unset($available[$key]);
+                }
+            }
+        }
+
+        return view('numbers.show')->with('available', $available )->with('active', $active );
     }
 }
