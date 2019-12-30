@@ -30,6 +30,11 @@ class CreateNumber extends Controller
 
         try{ $number->save(); }catch( Exception $e ){ return redirect()->to('/numbers')->withErrors([__('Unable to save number')]); }
 
+       if( $number->provision() !== true )
+       {
+           return redirect()->to('/numbers')->withErrors(['Unable to provision details with carrier.']);
+       }
+
         $statusHtml = "Number successfully associated!";
         return redirect()->to('/numbers')
             ->with('status', $statusHtml);

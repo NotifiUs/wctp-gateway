@@ -25,8 +25,8 @@
                         <th class="font-weight-bold text-muted">{{ __('Phone Number') }}</th>
                         <th class="font-weight-bold text-muted">{{ __('Type') }}</th>
                         <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Status') }}</th>
-                        <th class="w-25"></th>
+                        <th class="font-weight-bold text-muted"></th>
+                        <th style="max-width:20%;"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,12 +40,16 @@
                             <td class="">{{ $c->name  }}</td>
                             <td>
                                 @if( $number['enabled'])
-                                    <span class="badge badge-success">Enabled</span>
+                                    <small class="font-weight-bold text-uppercase text-success">
+                                            <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
+                                        </small>
                                 @else
-                                    <span class="badge badge-secondary">Disabled</span>
+                                    <small class="font-weight-bold text-uppercase text-danger">
+                                            <i class="fas fa-times-circle"></i> {{ __('Disabled') }}
+                                    </small>
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-right">
                                 <div class="dropdown">
                                     <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-cog"></i>
@@ -54,10 +58,11 @@
                                     <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light" aria-labelledby="dropdownMenuLink">
 
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#infoPhoneNumberModal{{ $number['identifier']}}">{{ __('Number Information') }}</a>
 
                                         <div class="dropdown-divider"></div>
                                         @if( $number['enabled'] )
-                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
+                                            <a class="dropdown-item" style="color:#fd7e14;" href="#" data-toggle="modal" data-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
                                         @else
                                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#enablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Enable Number') }}</a>
                                             <div class="dropdown-divider"></div>
@@ -100,7 +105,7 @@
                         <th class="font-weight-bold text-muted">{{ __('Phone Number') }}</th>
                         <th class="font-weight-bold text-muted">{{ __('Type') }}</th>
                         <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
-                        <th class="w-25"></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -109,7 +114,7 @@
                                 <td class="text-muted">{{ $number['number'] }}</td>
                                 <td class="font-weight-bold">{{ ucwords( $number['api'] ) }}</td>
                                 <td>{{ $number['carrier']->name }}</td>
-                                <td class="">
+                                <td class=" text-right">
                                     @if($number['sms_enabled'])
                                         <a href="#" title="Number is available to use with the WCTP gateway" data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}" class="btn font-weight-bold btn-sm btn-outline-success">
                                             Available
@@ -141,6 +146,7 @@
         @include('numbers.modals.disable')
         @include('numbers.modals.enable')
         @include('numbers.modals.setup')
+        @include('numbers.modals.info')
     @endforeach
 
 @endsection

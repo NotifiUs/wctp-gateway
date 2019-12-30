@@ -17,6 +17,11 @@ class EnableCarrier extends Controller
     public function __invoke( Request $request, Carrier $carrier )
     {
 
+        if( $carrier->numbers()->count() == 0 )
+        {
+            return redirect()->back()->withErrors(['Please enable at least one phone number']);
+        }
+
         $carrier->enabled = 1;
 
         try{ $carrier->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to enable carrier')]); }

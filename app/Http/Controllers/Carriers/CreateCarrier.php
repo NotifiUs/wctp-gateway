@@ -6,6 +6,7 @@ use Exception;
 use App\Carrier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CreateCarrier extends Controller
 {
@@ -16,7 +17,7 @@ class CreateCarrier extends Controller
 
     public function __invoke( Request $request )
     {
-        $this->validate( $request, [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:2|max:255|unique:carriers,name',
             'api' => 'required|in:twilio,thinq',
             'priority' => 'required|integer|unique:carriers,priority',
@@ -26,6 +27,8 @@ class CreateCarrier extends Controller
             'thinq_api_username' => 'required_with:thinq_api_token,thinq_account_id',
             'thinq_api_token' => 'required_with:thinq_api_username,thinq_account_id',
         ]);
+
+        if ( $validator->fails() ) { return redirect('/carriers' )->withErrors( $validator ); }
 
         if( $request->input('api') == 'twilio')
         {

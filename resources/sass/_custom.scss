@@ -1,5 +1,5 @@
 
-body{ text-shadow: 1px 1px 1px rgba(0,0,0,0.075); }
+body{ text-shadow: 1px 1px 1px rgba(0,0,0,0.06); }
 .card, .list-group, .table, .alert, .btn{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
 .card-body{ margin-top: 3.5em; margin-bottom: 2em; background: transparent;}
 .card-header{ background-color: transparent; border-bottom: none; font-weight: bolder; }
@@ -9,6 +9,10 @@ body{ text-shadow: 1px 1px 1px rgba(0,0,0,0.075); }
 
 label{ font-weight:bold; color: $gray-600; }
 
+.modal-footer{ border-top: 0; }
+.modal-header{ border-bottom: 0; }
+//.modal-header h5 { color: $gray-300; text-transform: uppercase; text-shadow: none !important; }
+
 .list-group-item.active {
     z-index: 2;
     color: #343a40;
@@ -17,11 +21,24 @@ label{ font-weight:bold; color: $gray-600; }
     font-weight: bold;
 }
 
+.table-fixed{
+    table-layout: fixed;
+}
+
+.btn-outline-success{ background-color: #fff; }
+
 .text-muted-light{ color: $gray-500; }
 
+.btn-info{ color: #fff; }
 .text-indigo{ color: $indigo; }
 a.text-indigo:focus{ color: #505ca4; }
 a.text-indigo:hover{ color: #505ca4; }
+
+.text-orange{ color: #fd7e14; }
+.text-orange:hover{ color: #ca6410};
+.btn-orange{ background-color: #fd7e14; color: #fff; }
+.btn-orange:hover{ background-color: #ca6410; color: #fff; }
+.border-orange{ border-color: #fd7e14; }
 
 .modal-content{ border-width: 2px; }
 .nav-pills .nav-link.active { background-color: rgba(0,0,0,0.05); }

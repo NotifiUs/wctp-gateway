@@ -40,6 +40,7 @@ Route::namespace('Numbers')->group(function(){
     Route::post('/numbers/{number}/enable', 'EnableNumber');
     Route::post('/numbers/{number}/disable', 'DisableNumber');
     Route::post('/numbers/{number}/delete', 'DeleteNumber');
+    Route::post('/numbers/{number}/setup', 'SetupNumber');
 });
 
 Route::namespace('EnterpriseHosts')->group(function(){

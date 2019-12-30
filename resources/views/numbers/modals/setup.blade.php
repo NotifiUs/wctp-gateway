@@ -1,8 +1,10 @@
 <div class="modal fade" data-backdrop="static" id="setupPhoneNumberModal{{ $number['identifier'] }}" tabindex="-1" role="dialog" aria-labelledby="setupPhoneNumberModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-danger">
-            <div class="modal-header">
+            <div class="modal-header border-bottom-0">
+                <!--
                 <h5 class="modal-title" id="setupPhoneNumberModalLabel{{ $number['identifier'] }}">{{ __('Disable Phone Number') }}</h5>
+                -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,9 +17,9 @@
                         This will remove and re-configure the SMS settings of this number.
                     </p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Setup Phone Number (Destructive)</button>
+                    <button type="submit" class="btn btn-danger">Overwrite SMS Settings</button>
                 </div>
             </form>
         </div>

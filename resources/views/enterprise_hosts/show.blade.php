@@ -32,7 +32,7 @@
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#credentialsEnterpriseHostModal{{ $host->id }}">{{ __('View Credentials') }}</a>
                                     <div class="dropdown-divider"></div>
                                     @if( $host->enabled )
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#disableEnterpriseHostModal{{ $host->id }}">{{ __('Disable Host') }}</a>
+                                        <a class="dropdown-item text-orange" href="#" data-toggle="modal" data-target="#disableEnterpriseHostModal{{ $host->id }}">{{ __('Disable Host') }}</a>
                                     @else
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#enableEnterpriseHostModal{{ $host->id }}">{{ __('Enable Host') }}</a>
                                         <div class="dropdown-divider"></div>

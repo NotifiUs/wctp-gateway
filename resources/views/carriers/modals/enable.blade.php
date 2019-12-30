@@ -2,7 +2,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-success">
             <div class="modal-header">
+                <!--
                 <h5 class="modal-title" id="enableCarrierModalLabel{{ $carrier->id }}">{{ __('Enable Carrier') }}</h5>
+                -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
