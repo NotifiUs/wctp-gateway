@@ -16,7 +16,7 @@
                         @foreach( \App\Number::find( $number['id'])->getCarrierDetails() as $key => $val )
                             @if( ! is_array( $val ) && ! is_object( $val ) )
                                 <tr>
-                                    <th class="w-25 text-center">{{ $key }}</th>
+                                    <th class="w-25 text-left">{{ $key }}</th>
                                     <td class="text-muted text-truncate w-75">
                                         <span title="{{ $val }}" class="text-truncate">{{ $val }}</span>
                                     </td>

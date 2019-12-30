@@ -23,9 +23,10 @@
                     <thead>
                     <tr>
                         <th class="font-weight-bold text-muted">{{ __('Phone Number') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Type') }}</th>
+                        <th class="font-weight-bold text-muted">{{ __('API Provider') }}</th>
                         <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
-                        <th class="font-weight-bold text-muted"></th>
+                        <th class="font-weight-bold text-muted">{{ __('Status') }}</th>
+                        <!--<th class="font-weight-bold text-muted"></th>-->
                         <th style="max-width:20%;"></th>
                     </tr>
                     </thead>
@@ -33,23 +34,25 @@
                     @foreach( $active as $number )
                         @php
                             $c = \App\Carrier::find( $number['carrier_id'] );
+                            $type = \App\Number::find( $number['id'] )->getFriendlyType();
                         @endphp
                         <tr>
                             <td class="text-muted">{{ $number['e164'] }}</td>
-                            <td class="font-weight-bold">{{ ucwords( $c->api ) }}</td>
-                            <td class="">{{ $c->name  }}</td>
+                            <td class="font-weight-bold text-small">{{ ucwords( $c->api ) }} {{ $type }}</td>
+                            <td class="">{{ $c->name  }} </td>
                             <td>
+
                                 @if( $number['enabled'])
                                     <small class="font-weight-bold text-uppercase text-success">
-                                            <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
-                                        </small>
+                                        <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
+                                    </small>
                                 @else
                                     <small class="font-weight-bold text-uppercase text-danger">
-                                            <i class="fas fa-times-circle"></i> {{ __('Disabled') }}
+                                        <i class="fas fa-times-circle"></i> {{ __('Disabled') }}
                                     </small>
                                 @endif
                             </td>
-                            <td class="text-right">
+                            <td class="text-center">
                                 <div class="dropdown">
                                     <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-cog"></i>
@@ -102,25 +105,26 @@
                 <table class="table table-striped table-hover m-0">
                     <thead>
                     <tr>
-                        <th class="font-weight-bold text-muted">{{ __('Phone Number') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Type') }}</th>
+                        <th class="font-weight-bold text-muted">{{ __('Description') }}</th>
+                        <th class="font-weight-bold text-muted">{{ __('API Provider') }}</th>
                         <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
-                        <th></th>
+                        <th style="max-width:25%;"></th>
                     </tr>
                     </thead>
                     <tbody>
                         @foreach( $available as $number )
                             <tr>
                                 <td class="text-muted">{{ $number['number'] }}</td>
-                                <td class="font-weight-bold">{{ ucwords( $number['api'] ) }}</td>
+                                <td class="font-weight-bold text-small">{{ ucwords( $number['api'] ) }} {{ ucwords( $number['type'] ) }}</td>
+
                                 <td>{{ $number['carrier']->name }}</td>
-                                <td class=" text-right">
+                                <td class=" text-center">
                                     @if($number['sms_enabled'])
                                         <a href="#" title="Number is available to use with the WCTP gateway" data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}" class="btn font-weight-bold btn-sm btn-outline-success">
                                             Available
                                         </a>
                                     @else
-                                        <a title="Number is not provisioned or is not SMS enabled" class="btn btn-sm btn-secondary text-white font-weight-bold">
+                                        <a title="Number is not SMS enabled, provisioned, or it may be part of a Messaging Service" class="btn btn-sm btn-secondary text-white font-weight-bold">
                                             Invalid
                                         </a>
                                     @endif

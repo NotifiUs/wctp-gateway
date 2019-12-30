@@ -6,6 +6,7 @@ use Exception;
 use App\Number;
 use App\Carrier;
 use Twilio\Rest\Client;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client as Guzzle;
 use App\Http\Controllers\Controller;
@@ -23,11 +24,55 @@ class ShowNumbers extends Controller
         $carriers = Carrier::all();
         $available = [];
         $active = Number::all()->toArray();
+        $exclude = [];
 
         foreach( $carriers as $carrier )
         {
             if( $carrier->api == 'twilio')
             {
+                //get list of numbers from messaging services
+                try {
+                    $twilio = new Client( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
+                    $services = $twilio->messaging->v1->services->read([], 100);
+
+
+                    foreach ( $services as $record ) {
+                        //check to see if it has phonenumbers or shortcodes
+                        $hasNumbers = false;
+                        $hasShortCodes = false;
+                        $serviceAddons = [];
+                        $service_name = $record->friendlyName;
+                        foreach( $record->phoneNumbers->read([], 100) as $num )
+                        {
+                            $hasNumbers = true;
+                            $service_name = $num->phoneNumber;
+                            $exclude[] = $num->sid;
+                            $serviceAddons['numbers'][] = $num->toArray();
+                        }
+
+                        foreach( $record->shortCodes->read([], 100) as $shortcode )
+                        {
+                            $hasShortCodes = true;
+                            $service_name = $shortcode->shortCode;
+                            $exclude[] = $shortcode->sid;
+                            $serviceAddons['shortcodes'][] = $shortcode->toArray();
+                        }
+
+                        $available[] = [
+                            'id' => $record->sid,
+                            'api' => $carrier->api,
+                            'type' => 'Messaging Service',
+                            'number' => $service_name,
+                            'carrier' => $carrier,
+                            'details' => Arr::dot( array_merge($record->toArray(), $serviceAddons ) ),
+                            'sms_enabled' => $hasNumbers || $hasShortCodes,
+                        ];
+                    }
+                }
+                catch( Exception $e ) {}
+
+
+                //get list of numbers
                 try {
                     $twilio = new Client( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
                     $incomingPhoneNumbers = $twilio->incomingPhoneNumbers->read(array(
@@ -38,21 +83,34 @@ class ShowNumbers extends Controller
 
                     foreach ( $incomingPhoneNumbers as $record ) {
 
-                        $available[] = [
-                            'id' => $record->sid,
-                            'api' => $carrier->api,
-                            'number' => $record->phoneNumber,
-                            'carrier' => $carrier,
-                            'details' => $record->toArray(),
-                            'sms_enabled' => $record->capabilities['sms'],
-                        ];
+                        if( in_array( $record->sid, $exclude ) )
+                        {
+                            $available[] = [
+                                'id' => $record->sid,
+                                'api' => $carrier->api,
+                                'type' => 'Phone Number',
+                                'number' => $record->phoneNumber,
+                                'carrier' => $carrier,
+                                'details' => Arr::dot($record->toArray()),
+                                'sms_enabled' => 0,
+                            ];
+                        }
+                        else
+                        {
+                            $available[] = [
+                                'id' => $record->sid,
+                                'api' => $carrier->api,
+                                'type' => 'Phone Number',
+                                'number' => $record->phoneNumber,
+                                'carrier' => $carrier,
+                                'details' => Arr::dot($record->toArray()),
+                                'sms_enabled' => $record->capabilities['sms'],
+                            ];
+                        }
+
                     }
                 }
-                catch( Exception $e )
-                {
-                    //return redirect()->to('/home')->withErrors(['Unable to view numbers.']);
-                }
-
+                catch( Exception $e ){}
             }
             elseif( $carrier->api == 'thinq')
             {
@@ -63,12 +121,8 @@ class ShowNumbers extends Controller
                 try{
                     $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
                 }
-                catch( RequestException $e ) {
-                    dd( $e );
-                }
-                catch( Exception $e ){
-                    dd( $e );
-                }
+                catch( RequestException $e ) {}
+                catch( Exception $e ){}
 
                 $thinq_numbers = json_decode( (string)$res->getBody(), true );
 
@@ -79,9 +133,10 @@ class ShowNumbers extends Controller
                         $available[] = [
                             'id' => $thinq_number['id'],
                             'api' => $carrier->api,
+                            'type' => 'Phone Number',
                             'number' => "+{$thinq_number['id']}",
                             'carrier' => $carrier,
-                            'details' => $thinq_number,
+                            'details' => Arr::dot( $thinq_number ),
                             'sms_enabled' => $thinq_number['provisioned']
                         ];
                     }

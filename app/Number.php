@@ -4,6 +4,8 @@ namespace App;
 
 use Exception;
 use Twilio\Rest\Client;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use GuzzleHttp\Client as Guzzle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
@@ -16,24 +18,64 @@ class Number extends Model
         return $this->belongsTo('App\Carrier');
     }
 
+    public function getType()
+    {
+        if( $this->carrier->api == 'twilio' )
+        {
+            return substr( $this->identifier, 0, 2);
+        }
+
+        return "PN";
+    }
+
+    public function getFriendlyType(){
+        if( $this->carrier->api == 'twilio' )
+        {
+            if( Str::startsWith( $this->identifier, 'MG') )
+            {
+                return "Messaging Service";
+            }
+        }
+
+        return "Phone Number";
+    }
+
     public function provision()
     {
         if( $this->carrier->api == 'twilio' )
         {
             try{
                 $twilio = new Client( $this->carrier->twilio_account_sid, decrypt( $this->carrier->twilio_auth_token ) );
-                $number = $twilio
-                    ->incomingPhoneNumbers( $this->identifier )
-                    ->update(array(
-                        'smsApplicationSid' => '',
-                        'smsFallbackMethod' => 'POST',
-                        'smsFallbackUrl' => secure_url("/sms/inbound/{$this->identifier}/fallback"),
-                        'smsMethod' => 'POST',
-                        'smsUrl' => secure_url("/sms/inbound/{$this->identifier}/primary" ),
-                        'statusCallback' => secure_url("/sms/inbound/{$this->identifier}/status"),
-                        'statusCallbackMethod' => 'POST',
-                    )
-                );
+
+                if( $this->getType() == 'MG' )
+                {
+                    $service = $twilio->messaging->v1->services($this->identifier )
+                        ->update([
+                            'inboundRequestUrl' => secure_url("/sms/inbound/{$this->identifier}/primary" ),
+                            'inboundMethod' => 'POST',
+                            'fallbackUrl' => secure_url("/sms/inbound/{$this->identifier}/fallback" ),
+                            'fallbackMethod' => 'POST',
+                            'statusCallback' => secure_url("/sms/callback/{$this->identifier}/status"),
+                            //'statusCallbackMethod' => 'POST',
+                        ]);
+                }
+                else
+                {
+                    $number = $twilio
+                        ->incomingPhoneNumbers( $this->identifier )
+                        ->update(array(
+                                'smsApplicationSid' => '',
+                                'smsFallbackMethod' => 'POST',
+                                'smsFallbackUrl' => secure_url("/sms/inbound/{$this->identifier}/fallback"),
+                                'smsMethod' => 'POST',
+                                'smsUrl' => secure_url("/sms/inbound/{$this->identifier}/primary" ),
+                                'statusCallback' => secure_url("/sms/callback/{$this->identifier}/status"),
+                                'statusCallbackMethod' => 'POST',
+                            )
+                        );
+                }
+
+
             }
             catch( Exception $e ) { return false; }
         }
@@ -172,12 +214,31 @@ class Number extends Model
         {
             try {
                 $twilio = new Client( $this->carrier->twilio_account_sid, decrypt( $this->carrier->twilio_auth_token ) );
-                $incoming_phone_number = $twilio->incomingPhoneNumbers( $this->identifier )
-                    ->fetch();
 
-            } catch( Exception $e ) {return [];}
+                if( $this->getType() == 'MG' )
+                {
+                    $serviceAddons = [];
+                    $results = $twilio->messaging->v1->services( $this->identifier )->fetch();
+                    foreach( $results->phoneNumbers->read([], 100) as $num )
+                    {
+                        $serviceAddons['numbers'][] = $num->toArray();
+                    }
 
-            return $incoming_phone_number->toArray();
+                    foreach( $results->shortCodes->read([], 100) as $shortcode )
+                    {
+                        $serviceAddons['shortcodes'][] = $shortcode->toArray();
+                    }
+                    return Arr::dot(array_merge( $results->toArray(), $serviceAddons ) );
+                }
+                else {
+
+                    $results = $twilio->incomingPhoneNumbers($this->identifier)->fetch();
+                    return Arr::dot($results->toArray() );
+                }
+
+            }catch( Exception $e ) {return [];}
+
+
 
         }
         elseif( $this->carrier->api == 'thinq')
