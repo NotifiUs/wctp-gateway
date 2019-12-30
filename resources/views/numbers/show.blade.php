@@ -124,7 +124,7 @@
                                             Available
                                         </a>
                                     @else
-                                        <a title="Number is not SMS enabled, provisioned, or it may be part of a Messaging Service" class="btn btn-sm btn-secondary text-white font-weight-bold">
+                                        <a title="Number is not SMS enabled, provisioned, or it may be part of a Messaging Service" class="btn btn-sm btn-secondary text-white font-weight-bold" href="#" data-toggle="modal" data-target="#invalidPhoneNumberModal">
                                             Invalid
                                         </a>
                                     @endif
@@ -152,5 +152,7 @@
         @include('numbers.modals.setup')
         @include('numbers.modals.info')
     @endforeach
+
+    @include('numbers.modals.invalid')
 
 @endsection
