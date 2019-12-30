@@ -22,11 +22,11 @@
                 <table class="table table-striped table-hover m-0">
                     <thead>
                     <tr>
-                        <th class="font-weight-bold text-muted">{{ __('Phone Number') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('API Provider') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Status') }}</th>
-                        <!--<th class="font-weight-bold text-muted"></th>-->
+                        <th class="font-weight-bold text-muted-light">{{ __('Phone Number') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('API Provider') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Carrier Name') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Status') }}</th>
+                        <!--<th class="font-weight-bold text-muted-light"></th>-->
                         <th style="max-width:20%;"></th>
                     </tr>
                     </thead>
@@ -105,9 +105,9 @@
                 <table class="table table-striped table-hover m-0">
                     <thead>
                     <tr>
-                        <th class="font-weight-bold text-muted">{{ __('Description') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('API Provider') }}</th>
-                        <th class="font-weight-bold text-muted">{{ __('Carrier Name') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Description') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('API Provider') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Carrier Name') }}</th>
                         <th style="max-width:25%;"></th>
                     </tr>
                     </thead>

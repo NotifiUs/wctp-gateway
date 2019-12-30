@@ -151,9 +151,9 @@
                 <table class="table table-striped table-hover m-0">
                     <thead>
                         <tr>
-                            <th class="font-weight-bold text-muted">{{ __('Timestamp') }}</th>
-                            <th class="font-weight-bold text-muted">{{ __('Source') }}</th>
-                            <th class="font-weight-bold text-muted">{{ __('Description') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Timestamp') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Source') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Description') }}</th>
                         </tr>
                     </thead>
                     <tbody>
