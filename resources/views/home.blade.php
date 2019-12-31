@@ -45,13 +45,14 @@
             </div>
         @else
             <div class="col-md-8">
-                <div class="card mb-2" style="height:100%;background-color:rgba(255, 0, 0, 0.05);">
+                <div class="card mb-2 border-orange bg-orange h-100">
                     <div class="card-body text-left px-4 my-0">
-                        <h5 class="text-danger font-weight-bolder mb-2">{{ __('Message Sending Disabled') }}</h5>
+                        <h5 class="text-orange font-weight-bolder mb-2">
+                            {{ __('System Warnings') }}
+                        </h5>
                         @foreach( $checklist as $item )
-                           <p class="my-0">
-
-                               <i class="fas fa-times-circle text-danger"></i> <strong>{!!  $item['description']  !!} <small class="font-weight-bold"><a class="text-uppercase text-danger" href="{{ $item['link'] }}">Fix</a></small></strong>
+                           <p class="my-0" style="color:#b37400;">
+                               <i class="fas fa-times-circle text-orange"></i> <strong>{!!  $item['description']  !!} <small class="font-weight-bold"><a class="text-uppercase text-orange" href="{{ $item['link'] }}">Fix</a></small></strong>
                            </p>
                         @endforeach
                     </div>

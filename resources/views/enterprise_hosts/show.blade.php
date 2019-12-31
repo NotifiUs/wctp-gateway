@@ -54,7 +54,7 @@
                         </div>
                         <div class="card-footer">
                             <small class="d-inline text-muted-light font-weight-bold text-uppercase">
-                                <i class="fas fa-microchip"></i> {{ ucwords( $host->type )}}
+                                <i class="fas fa-plug"></i> {{ ucwords( $host->type )}}
                             </small>
                             <div class="float-right">
                                 <small class="d-inline font-weight-bold text-uppercase">
