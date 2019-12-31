@@ -4,6 +4,9 @@
 @endpush
 @push('scripts')
 @endpush
+@push('modals')
+    @include('setup-instructions')
+@endpush
 
 @section('content')
     <h5 class="text-muted-light mt-2 mt-md-0">{{ __('Quick Glance') }}</h5>
@@ -28,21 +31,23 @@
             <div class="col-md-4">
                 <div class="card mb-2">
                     <div class="card-body text-center my-0">
-                        <i class="fas fa-3x fa-comments text-info"></i>
-                        <h5 class="text-muted mt-2 mb-0">{{ $messageCount }}</h5>
-                        <a href="/analytics" class="text-info">Recent Messages</a>
+                        <i class="fas fa-3x fa-chevron-circle-up text-primary"></i>
+                        <h5 class="text-muted mt-2 mb-0">{{ $outboundCount }}</h5>
+                        <a href="/analytics/outbound" class="text-primary">Outbound Messages</a>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="card mb-2">
                     <div class="card-body text-center my-0">
-                        <i class="fas fa-3x fa-dumpster-fire text-danger"></i>
-                        <h5 class="text-muted mt-2 mb-0">{{ $errorCount }}</h5>
-                        <a href="/errors" class="text-danger">Recent Errors</a>
+                        <i class="fas fa-3x fa-chevron-circle-down text-primary"></i>
+                        <h5 class="text-muted mt-2 mb-0">{{ $inboundCount }}</h5>
+                        <a href="/analytics/inbound" class="text-primary">Inbound Messages</a>
                     </div>
                 </div>
             </div>
+
         @else
             <div class="col-md-8">
                 <div class="card mb-2 border-orange bg-orange h-100">
@@ -127,7 +132,7 @@
                     </dl>
 
                     <small class="text-muted">
-                        <i class="fas fa-question-circle"></i> {{ __('Learn how to') }} <a href="#">{{ __('configure')}}</a> {{ __('your WCTP integration') }}
+                        <i class="fas fa-question-circle"></i> {{ __('Learn how to') }} <a href="#" data-toggle="modal" data-target="#setupInstructionsModal">{{ __('configure')}}</a> {{ __('your WCTP integration') }}
                     </small>
                 </div>
             </div>
@@ -137,7 +142,7 @@
 
 
     <h5 class="text-muted-light mt-2">{{ __('Recent Events') }}
-        <small>
+        <small class="text-small">
             <a href="/events" class="float-right text-muted">{{ __('View event log') }}</a>
         </small>
     </h5>
@@ -154,7 +159,7 @@
                         <tr>
                             <th class="font-weight-bold text-muted-light">{{ __('Timestamp') }}</th>
                             <th class="font-weight-bold text-muted-light">{{ __('Source') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Description') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Event') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,8 +178,8 @@
                         @endphp
                         <tr>
                             <td><small class="text-muted">{{ \Carbon\Carbon::now( Auth::user()->timezone )->subMinutes($i)->format('m/d/Y g:i:s A T') }}</small></td>
-                            <td class="text-muted">{{ $sources[$index] }}</td>
-                            <td class="text-dark">{{ $messages[$index] }}</td>
+                            <td class="text-muted-light">{{ $sources[$index] }}</td>
+                            <td class="text-muted text-small">{{ $messages[$index] }}</td>
                         </tr>
                     @endfor
                     </tbody>

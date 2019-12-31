@@ -20,14 +20,14 @@ class ShowDashboard extends Controller
         $server = ServerStats::get();
         $checklist = Checklist::get();
 
-        $messageCount = number_format( mt_rand(0, 25000) );
-        $errorCount = number_format( mt_rand( 0, 1000) );
+        $inboundCount = number_format( mt_rand(0, 1000) );
+        $outboundCount = number_format( mt_rand( 0, 1000) );
 
         return view('home')
             ->with('server', $server )
             ->with('queue', $queue )
             ->with('checklist', $checklist )
-            ->with('messageCount', $messageCount )
-            ->with('errorCount', $errorCount );
+            ->with('inboundCount', $inboundCount )
+            ->with('outboundCount', $outboundCount );
     }
 }
