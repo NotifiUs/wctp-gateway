@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
+use App\Jobs\LogEvent;
 use Exception;
 use App\EnterpriseHost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EditHost extends Controller
 {
@@ -26,6 +28,10 @@ class EditHost extends Controller
 
         try{ $host->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to update host')]); }
 
+        LogEvent::dispatch(
+            "{$host->senderID} updated",
+            get_class( $this ), 'info', json_encode($host->toArray()), Auth::user()->id ?? null
+        );
         $statusHtml = "Enterprise host updated!";
         return redirect()->back()
             ->with('status', $statusHtml);

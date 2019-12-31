@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Carriers;
 
+use App\Jobs\LogEvent;
 use Exception;
 use App\Carrier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DisableCarrier extends Controller
 {
@@ -20,6 +22,11 @@ class DisableCarrier extends Controller
         $carrier->enabled = 0;
 
         try{ $carrier->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to disable carrier')]); }
+
+        LogEvent::dispatch(
+            "{$carrier->name} ({$carrier->api}) disabled",
+            get_class( $this ), 'info', json_encode($carrier->toArray()), Auth::user()->id ?? null
+        );
 
         $statusHtml = "Carrier disabled!";
         return redirect()->back()

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Carriers;
 
+use App\Jobs\LogEvent;
 use Exception;
 use App\Carrier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CreateCarrier extends Controller
@@ -61,6 +63,11 @@ class CreateCarrier extends Controller
             $carrier->api = $request->input('api');
 
             try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier'), $e->getMessage()]); }
+
+            LogEvent::dispatch(
+                "{$carrier->name} ({$carrier->api}) created",
+                get_class( $this ), 'info', json_encode($carrier->toArray()), Auth::user()->id ?? null
+            );
 
             $statusHtml = "Carrier successfully created!";
             return redirect()->to('/carriers')

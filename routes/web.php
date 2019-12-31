@@ -24,6 +24,10 @@ Route::namespace('Account')->group(function () {
     Route::get('/account/verify-email', 'VerifyEmail')->middleware('verified');
 });
 
+Route::namespace('Events')->group(function () {
+    Route::get('/events', 'ShowEvents');
+});
+
 Route::namespace('Carriers')->group(function () {
     Route::get('/carriers', 'ShowCarriers');
     Route::post('/carriers', 'CreateCarrier');
@@ -59,7 +63,6 @@ Route::namespace('WCTP')->group(function(){
 
 
 Route::get('/analytics', 'UnderConstruction');
-Route::get('/events', 'UnderConstruction');
 Route::get('/sticky', 'UnderConstruction');
 Route::get('/system', 'UnderConstruction');
 

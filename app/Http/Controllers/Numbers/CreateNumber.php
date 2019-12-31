@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Numbers;
 
 use Exception;
-use App\Carrier;
 use App\Number;
+use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CreateNumber extends Controller
 {
@@ -35,7 +36,12 @@ class CreateNumber extends Controller
            return redirect()->to('/numbers')->withErrors(['Unable to provision details with carrier.']);
        }
 
-        $statusHtml = "Number successfully associated!";
+        LogEvent::dispatch(
+            "{$number->e164} provisioned",
+            get_class( $this ), 'info', json_encode($number->toArray()), Auth::user()->id ?? null
+        );
+
+       $statusHtml = "Number successfully associated!";
         return redirect()->to('/numbers')
             ->with('status', $statusHtml);
     }

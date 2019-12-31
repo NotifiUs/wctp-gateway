@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
+use App\Jobs\LogEvent;
 use Exception;
 use App\EnterpriseHost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EnableHost extends Controller
 {
@@ -20,7 +22,10 @@ class EnableHost extends Controller
         $host->enabled = 1;
 
         try{ $host->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to enable host')]); }
-
+        LogEvent::dispatch(
+            "{$host->senderID} enabled",
+            get_class( $this ), 'info', json_encode($host->toArray()), Auth::user()->id ?? null
+        );
         $statusHtml = "Enterprise host enabled!";
         return redirect()->back()
             ->with('status', $statusHtml);

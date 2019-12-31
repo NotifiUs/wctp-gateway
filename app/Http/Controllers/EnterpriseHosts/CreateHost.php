@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
+use App\Jobs\LogEvent;
 use Faker;
 use Exception;
 use App\EnterpriseHost;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -60,6 +62,10 @@ class CreateHost extends Controller
 
         try{ $eh->save(); }catch( Exception $e ){ return redirect()->back()->withInput()->withErrors([__('Unable to save host')]); }
 
+        LogEvent::dispatch(
+            "{$eh->senderID} setup",
+            get_class( $this ), 'info', json_encode($eh->toArray()), Auth::user()->id ?? null
+        );
         $statusHtml = "Enterprise host created!<br><br><strong>senderID</strong>: {$senderID}<br><strong>securityCode</strong>: <code class=\"text-success\">{$securityCode}</code>";
         return redirect()->back()
             ->with('status', $statusHtml);

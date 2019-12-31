@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Carriers;
 
+use App\Jobs\LogEvent;
 use Exception;
 use App\Carrier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EditCarrier extends Controller
 {
@@ -26,6 +28,10 @@ class EditCarrier extends Controller
 
         try{ $carrier->save(); }catch( Exception $e ){ return redirect()->back()->withInput()->withErrors([__('Unable to update carrier')]); }
 
+        LogEvent::dispatch(
+            "{$carrier->name} ({$carrier->api}) updated",
+            get_class( $this ), 'info', json_encode($carrier->toArray()), Auth::user()->id ?? null
+        );
         $statusHtml = "Carrier successfully updated!";
         return redirect()->to('/carriers')
             ->with('status', $statusHtml);

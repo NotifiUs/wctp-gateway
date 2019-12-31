@@ -126,9 +126,6 @@
                             <br>
                             <span class="text-primary"><i class="fas fa-shield-alt"></i> <code class="text-primary font-weight-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
                         </dd>
-
-
-
                     </dl>
 
                     <small class="text-muted">
@@ -148,40 +145,51 @@
     </h5>
     <div class="card py-0 my-0">
         <div class="card-body p-0 m-0">
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
-            <div class="table-responsive text-left">
-                <table class="table table-striped table-hover m-0">
+            <div class="table-responsive text-left text-small">
+                <table class="table table-striped table-hover m-0 table-fixed">
                     <thead>
                         <tr>
-                            <th class="font-weight-bold text-muted-light">{{ __('Timestamp') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Source') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Event') }}</th>
+                            <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('Timestamp') }}</th>
+                            <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('Source') }}</th>
+                            <th class="font-weight-bold text-muted-light" style="max-width:40%;">{{ __('Event') }}</th>
+                            <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('User') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @php
-                        $sources[0] = 'Enterprise Host';
-                        $sources[1] = 'Webhook';
-                        $sources[2] = 'Queue';
-
-                        $messages[0] = 'Outbound message submitted by enterprise host';
-                        $messages[1] = 'Inbound SMS from Twilio';
-                        $messages[2] = 'Message processed from queue';
-                    @endphp
-                    @for( $i=0; $i<mt_rand(7,12); $i++)
-                        @php
-                            $index = mt_rand(0,count($sources)-1);
-                        @endphp
+                    @if( $events->count() )
+                        @foreach( $events as $event )
+                            <tr>
+                                <td><small class="text-muted">{{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}</small></td>
+                                <td class="text-muted-light">
+                                    {{ $event->source }}
+                                </td>
+                                <td class="text-muted text-small text-truncate">{{ $event->event }}</td>
+                                <td class="text-muted-light text-small text-truncate">
+                                    @if( $event->user_id )
+                                        @php
+                                            $user = \App\User::find( $event->user_id );
+                                            if( is_null( $user) )
+                                            {
+                                                echo "&mdash;";
+                                            }
+                                            else
+                                            {
+                                                echo $user->name;
+                                            }
+                                        @endphp
+                                    @else
+                                        &mdash;
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
-                            <td><small class="text-muted">{{ \Carbon\Carbon::now( Auth::user()->timezone )->subMinutes($i)->format('m/d/Y g:i:s A T') }}</small></td>
-                            <td class="text-muted-light">{{ $sources[$index] }}</td>
-                            <td class="text-muted text-small">{{ $messages[$index] }}</td>
+                            <td colspan="4" class="text-muted text-center text-small font-weight-bold">
+                                <i class="fas fa-ban text-muted-light"></i> No events found
+                            </td>
                         </tr>
-                    @endfor
+                    @endif
                     </tbody>
                 </table>
             </div>

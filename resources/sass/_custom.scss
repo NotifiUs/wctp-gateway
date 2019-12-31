@@ -1,6 +1,6 @@
 
 body{ text-shadow: 1px 1px 1px rgba(0,0,0,0.06); }
-.card, .list-group, .table, .alert, .btn{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
+.card, .list-group, .table, .alert, .btn, .pagination{ box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important; }
 .card-body{ margin-top: 3.5em; margin-bottom: 2em; background: transparent;}
 .card-header{ background-color: transparent; border-bottom: none; font-weight: bolder; }
 .card-footer{ background-color: transparent; border-top: none; }
@@ -14,7 +14,7 @@ label{ font-weight:bold; color: $gray-600; }
 .modal-header{ border-bottom: 0; }
 //.modal-header h5 { color: $gray-300; text-transform: uppercase; text-shadow: none !important; }
 
-.list-group-item.active {
+.list-group-item.active, .page-item.active .page-link  {
     z-index: 2;
     color: #343a40;
     background-color: #EDF2F7; //rgba(0,0,0,.005);
@@ -28,6 +28,10 @@ label{ font-weight:bold; color: $gray-600; }
 
 .table thead tr {
     background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23edf2f7' fill-opacity='0.08' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.bg-striped{
     background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23edf2f7' fill-opacity='0.08' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
 }
 
