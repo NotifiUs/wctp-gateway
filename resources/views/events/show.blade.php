@@ -16,74 +16,58 @@
         @endif
     </h5>
 
-
-    @if( $events->count() )
-        <!--
-        <div class="row col">
-            {{ $events->links() }}
-        </div>
-        -->
     <div class="card py-0 my-0">
         <div class="card-body p-0 m-0">
 
             <div class="table-responsive text-left">
-                <table class="table table-striped text-small table-hover m-0">
+                <table class="table table-striped table-hover m-0">
                     <thead>
-                    <tr>
-                        <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('Timestamp') }}</th>
-                        <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('Source') }}</th>
-                        <th class="font-weight-bold text-muted-light" style="max-width:40%;">{{ __('Event') }}</th>
-                        <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('User') }}</th>
+                    <tr class="text-center">
+                        <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
+                        <th class="font-weight-bold text-muted-light w-25">{{ __('User') }}</th>
+                        <th class="font-weight-bold text-muted-light w-25">{{ __('Source') }}</th>
+                        <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach( $events as $event )
-                        <tr>
-                            <td><small class="text-muted">{{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}</small></td>
-                            <td class="text-muted-light text-small">
-                                {{ $event->source }}
-                            </td>
-                            <td class="text-muted text-small text-truncate"  title="{{ json_encode( json_decode($event->details, true ), JSON_PRETTY_PRINT) }}">
-                                <small>
-                                    <a href="#" data-toggle="modal" data-target="#infoPhoneNumberModal{{ $event->id}}">
-                                        <i class="fas fa-search text-muted-light"></i>
-                                    </a>
-                                </small>
-                                {{ $event->event }}
+                    @if( $events->count() )
+                        @foreach( $events as $event )
+                            <tr class="align-text-bottom">
+                                <td class="text-muted text-small font-weight-bold text-nowrap">
+                                    {{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
+                                </td>
+                                <td class="text-muted-light text-truncate text-center">
+                                    @if( $event->user )
+                                    {{ $event->user->name }}
+                                    @else
+                                    &mdash;
+                                    @endif
+                                </td>
+                                <td class=" align-text-bottom">
+                                    <span class="text-small text-muted-light">{{ $event->source }}</span>
+                                </td>
+                                <td class="text-truncate text-muted text-small">
+                                    <a href="#" data-toggle="modal" data-target="#detailsEventsModal{{ $event->id}}" ><i class="fas fa-search text-muted-light"></i></a>
+                                    {{ $event->event }}
+                                </td>
 
-                            </td>
-                            <td class="text-muted-light text-small text-truncate">
-                                @if( $event->user_id )
-                                @php
-                                    $user = \App\User::find( $event->user_id );
-                                    if( is_null( $user) )
-                                    {
-                                        echo "&mdash;";
-                                    }
-                                    else
-                                    {
-                                        echo $user->name;
-                                    }
-                                @endphp
-                                @else
-                                &mdash;
-                                @endif
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="4" class="text-muted text-center text-small font-weight-bold">
+                                <i class="fas fa-ban text-muted-light"></i> No events found
                             </td>
                         </tr>
-                    @endforeach
+                    @endif
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-        <div class="row col my-4">
-            {{ $events->links() }}
-        </div>
-    @else
-        <div class="alert alert-primary py-4" role="alert">
-            <i class="fas fa-exclamation-circle"></i> There are no events to display!
-        </div>
-    @endif
+    <div class="row col my-4">
+        {{ $events->links() }}
+    </div>
 
     @foreach( $events as $event )
         @include('events.modals.details')

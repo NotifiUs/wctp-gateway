@@ -1,4 +1,4 @@
-<div class="modal fade" data-backdrop="static" id="infoPhoneNumberModal{{ $event->id}}" tabindex="-1" role="dialog" aria-labelledby="detailsEventsModal" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="detailsEventsModal{{ $event->id}}" tabindex="-1" role="dialog" aria-labelledby="detailsEventsModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm">
             <div class="modal-header border-bottom-0">

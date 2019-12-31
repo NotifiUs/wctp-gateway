@@ -145,42 +145,36 @@
     </h5>
     <div class="card py-0 my-0">
         <div class="card-body p-0 m-0">
-            <div class="table-responsive text-left text-small">
+            <div class="table-responsive text-left">
                 <table class="table table-striped table-hover m-0 table-fixed">
                     <thead>
-                        <tr>
-                            <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('Timestamp') }}</th>
-                            <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('Source') }}</th>
-                            <th class="font-weight-bold text-muted-light" style="max-width:40%;">{{ __('Event') }}</th>
-                            <th class="font-weight-bold text-muted-light" style="max-width:20%;">{{ __('User') }}</th>
+                        <tr class="text-center">
+                            <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
+                            <th class="font-weight-bold text-muted-light w-25">{{ __('User') }}</th>
+                            <th class="font-weight-bold text-muted-light w-25">{{ __('Source') }}</th>
+                            <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
+
                         </tr>
                     </thead>
                     <tbody>
                     @if( $events->count() )
                         @foreach( $events as $event )
                             <tr>
-                                <td><small class="text-muted">{{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}</small></td>
-                                <td class="text-muted-light">
-                                    {{ $event->source }}
+                                <td class="text-muted text-small font-weight-bold text-nowrap">
+                                    {{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
                                 </td>
-                                <td class="text-muted text-small text-truncate">{{ $event->event }}</td>
-                                <td class="text-muted-light text-small text-truncate">
-                                    @if( $event->user_id )
-                                        @php
-                                            $user = \App\User::find( $event->user_id );
-                                            if( is_null( $user) )
-                                            {
-                                                echo "&mdash;";
-                                            }
-                                            else
-                                            {
-                                                echo $user->name;
-                                            }
-                                        @endphp
+                                <td class="text-muted-light text-truncate text-center">
+                                    @if( $event->user )
+                                        {{ $event->user->name }}
                                     @else
                                         &mdash;
                                     @endif
                                 </td>
+                                <td class=" align-text-bottom">
+                                    <span class="text-small text-muted-light">{{ $event->source }}</span>
+                                </td>
+                                <td class="text-truncate text-dark text-small">{{ $event->event }}</td>
+
                             </tr>
                         @endforeach
                     @else
