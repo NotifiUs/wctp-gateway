@@ -1,8 +1,20 @@
 <p align="center"><img src="https://wctp.io/assets/images/phones.svg" width="200"></p>
 
+<div align="center">
+
+
+[![GitHub issues](https://img.shields.io/github/issues/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/issues)
+[![GitHub license](https://img.shields.io/github/license/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
+![GitHub All Releases](https://img.shields.io/github/downloads/NotifiUs/wctp-gateway/total)
+
+</div>
+
 ## About WCTP Gateway
 
-WCTP Gateway is a web application that implements the Carrier Gateway WCTP Actor roles. Ardently crafted for the [Amtelco](https://amtelco.com) community, you can use this application to run an Amtelco-compatible primary or backup SMS aggregator service. Send and recieve messages from your own [Twilio](https://twilio.com) and [ThinQ](https://thinq.com) accounts &mdash; just bring your API keys!
+WCTP Gateway is a web application that implements the Carrier Gateway WCTP Actor roles needed to interface with the [Amtelco](https://amtelco.com) WCTP Intelligent Series SMS Aggregator interface.
+
+Ardently crafted for the Amtelco and [NAEO](https://www.naeo.org) community, you can use this application to run an Amtelco-compatible primary or backup SMS aggregator service. 
+Send and recieve messages from your own [Twilio](https://twilio.com) and [ThinQ](https://thinq.com) accounts &mdash; just bring your API keys!
 
 The modern WCTP engine brings the following features and more:
 
@@ -15,25 +27,28 @@ The modern WCTP engine brings the following features and more:
 
 ## Status
 
-We're in beta testing. If you'd like to help test, please email [support+wctp+beta@notifi.us](mailto:support+wctp+beta@notifi.us)
+**Not production ready**
 
-## Privacy
+## Requirements
 
-Sending PHI, PCI, or other similar private information over SMS [**SHOULD NOT BE CONSIDERED COMPLIANT FOR ANY REGULATORY PURPOSES**](https://support.twilio.com/hc/en-us/articles/223182008-Are-there-special-rules-for-campaigns-involving-health-information-)
+We use features that require the following tools and technologies:
 
-From a message storage standpoint, we only keep the content of messages available as long as needed to complete conversations. The content itself is stored in an automaticaly expiring in-memory database ([redis.io](https://redis.io)) and never persisted to disk.
-
-> To do: Encrypt message content even while stored in Redis and retrieve by key
-
-Meta-data, such as SMS routing information (recipient, sender, date/time, etc.) are persisted into a normal database for metrics and analytics. 
+- PHP 7.2+
+- nginx
+- redis-server
+- mysql
+- supervisord
+- Linux ( We generally recommend Ubuntu for most users)
 
 ## Technologies
 
-WCTP Gateway is a [Laravel](https://laravel.com) web-application that implements a WCTP endpoint and administrative portal. This system cannot send SMS messages without a supported carrier (Telecom API provider) like Twilio or ThinQ. 
+WCTP Gateway is a [Laravel](https://laravel.com) web-application that implements a WCTP endpoint and administrative portal. 
+This system cannot send SMS messages without a supported carrier (Telecom API provider) like Twilio or ThinQ. 
 
 The web portal UI is built on [Bootstrap](https://getbootstrap.com) and uses [Font Awesome](https://fontawesome.com/) icons. 
 
-You can setup and run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, and just about any modern PHP web environment. Start from a single-server appliance setup and grow into a full blown load balancing and clustering setup.
+You can setup and run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, and just about any modern PHP web environment. 
+Start from a single-server appliance setup and grow into a full blown load balancing and clustering setup.
 
 You can also go *serverless*, and try out [Vapor](https://vapor.laravel.com/). 
 
