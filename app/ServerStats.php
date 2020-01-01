@@ -117,20 +117,20 @@ class ServerStats
         $uptime = exec("uptime");
         $uptime = explode(',', $uptime );
         $uptime = array_slice( $uptime, 0, 2);
+        $timestring = '';
         if( Str::contains($uptime[1], ':'))
         {
             $time = explode(':', trim( $uptime[1] ) );
-            $uptime = array_slice(explode(' ', trim( $uptime[0] ) ), 1, 3);
-            $uptime = implode(' ', $uptime) . ", {$time[0]} hours, {$time[1]} minutes";
+            $timestring = ", {$time[0]} hours, {$time[1]} minutes";
         }
         else
         {
             $time = $uptime[1];
-            $uptime = array_slice(explode(' ', trim( $uptime[0] ) ), 1, 3);
-            $uptime = implode(' ', $uptime) . ", {$time}utes";
+            $timestring = ", {$time}utes";
         }
 
-
+        $uptime = array_slice(explode(' ', trim( $uptime[0] ) ), 1, 3);
+        $uptime = implode(' ', $uptime) . $timestring;
 
         return $uptime;
     }

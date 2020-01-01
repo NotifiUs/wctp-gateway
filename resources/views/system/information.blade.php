@@ -42,7 +42,7 @@
                     <i class="fas fa-hourglass-half text-info"></i> {{ __('Uptime') }} <small class="float-right text-muted">{{ $advanced['uptime'] }}</small>
                 </li>
                 <li class="list-group-item">
-                    <i class="fas fa-weight-hanging text-info"></i> {{ __('Load') }} <small class="float-right text-muted">{{ $advanced['load'] }}</small>
+                    <i class="fas fa-weight-hanging text-info"></i> {{ __('Load Average') }} <small class="float-right text-muted">{{ $advanced['load'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fab fa-php text-info"></i> {{ __('PHP Configuration') }} <span class="float-right font-weight-bold text-muted"><a href="/system/phpinfo"><code class="text-primary">phpinfo();</code></a></span>
