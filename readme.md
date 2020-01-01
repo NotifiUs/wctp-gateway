@@ -2,10 +2,10 @@
 
 <div align="center">
 
-
-[![GitHub issues](https://img.shields.io/github/issues/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/issues)
-[![GitHub license](https://img.shields.io/github/license/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/NotifiUs/wctp-gateway.svg?branch=master)](https://travis-ci.org/NotifiUs/wctp-gateway)
+[![GitHub license](https://img.shields.io/github/license/notifius/wctp-gateway?color=blue)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
 ![GitHub All Releases](https://img.shields.io/github/downloads/NotifiUs/wctp-gateway/total)
+![Software Release Life Cycle Status](https://img.shields.io/badge/release%20status-closed--beta-blueviolet)
 
 </div>
 
@@ -13,42 +13,54 @@
 
 WCTP Gateway is a web application that implements the Carrier Gateway WCTP Actor roles needed to interface with the [Amtelco](https://amtelco.com) WCTP Intelligent Series SMS Aggregator interface.
 
-Ardently crafted for the Amtelco and [NAEO](https://www.naeo.org) community, you can use this application to run an Amtelco-compatible primary or backup SMS aggregator service. 
-Send and recieve messages from your own [Twilio](https://twilio.com) and [ThinQ](https://thinq.com) accounts &mdash; just bring your API keys!
+Ardently crafted for the Amtelco and [NAEO](https://www.naeo.org) community, you can use this application to run an Amtelco-compatible primary or backup SMS aggregator service using your own [Twilio](https://twilio.com) and [ThinQ](https://thinq.com) accounts &mdash; just bring your API keys!
 
 The modern WCTP engine brings the following features and more:
 
+- Create and manage Enterprise Host credentials
 - Bring your own Twilio or ThinQ accounts
-- Automatic carrier failover when using multiple carriers
+- Support for using Twilio Messaging Services or Phone Numbers
+- Carrier priority and automatic fail-over
 - Sticky sending by recipient to favor specific carriers
-- Create and manage Enterprise Hosts
 - IP Whitelisting, MFA, and login notifications
-- TLS/SSL required by default across the entire stack
+- TLS/SSL required by default
 
 ## Status
 
-**Not production ready**
+We're putting the final touches on to publish our first release candidate version in January 2020.
+
+![Software Release Life Cycle Status](https://img.shields.io/badge/release%20status-closed--beta-blueviolet)
+
 
 ## Requirements
 
-We use features that require the following tools and technologies:
+We use application, language, and OS features that require the following tools and technologies:
 
-- PHP 7.2+
-- nginx
-- redis-server
-- mysql
-- supervisord
-- Linux ( We generally recommend Ubuntu for most users)
+- **Ubuntu** linux
+- **PHP 7.2+** for web application scripting
+- **nginx with php-fpm** for web server
+- **redis-server** for caching
+- **mysql** for storage
+- **supervisord** to watch queue processes
+
+We utilize linux specific methods of obtaining data about the hardware/server (such as memory, disk space, CPU, etc.)
+Because of this, we require the use of a linux host. We generally recommend Ubuntu for most users. 
 
 ## Technologies
 
 WCTP Gateway is a [Laravel](https://laravel.com) web-application that implements a WCTP endpoint and administrative portal. 
 This system cannot send SMS messages without a supported carrier (Telecom API provider) like Twilio or ThinQ. 
 
-The web portal UI is built on [Bootstrap](https://getbootstrap.com) and uses [Font Awesome](https://fontawesome.com/) icons. 
+### Front End
+The web portal UI is built on [Bootstrap](https://getbootstrap.com) with some [TailwindCSS](https://tailwindcss.com) sprinkled in.
+We use [Font Awesome](https://fontawesome.com/) free versions for icons throughout the application.
 
+
+### Laravel Application
 You can setup and run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, and just about any modern PHP web environment. 
 Start from a single-server appliance setup and grow into a full blown load balancing and clustering setup.
+
+Laravel [Forge](https://forge.laravel.com) is an easy to use server management tool to try out! 
 
 You can also go *serverless*, and try out [Vapor](https://vapor.laravel.com/). 
 
