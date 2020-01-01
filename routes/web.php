@@ -28,6 +28,12 @@ Route::namespace('Events')->group(function () {
     Route::get('/events', 'ShowEvents');
 });
 
+Route::namespace('System')->group(function () {
+    Route::get('/system/information', 'ShowSysInfo');
+    Route::get('/system/phpinfo', 'ShowPHPInfo');
+    Route::get('/system', '\App\Http\Controllers\UnderConstruction');
+});
+
 Route::namespace('Carriers')->group(function () {
     Route::get('/carriers', 'ShowCarriers');
     Route::post('/carriers', 'CreateCarrier');
@@ -64,5 +70,4 @@ Route::namespace('WCTP')->group(function(){
 
 Route::get('/analytics', 'UnderConstruction');
 Route::get('/sticky', 'UnderConstruction');
-Route::get('/system', 'UnderConstruction');
 

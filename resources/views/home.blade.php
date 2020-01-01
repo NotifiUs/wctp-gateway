@@ -27,7 +27,6 @@
                 </div>
             </div>
         </div>
-        @if(count($checklist) == 0 )
             <div class="col-md-4">
                 <div class="card mb-2">
                     <div class="card-body text-center my-0">
@@ -48,21 +47,12 @@
                 </div>
             </div>
 
-        @else
-            <div class="col-md-8">
-                <div class="card mb-2 border-orange bg-orange h-100">
-                    <div class="card-body text-left px-4 my-0">
-                        <h5 class="text-orange font-weight-bolder mb-2">
-                            {{ __('System Warnings') }}
-                        </h5>
-                        @foreach( $checklist as $item )
-                           <p class="my-0" style="color:#b37400;">
-                               <i class="fas fa-times-circle text-orange"></i> <strong>{!!  $item['description']  !!} <small class="font-weight-bold"><a class="text-uppercase text-orange" href="{{ $item['link'] }}">Fix</a></small></strong>
-                           </p>
-                        @endforeach
-                    </div>
-                </div>
+        @if(count($checklist) !== 0 )
+
+            <div class="col-md-12 my-2">
+                @include('layouts.checklist')
             </div>
+
         @endif
     </div>
 
