@@ -53,7 +53,8 @@ This system cannot send SMS messages without a supported carrier (Telecom API pr
 
 ### Front End
 The web portal UI is built on [Bootstrap](https://getbootstrap.com) with some [TailwindCSS](https://tailwindcss.com) sprinkled in.
-We use [Font Awesome](https://fontawesome.com/) free versions for icons throughout the application.
+We use [Font Awesome](https://fontawesome.com/) free for icons throughout the application. 
+For various splash pages (errors, etc), we use open source illustrations from [UnDraw](https://undraw.co/illustrations).
 
 
 ### Laravel Application
