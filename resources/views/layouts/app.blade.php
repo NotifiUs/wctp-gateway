@@ -26,15 +26,24 @@
                 <div class="row justify-content-center">
                     <!-- this needs cleaned up some, better use of templates, split out account side menu? -->
                     @if( Auth::check() )
-                        @if( ! \Illuminate\Support\Str::startsWith( request()->path(), 'account' ) )
+                        @if( ! Str::startsWith( request()->path(), 'account' ) )
                             <div class="col-md-4">
                                 @include('layouts.side')
                             </div>
+                            <div class="col-md-8">
+                                @yield('content')
+                            </div>
+                        @else
+                            <div class="col">
+                                @yield('content')
+                            </div>
                         @endif
+                    @else
+                        <div class="col">
+                            @yield('content')
+                        </div>
                     @endif
-                    <div class="col">
-                        @yield('content')
-                    </div>
+
                 </div>
             </div>
 

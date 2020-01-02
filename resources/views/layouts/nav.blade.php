@@ -54,3 +54,5 @@
         </div>
     </div>
 </nav>
+
+@include('system.maintenance-bar')

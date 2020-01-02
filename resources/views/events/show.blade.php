@@ -16,7 +16,7 @@
         @endif
     </h5>
 
-    <div class="card py-0 my-0">
+    <div class="card py-0 my-0 mx-0">
         <div class="card-body p-0 m-0">
 
             <div class="table-responsive text-left">

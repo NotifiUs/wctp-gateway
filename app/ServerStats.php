@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Request;
 
@@ -51,22 +54,6 @@ class ServerStats
         return $server;
     }
 
-    public static function lscpu()
-    {
-        $output = '';
-        exec("lscpu 2>&1", $output );
-
-        $lscpu = [];
-        foreach( $output as $key => $val )
-        {
-            $temp = explode(':', $val );
-            $lscpu[ $temp[0] ] = trim( $temp[1] );
-        }
-
-
-        return $lscpu;
-    }
-
     private static function getVersion()
     {
         return  exec("uname -srm 2>&1" );
@@ -88,7 +75,7 @@ class ServerStats
             $return_value = '';
             $status = exec("service {$service} status 2>&1", $output, $return_value );
             $services[$service]['desc'] = implode("\n", $output );
-            if( $return_value === 0)
+            if( $return_value === 0 && $status)
             {
                 $services[$service]['status'] = true;
             }
@@ -97,42 +84,27 @@ class ServerStats
         return $services;
     }
 
-    public static function lsblk()
-    {
-        $output = '';
-        exec("lsblk 2>&1", $output );
-
-        return implode("\n", $output);
-    }
-
     private static function getLoad()
     {
-        $uptime = exec("uptime");
-        $uptime = explode(',', $uptime );
-        return str_replace('  load average: ', '', implode(',', array_slice( $uptime, 3, 3)));
+        $load = exec("uptime");
+        $load = explode('load average:', $load );
+        if(is_array( $load ) )
+        {
+            return $load[1];
+        }
+
+        return 'Error getting info';
+
     }
 
     private static function getUptime()
     {
-        $uptime = exec("uptime");
-        $uptime = explode(',', $uptime );
-        $uptime = array_slice( $uptime, 0, 2);
-        $timestring = '';
-        if( Str::contains($uptime[1], ':'))
-        {
-            $time = explode(':', trim( $uptime[1] ) );
-            $timestring = ", {$time[0]} hours, {$time[1]} minutes";
-        }
-        else
-        {
-            $time = $uptime[1];
-            $timestring = ", {$time}utes";
-        }
+        $uptime = File::get('/proc/uptime', false);
+        $uptime = explode(' ', trim( $uptime ) );
+        $uptime_in_seconds = $uptime[0];
 
-        $uptime = array_slice(explode(' ', trim( $uptime[0] ) ), 1, 3);
-        $uptime = implode(' ', $uptime) . $timestring;
-
-        return $uptime;
+        return Carbon::now()->subMilliseconds( $uptime_in_seconds * 1000 )
+            ->diffForHumans(null, CarbonInterface::DIFF_ABSOLUTE, true, 3 );
     }
 
     private static function getHostname()

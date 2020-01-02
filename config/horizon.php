@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'middleware' => ['web', 'auth'],
+    'middleware' => ['web'],
 
     /*
     |--------------------------------------------------------------------------
@@ -144,8 +144,9 @@ return [
             'supervisor-1' => [
                 'connection' => 'redis',
                 'queue' => ['default'],
-                'balance' => 'simple',
-                'processes' => 10,
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 10,
                 'tries' => 3,
             ],
         ],
@@ -155,7 +156,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['default'],
                 'balance' => 'simple',
-                'processes' => 3,
+                'processes' => 1,
                 'tries' => 3,
             ],
         ],

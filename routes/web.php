@@ -31,7 +31,9 @@ Route::namespace('Events')->group(function () {
 Route::namespace('System')->group(function () {
     Route::get('/system/information', 'ShowSysInfo');
     Route::get('/system/phpinfo', 'ShowPHPInfo');
-    Route::get('/system', '\App\Http\Controllers\UnderConstruction');
+    Route::get('/system', 'ShowSystem');
+    Route::post('/system/maintenance/disable', 'DisableMaintenanceMode');
+    Route::post('/system/maintenance/enable', 'EnableMaintenanceMode');
 });
 
 Route::namespace('Carriers')->group(function () {
