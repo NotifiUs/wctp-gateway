@@ -28,7 +28,6 @@ class SendThinqSMS implements ShouldQueue
         $this->message = $message;
     }
 
-
     public function handle()
     {
         try{
@@ -37,13 +36,26 @@ class SendThinqSMS implements ShouldQueue
                 'auth' => [ $this->carrier->thinq_api_username, decrypt($this->carrier->thinq_api_token)],
                 'headers' => [ 'content-type' => 'application/json' ],
                 'json' => [
-                    'from_did' => $this->carrier->numbers()->first()->e164,
+                    'from_did' => substr( $this->carrier->numbers()->first()->e164, 2),
                     'to_did' => $this->recipient,
                     'message' => $this->message,
                 ],
             ]);
         }
         catch( Exception $e ){ return false; }
+
+        $result = $thinq->post("account/{$this->carrier->thinq_account_id}/product/origination/sms/send");
+        if( $result->getStatusCode() != 200 )
+        {
+            return false;
+        }
+        $body = $result->getBody();
+        $json = $body->getContents();
+        $arr = json_decode( $json, true );
+        if( ! isset( $arr['guid']))
+        {
+            return false;
+        }
 
         return true;
     }

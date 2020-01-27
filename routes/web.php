@@ -69,7 +69,5 @@ Route::namespace('WCTP')->group(function(){
 });
 
 
-
 Route::get('/analytics', 'UnderConstruction');
 Route::get('/sticky', 'UnderConstruction');
-
