@@ -50,10 +50,10 @@ class VerifyCarrier extends Controller
                 $res = $guzzle->request('GET', $url, ['auth' => [ $request->input('thinq_api_username'), $request->input('thinq_api_token')]]);
             }
             catch( RequestException $e ) {
-                return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account"]);
+                return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
             }
             catch( Exception $e ){
-                return redirect()->to('/carriers')->withErrors(['Unable to connect to ThinQ account']);
+                return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
             }
 
             try {
@@ -69,10 +69,8 @@ class VerifyCarrier extends Controller
                 'api_username' => $request->input('thinq_api_username'),
                 'api_token' => $request->input('thinq_api_token'),
             ];
+
             return view('carriers.thinq-verify')->with('account', $account );
         }
-
-        return redirect()->to('/carriers');
-
     }
 }

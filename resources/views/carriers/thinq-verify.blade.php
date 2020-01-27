@@ -79,7 +79,7 @@
                                     </dl>
                                     <dt class="text-muted-light">Current Balance</dt>
                                     <dl class="text-dark font-weight-bolder">
-                                        <i class="fas fa-dollar-sign text-muted"></i> {{ money_format('%i', $account['balance'] ) }}
+                                        <i class="fas fa-dollar-sign text-muted"></i> {{ $account['balance'] }}
                                     </dl>
                                 </dl>
                             </div>
