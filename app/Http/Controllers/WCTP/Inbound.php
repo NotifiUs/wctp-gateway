@@ -24,7 +24,7 @@ class Inbound extends Controller
         $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
         $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
 
-        $this->validateWCTPParams([
+        $test = $this->validateWCTPParams([
             'recipient' => $recipient,
             'message' => $message,
             'senderID' => $senderID,
