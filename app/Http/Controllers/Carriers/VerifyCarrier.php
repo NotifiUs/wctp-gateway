@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Carriers;
 
 use Exception;
+use NumberFormatter;
 use Twilio\Rest\Client;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client as Guzzle;
@@ -62,6 +63,9 @@ class VerifyCarrier extends Controller
             catch( Exception $e ) {
                 return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
             }
+
+            $fmt = new NumberFormatter( 'en_US', NumberFormatter::CURRENCY );
+            $balance['balance'] =  $fmt->formatCurrency($balance['balance'], "USD");
 
             $account = [
                 'balance' => $balance['balance'],
