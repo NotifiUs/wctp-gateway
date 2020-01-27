@@ -24,7 +24,7 @@ class Inbound extends Controller
         $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
         $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
 
-        $this->validate([
+        $this->validateInput([
             'recipient' => $recipient,
             'message' => $message,
             'senderID' => $senderID,
@@ -87,7 +87,7 @@ class Inbound extends Controller
             ->with('successText', 'Message queued for delivery' );
     }
 
-    private function validate( array $data )
+    private function validateInput( array $data )
     {
         $validator = Validator::make([
             'recipient' => 'required|string|size:10',
