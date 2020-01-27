@@ -22,8 +22,8 @@ class ShowDashboard extends Controller
         $checklist = Checklist::get();
         $events = EventLog::take(10)->orderBy('created_at', 'desc')->get();
 
-        $inboundCount = number_format( mt_rand(0, 1000) );
-        $outboundCount = number_format( mt_rand( 0, 1000) );
+        $inboundCount = 0;      //number_format( mt_rand(0, 1000) );
+        $outboundCount = 0;     //number_format( mt_rand( 0, 1000) );
 
         return view('home')
             ->with('server', $server )
