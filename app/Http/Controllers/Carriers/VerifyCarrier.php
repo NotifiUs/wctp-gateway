@@ -57,7 +57,7 @@ class VerifyCarrier extends Controller
             }
 
             try {
-                $balance = json_decode( (string)$res->getBody(), true, null, JSON_THROW_ON_ERROR );
+                $balance = json_decode( (string)$res->getBody(), true, 1, JSON_THROW_ON_ERROR );
             }
             catch( Exception $e ) {
                 return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
