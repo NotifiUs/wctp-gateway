@@ -24,12 +24,12 @@ class Inbound extends Controller
         $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
         $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
 
-        $test = $this->checkParams([
+        /*$test = $this->checkParams([
             'recipient' => $recipient,
             'message' => $message,
             'senderID' => $senderID,
             'securityCode' => $securityCode,
-        ]);
+        ]);*/
 
         $host = EnterpriseHost::where('senderID', $senderID )->first();
 
