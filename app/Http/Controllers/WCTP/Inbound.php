@@ -4,15 +4,16 @@ namespace App\Http\Controllers\WCTP;
 
 use Exception;
 use App\Carrier;
+use Illuminate\Support\Facades\Validator;
 use SimpleXMLElement;
 use App\EnterpriseHost;
+use App\Jobs\SendThinqSMS;
+use App\Jobs\SendTwilioSMS;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Twilio\Rest\Client as TwilioClient;
 
 class Inbound extends Controller
 {
-
     public function __invoke(Request $request)
     {
         $wctp = new SimpleXMLElement( $request->getContent() );
@@ -23,7 +24,15 @@ class Inbound extends Controller
         $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
         $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
 
+        $this->validate([
+            'recipient' => $recipient,
+            'message' => $message,
+            'senderID' => $senderID,
+            'securityCode' => $securityCode,
+        ]);
+
         $host = EnterpriseHost::where('senderID', $senderID )->first();
+
         if( is_null( $host ) )
         {
             return view('WCTP.wctp-Failure')
@@ -58,32 +67,12 @@ class Inbound extends Controller
 
         if( $carrier->api == 'twilio' )
         {
-            try{
-                $client = new TwilioClient( $host->twilio_account_sid, $host->twilio_auth_token );
-            }
-            catch( Exception $e ){
-                return view('WCTP.wctp-Failure')
-                    ->with('errorCode', '604' )
-                    ->with('errorText', 'Internal Server Error' )
-                    ->with('errorDesc', 'Unable to connect to upstream carrier');
-            }
+            SendTwilioSMS::dispatch( $host, $carrier, $recipient, $message );
 
-            try{
-                $client->messages->create(
-                    "+1{$recipient}",
-                    array(
-                        'from' => $carrier->numbers()->first()->e164,
-                        'body' => $message
-                    )
-                );
-            }
-            catch( Exception $e ){
-                return view('WCTP.wctp-Failure')
-                    ->with('errorCode', '604' )
-                    ->with('errorText', 'Internal Server Error' )
-                    ->with('errorDesc', 'Unable to connect to upstream carrier');
-            }
-
+        }
+        elseif( $carrier->api == 'thinq' )
+        {
+            SendThinqSMS::dispatch( $host, $carrier, $recipient, $message );
         }
         else
         {
@@ -93,10 +82,69 @@ class Inbound extends Controller
                 ->with('errorDesc', 'This carrier API is not yet implemented');
         }
 
-
         return view('WCTP.wctp-Confirmation')
             ->with('successCode', '200' )
-            ->with( 'successText', 'Message queued for delivery' );
+            ->with('successText', 'Message queued for delivery' );
+    }
 
+    private function validate( array $data )
+    {
+        $validator = Validator::make([
+            'recipient' => 'required|string|size:10',
+        ],[
+            'recipient' => $data['recipient'],
+        ]);
+
+        if ($validator->fails())
+        {
+            return view('WCTP.wctp-Failure')
+                ->with('errorCode', '403' )
+                ->with('errorText', 'Invalid recipientID' )
+                ->with('errorDesc', 'The recipientID is invalid');
+        }
+
+        $validator = Validator::make([
+            'message' => 'required|string|max:1600',
+        ],[
+            'message' => $data['message'],
+        ]);
+
+        if ($validator->fails())
+        {
+            return view('WCTP.wctp-Failure')
+                ->with('errorCode', '411' )
+                ->with('errorText', 'Message exceeds allowable length' )
+                ->with('errorDesc', 'Message exceeds allowable message length of 1600');
+        }
+
+        $validator = Validator::make([
+            'senderID' => 'required|string|max:128',
+        ],[
+            'senderID' => $data['senderID'],
+        ]);
+
+        if ($validator->fails())
+        {
+            return view('WCTP.wctp-Failure')
+                ->with('errorCode', '401' )
+                ->with('errorText', 'Invalid senderID' )
+                ->with('errorDesc', 'The senderID is invalid');
+        }
+
+        $validator = Validator::make([
+            'securityCode' => 'required|string|max:16',
+        ],[
+            'securityCode' => $data['securityCode'],
+        ]);
+
+        if ($validator->fails())
+        {
+            return view('WCTP.wctp-Failure')
+                ->with('errorCode', '402' )
+                ->with('errorText', 'Invalid security code' )
+                ->with('errorDesc', 'The security code for this senderID is invalid');
+        }
+
+        return true;
     }
 }
