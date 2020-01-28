@@ -100,12 +100,12 @@ class Inbound extends Controller
     private function checkParams( array $data )
     {
         $validator = Validator::make([
-            'recipient' => 'required|string|size:10',
-        ],[
             'recipient' => $data['recipient'],
+        ],[
+            'recipient' => 'required|string|size:10',
         ]);
 
-        if ($validator->fails())
+        if( $validator->fails() )
         {
             return [
                 'success' => false,
@@ -116,12 +116,12 @@ class Inbound extends Controller
         }
 
         $validator = Validator::make([
-            'message' => 'required|string|max:1600',
-        ],[
             'message' => $data['message'],
+        ],[
+            'message' => 'required|string|max:1600',
         ]);
 
-        if ($validator->fails())
+        if( $validator->fails() )
         {
             return [
                 'success' => false,
@@ -132,12 +132,12 @@ class Inbound extends Controller
         }
 
         $validator = Validator::make([
-            'senderID' => 'required|string|max:128',
-        ],[
             'senderID' => $data['senderID'],
+        ],[
+            'senderID' => 'required|string|max:128',
         ]);
 
-        if ($validator->fails())
+        if( $validator->fails() )
         {
             return [
                 'success' => false,
@@ -148,12 +148,12 @@ class Inbound extends Controller
         }
 
         $validator = Validator::make([
-            'securityCode' => 'required|string|max:16',
-        ],[
             'securityCode' => $data['securityCode'],
+        ],[
+            'securityCode' => 'required|string|max:16',
         ]);
 
-        if ($validator->fails())
+        if( $validator->fails() )
         {
             return [
                 'success' => false,
