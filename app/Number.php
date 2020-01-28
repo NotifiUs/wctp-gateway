@@ -7,6 +7,7 @@ use Twilio\Rest\Client;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Client as Guzzle;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\RequestException;
@@ -82,11 +83,11 @@ class Number extends Model
         elseif( $this->carrier->api == 'thinq' )
         {
             $ipify = new Guzzle(['base_uri' => 'https://api.ipify.org']);
-            try{ $response = $ipify->get( '/'); } catch( Exception $e ){ return false; }
+            try{ $response = $ipify->get( '/'); } catch( Exception $e ){ Log::debug($e->getMessage());return false; }
             $ip = (string)$response->getBody();
 
             $validator = Validator::make(['ip' => $ip], ['ip' => 'required|ip']);
-            if( $validator->fails() ) { return false; }
+            if( $validator->fails() ) { Log::debug('IP validation failed' );return false; }
 
             try{
                 $thinq = new Guzzle([
@@ -95,7 +96,7 @@ class Number extends Model
                     'headers' => [ 'content-type' => 'application/json' ],
                 ]);
             }
-            catch( Exception $e ){ return false; }
+            catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
             //get all current ip whitelists
             $url = "/account/{$this->carrier->thinq_account_id}/product/origination/sms/ip";
@@ -103,7 +104,7 @@ class Number extends Model
             try{
                 $res = $thinq->get($url);
             }
-            catch( Exception $e ){ return false; }
+            catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
             $hasIP = false;
             $list = json_decode( (string)$res->getBody(), true );
@@ -120,7 +121,7 @@ class Number extends Model
                 try{
                     $res = $thinq->post($url);
                 }
-                catch( Exception $e ){ return false; }
+                catch( Exception $e ){ Log::debug($e->getMessage());return false; }
             }
 
             //get all current sms routing profiles
@@ -128,7 +129,7 @@ class Number extends Model
             try{
                 $res = $thinq->get($url);
             }
-            catch( Exception $e ){ return false; }
+            catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
             $hasProfile = false;
             $list = json_decode( (string)$res->getBody(), true );
@@ -161,7 +162,7 @@ class Number extends Model
                 try{
                     $res = $thinq->post($url, ['body' => json_encode( $body ) ]);
                 }
-                catch( Exception $e ){ return false; }
+                catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
                 $profile = json_decode( (string)$res->getBody(), true );
 
@@ -188,7 +189,7 @@ class Number extends Model
             try{
                 $res = $thinq->post($url, ['body' => json_encode( $body ) ]);
             }
-            catch( Exception $e ){ return false; }
+            catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
             $order = json_decode( (string)$res->getBody(), true );
 
@@ -197,7 +198,7 @@ class Number extends Model
             try{
                 $res = $thinq->post($url);
             }
-            catch( Exception $e ){ return false; }
+            catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
         }
         else

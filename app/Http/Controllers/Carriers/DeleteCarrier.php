@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Carriers;
 
-use App\Jobs\LogEvent;
 use Exception;
 use App\Carrier;
+use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

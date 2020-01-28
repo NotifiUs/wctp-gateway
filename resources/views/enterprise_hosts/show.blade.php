@@ -30,6 +30,7 @@
                                 <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editEnterpriseHostModal{{ $host->id }}">{{ __('Edit Settings') }}</a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#credentialsEnterpriseHostModal{{ $host->id }}">{{ __('View Credentials') }}</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#setupEnterpriseHostModal{{ $host->id }}">{{ __('Setup Information') }}</a>
                                     <div class="dropdown-divider"></div>
                                     @if( $host->enabled )
                                         <a class="dropdown-item text-orange" href="#" data-toggle="modal" data-target="#disableEnterpriseHostModal{{ $host->id }}">{{ __('Disable Host') }}</a>
@@ -74,6 +75,7 @@
                     </div>
                 </div>
                 @include('enterprise_hosts.modals.credentials')
+                @include('enterprise_hosts.modals.setup')
                 @include('enterprise_hosts.modals.delete')
                 @include('enterprise_hosts.modals.disable')
                 @include('enterprise_hosts.modals.edit')
