@@ -137,7 +137,7 @@ class Number extends Model
 
             foreach( $list['rows'] as $row )
             {
-               if( $row['url'] == secure_url("/sms/inbound/{$this->identifier}/primary" ) )
+               if( $row['name'] == $this->identifier )
                {
                    $sms_routing_profile = $row['id'];
                    $hasProfile = true;
