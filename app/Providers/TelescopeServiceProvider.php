@@ -9,6 +9,8 @@ use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
 class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 {
+    protected $log_in_production = true;
+
     /**
      * Register any application services.
      *
@@ -21,7 +23,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         $this->hideSensitiveRequestDetails();
 
         Telescope::filter(function (IncomingEntry $entry) {
-            if ($this->app->isLocal()) {
+            if ($this->app->isLocal() || $this->log_in_production ) {
                 return true;
             }
 
@@ -44,7 +46,10 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
             return;
         }
 
-        Telescope::hideRequestParameters(['_token']);
+        Telescope::hideRequestParameters([
+            '_token', 'password', 'password_confirmation',
+            'current_password'
+        ]);
 
         Telescope::hideRequestHeaders([
             'cookie',

@@ -36,6 +36,10 @@ class SendTwilioSMS implements ShouldQueue
             );
         }
         catch( Exception $e ){
+            LogEvent::dispatch(
+                "Failure submitting message",
+                get_class( $this ), 'info', json_encode($e->getMessage()), null
+            );
             return false;
         }
 
@@ -49,6 +53,10 @@ class SendTwilioSMS implements ShouldQueue
             );
         }
         catch( Exception $e ){
+            LogEvent::dispatch(
+                "Failure sending message",
+                get_class( $this ), 'info', json_encode($e->getMessage()), null
+            );
             return false;
         }
 

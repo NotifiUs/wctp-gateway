@@ -12,7 +12,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-
 class SendThinqSMS implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -42,11 +41,21 @@ class SendThinqSMS implements ShouldQueue
                 ],
             ]);
         }
-        catch( Exception $e ){ return false; }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Failed decrypting carrier api token",
+                get_class( $this ), 'info', json_encode($this->carrier->toArray()), null
+            );
+            return false;
+        }
 
         $result = $thinq->post("account/{$this->carrier->thinq_account_id}/product/origination/sms/send");
         if( $result->getStatusCode() != 200 )
         {
+            LogEvent::dispatch(
+                "Failure submitting message",
+                get_class( $this ), 'info', json_encode($result->getReasonPhrase()), null
+            );
             return false;
         }
         $body = $result->getBody();
@@ -54,6 +63,10 @@ class SendThinqSMS implements ShouldQueue
         $arr = json_decode( $json, true );
         if( ! isset( $arr['guid']))
         {
+            LogEvent::dispatch(
+                "No message GUID returned from carrier",
+                get_class( $this ), 'info', json_encode($arr), null
+            );
             return false;
         }
 
