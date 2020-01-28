@@ -22,6 +22,10 @@ Route::get('/home', 'ShowDashboard')->name('home');
 Route::namespace('Account')->group(function () {
     Route::get('/account', 'ShowAccount');
     Route::get('/account/verify-email', 'VerifyEmail')->middleware('verified');
+    Route::post('/account/name', 'UpdateName');
+    Route::post('/account/timezone', 'UpdateTimezone');
+    Route::post('/account/email', 'ChangeEmail');
+    Route::post('/account/password', 'ChangePassword');
 });
 
 Route::namespace('Events')->group(function () {
