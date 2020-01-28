@@ -22,7 +22,8 @@
                             No voice settings are changed or updated.
                         @else
                             This will add this system's IP address to ThinQ whitelist and setup a SMS routing profile for inbound messages to route to our application.
-                            No existing IP or Routing profiles will be removed. No voice settings are changed or updated.
+                            No existing IPs will be removed. If a Routing Profile matches the number, it will be updated with the new webhook url.
+                            e911 and CNAM selections will be reset - you will need to manually re-assign them.
                         @endif
 
                     </p>
