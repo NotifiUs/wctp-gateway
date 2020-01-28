@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WCTP;
 use Exception;
 use App\Carrier;
 use SimpleXMLElement;
+use App\Jobs\LogEvent;
 use App\EnterpriseHost;
 use App\Jobs\SendThinqSMS;
 use App\Jobs\SendTwilioSMS;
@@ -33,44 +34,34 @@ class Inbound extends Controller
 
         if( ! $paramCheck['success'] )
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', $paramCheck['errorCode'] )
-                ->with('errorText', $paramCheck['errorText'] )
-                ->with('errorDesc', $paramCheck['errorDesc']);
+            return $this->showError( $paramCheck['errorCode'], $paramCheck['errorText'],
+                $paramCheck['errorDesc']);
         }
 
         $host = EnterpriseHost::where('senderID', $senderID )->first();
 
         if( is_null( $host ) )
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '401' )
-                ->with('errorText', 'Invalid senderID' )
-                ->with('errorDesc', 'senderID does not live on this system');
+            return $this->showError( 401, 'Invalid senderID',
+                'senderID does not live on this system');
         }
 
         try{
             if( $securityCode != decrypt( $host->securityCode ) )
             {
-                return view('WCTP.wctp-Failure')
-                    ->with('errorCode', '402' )
-                    ->with('errorText', 'Invalid securityCode' )
-                    ->with('errorDesc', 'securityCodes does not match');
+                return $this->showError( 402, 'Invalid securityCode',
+                    'Unable to decrypt securityCode');
             }
         }
         catch( Exception $e ){
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '402' )
-                ->with('errorText', 'Invalid securityCode' )
-                ->with('errorDesc', 'Unable to decrypt securityCode');
+            return $this->showError( 402, 'Invalid securityCode',
+                'Unable to decrypt securityCode');
         }
 
         $carrier = Carrier::where('enabled', 1)->orderBy('priority')->first();
         if( is_null($carrier)){
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '606' )
-                ->with('errorText', 'Service Unavailable' )
-                ->with('errorDesc', 'No upstream carriers are enabled');
+            return $this->showError( 606, 'Service Unavailable',
+                'No upstream carriers are enabled');
         }
 
         if( $carrier->api == 'twilio' )
@@ -84,15 +75,26 @@ class Inbound extends Controller
         }
         else
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '604' )
-                ->with('errorText', 'Internal Server Error' )
-                ->with('errorDesc', 'This carrier API is not yet implemented');
+            return $this->showError( 604, 'Internal Server Error',
+                'This carrier API is not yet implemented');
         }
 
         return view('WCTP.wctp-Confirmation')
             ->with('successCode', '200' )
             ->with('successText', 'Message queued for delivery' );
+    }
+
+    private function showError( $code, $text, $desc )
+    {
+        LogEvent::dispatch(
+            "Failed WCTP connection",
+            get_class( $this ), 'info', json_encode([$code, $text, $desc]), null
+        );
+
+        return view('WCTP.wctp-Failure')
+            ->with('errorCode', $code )
+            ->with('errorText', $text )
+            ->with('errorDesc', $desc );
     }
 
     private function checkParams( array $data )
