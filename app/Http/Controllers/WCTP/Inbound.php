@@ -24,12 +24,20 @@ class Inbound extends Controller
         $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
         $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
 
-        /*$test = $this->checkParams([
+        $paramCheck = $this->checkParams([
             'recipient' => $recipient,
             'message' => $message,
             'senderID' => $senderID,
             'securityCode' => $securityCode,
-        ]);*/
+        ]);
+
+        if( ! $paramCheck['success'] )
+        {
+            return view('WCTP.wctp-Failure')
+                ->with('errorCode', $paramCheck['errorCode'] )
+                ->with('errorText', $paramCheck['errorText'] )
+                ->with('errorDesc', $paramCheck['errorDesc']);
+        }
 
         $host = EnterpriseHost::where('senderID', $senderID )->first();
 
@@ -97,10 +105,12 @@ class Inbound extends Controller
 
         if ($validator->fails())
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '403' )
-                ->with('errorText', 'Invalid recipientID' )
-                ->with('errorDesc', 'The recipientID is invalid');
+            return [
+                'success' => false,
+                'errorCode' => 403,
+                'errorText' => 'Invalid recipientID',
+                'errorDesc' => 'The recipientID is invalid',
+            ];
         }
 
         $validator = Validator::make([
@@ -111,10 +121,12 @@ class Inbound extends Controller
 
         if ($validator->fails())
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '411' )
-                ->with('errorText', 'Message exceeds allowable length' )
-                ->with('errorDesc', 'Message exceeds allowable message length of 1600');
+            return [
+                'success' => false,
+                'errorCode' => 411,
+                'errorText' => 'Message exceeds allowable length',
+                'errorDesc' => 'Message exceeds allowable message length of 1600',
+            ];
         }
 
         $validator = Validator::make([
@@ -125,10 +137,12 @@ class Inbound extends Controller
 
         if ($validator->fails())
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '401' )
-                ->with('errorText', 'Invalid senderID' )
-                ->with('errorDesc', 'The senderID is invalid');
+            return [
+                'success' => false,
+                'errorCode' => 401,
+                'errorText' => 'Invalid senderID',
+                'errorDesc' => 'The senderID is invalid',
+            ];
         }
 
         $validator = Validator::make([
@@ -139,12 +153,19 @@ class Inbound extends Controller
 
         if ($validator->fails())
         {
-            return view('WCTP.wctp-Failure')
-                ->with('errorCode', '402' )
-                ->with('errorText', 'Invalid security code' )
-                ->with('errorDesc', 'The security code for this senderID is invalid');
+            return [
+                'success' => false,
+                'errorCode' => 402,
+                'errorText' => 'Invalid security code',
+                'errorDesc' => 'The security code for this senderID is invalid',
+            ];
         }
 
-        return true;
+        return [
+            'success' => true,
+            'errorCode' => 0,
+            'errorText' => '',
+            'errorDesc' => '',
+        ];
     }
 }
