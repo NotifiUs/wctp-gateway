@@ -32,6 +32,7 @@
                     <a class="list-group-item list-group-item-action" href="#">
                         <i class="fas fa-asterisk text-primary"></i> {{ __('Change password') }}
                     </a>
+                    <!--
                     <a class="list-group-item list-group-item-action" href="#">
                         <i class="fas fa-shield-alt text-primary"></i> {{ __('Multi-factor authentication') }}
                     </a>
@@ -41,6 +42,7 @@
                     <a class="list-group-item list-group-item-action" href="#">
                         <i class="fas fa-key text-primary"></i> {{ __('Generate API Key') }}
                     </a>
+                    -->
                 </ul>
             </div>
             <div class="col-md-8">
