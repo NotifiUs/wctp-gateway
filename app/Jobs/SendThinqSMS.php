@@ -31,6 +31,7 @@ class SendThinqSMS implements ShouldQueue
     {
         try{
             $thinq = new Guzzle([
+                'timeout' => 10.0,
                 'base_uri' => 'https://api.thinq.com',
                 'auth' => [ $this->carrier->thinq_api_username, decrypt($this->carrier->thinq_api_token)],
                 'headers' => [ 'content-type' => 'application/json' ],
