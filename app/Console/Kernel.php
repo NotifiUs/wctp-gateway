@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
+use Laravel\Horizon\Console\StatusCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Laravel\Horizon\Console\StatusCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,8 +14,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\CreateAdminUser::class,
         StatusCommand::class,
+        Commands\PurgeEventLog::class,
+        Commands\CreateAdminUser::class,
     ];
 
     /**
@@ -26,8 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        $schedule->command('eventlog:purge')->daily();
         $schedule->command('telescope:prune')->daily();
+        $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
 
     /**

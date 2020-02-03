@@ -38,6 +38,9 @@ Route::namespace('System')->group(function () {
     Route::get('/system', 'ShowSystem');
     Route::post('/system/maintenance/disable', 'DisableMaintenanceMode');
     Route::post('/system/maintenance/enable', 'EnableMaintenanceMode');
+    Route::post('/system/user/create', 'CreateUser');
+    Route::post('/system/user/edit/{user}', 'EditUser');
+    Route::post('/system/user/delete/{user}', 'DeleteUser');
 });
 
 Route::namespace('Carriers')->group(function () {

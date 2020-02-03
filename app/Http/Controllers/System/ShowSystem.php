@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\System;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,9 @@ class ShowSystem extends Controller
             $maintenanceMode = json_decode( File::get( storage_path('framework/down')), true );
         }
 
+        $users = User::all();
+
         return view('system.show' )->with('clientIp', $request->getClientIp() )
-            ->with('maintenanceMode', $maintenanceMode );
+            ->with('maintenanceMode', $maintenanceMode )->with( 'users', $users );
     }
 }

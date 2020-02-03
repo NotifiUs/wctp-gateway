@@ -30,7 +30,7 @@ class LogEvent implements ShouldQueue
     {
         $event = new EventLog;
         $event->event = $this->event;
-        $event->source = str_replace("App\\Http\\Controllers\\", "", $this->source );
+        $event->source = str_replace(["App\\Http\\Controllers\\","App\\"], "", $this->source );
         $event->severity = $this->severity;
         $event->details = $this->details;
         $event->user_id = $this->user_id;

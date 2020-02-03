@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <label>Name</label>
+                        <label>E-Mail</label>
                         <input type="email" required name="email" class="form-control" value="{{ Auth::user()->email }}">
                         <small class="form-text text-muted">Your email address for password resets and notifications.</small>
                     </div>

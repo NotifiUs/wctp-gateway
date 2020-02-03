@@ -15,7 +15,7 @@ class ShowEvents extends Controller
 
     public function __invoke(Request $request)
     {
-        $events = EventLog::orderBy('created_at', 'desc')->paginate(25);
+        $events = EventLog::orderBy('created_at', 'desc')->paginate(10);
 
         return view('events.show')->with('events', $events );
     }
