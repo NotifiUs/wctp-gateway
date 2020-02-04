@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Message;
 use App\EventLog;
 use App\Checklist;
+use Carbon\Carbon;
 use App\ServerStats;
 use App\QueueStatus;
 use Illuminate\Http\Request;
@@ -22,8 +24,8 @@ class ShowDashboard extends Controller
         $checklist = Checklist::get();
         $events = EventLog::take(10)->orderBy('created_at', 'desc')->get();
 
-        $inboundCount = 0;      //number_format( mt_rand(0, 1000) );
-        $outboundCount = 0;     //number_format( mt_rand( 0, 1000) );
+        $inboundCount = Message::where('direction', 'inbound')->where('created_at', '>=', Carbon::now()->subHours(24))->count();
+        $outboundCount = Message::where('direction', 'outbound')->where('created_at', '>=', Carbon::now()->subHours(24))->count();
 
         return view('home')
             ->with('server', $server )

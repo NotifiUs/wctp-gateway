@@ -32,7 +32,7 @@
                     <div class="card-body text-center my-0">
                         <i class="fas fa-3x fa-chevron-circle-up text-primary"></i>
                         <h5 class="text-muted mt-2 mb-0">{{ $outboundCount }}</h5>
-                        <a href="/analytics/outbound" class="text-primary">Outbound Messages</a>
+                        <a href="/messages" class="text-primary">Outbound Messages</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     <div class="card-body text-center my-0">
                         <i class="fas fa-3x fa-chevron-circle-down text-primary"></i>
                         <h5 class="text-muted mt-2 mb-0">{{ $inboundCount }}</h5>
-                        <a href="/analytics/inbound" class="text-primary">Inbound Messages</a>
+                        <a href="/messages" class="text-primary">Inbound Messages</a>
                     </div>
                 </div>
             </div>

@@ -90,7 +90,9 @@ class SendThinqSMS implements ShouldQueue
             encrypt( $this->message ),
             $this->messageID,
             Carbon::now(),
-            $this->reply_with
+            $this->reply_with,
+            $arr['guid'],
+            'outbound'
         );
 
         return true;

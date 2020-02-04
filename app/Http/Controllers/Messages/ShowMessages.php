@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Analytics;
+namespace App\Http\Controllers\Messages;
 
 use App\Message;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ShowAnalytics extends Controller
+class ShowMessages extends Controller
 {
     public function __construct()
     {
@@ -17,6 +17,6 @@ class ShowAnalytics extends Controller
     {
         $messages = Message::orderBy('created_at', 'desc')->paginate(25);
 
-        return view('analytics.show')->with('messages', $messages );
+        return view('messages.show')->with('messages', $messages );
     }
 }

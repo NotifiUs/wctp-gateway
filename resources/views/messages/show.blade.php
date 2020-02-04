@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', __('Analytics'))
+@section('title', __('Messages'))
 @push('css')
 @endpush
 @push('scripts')
@@ -34,6 +34,11 @@
                         @foreach( $messages as $message )
                             <tr class="align-text-bottom">
                                 <td class="text-muted text-small font-weight-bold text-nowrap">
+                                    @if($message->direction == 'outbound')
+                                        <i class="fas fa-long-arrow-alt-up text-primary"></i>
+                                    @else
+                                        <i class="fas fa-long-arrow-alt-down text-info"></i>
+                                    @endif
                                     {{ $message->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
                                 </td>
                                 <td class=" text-truncate text-center">
@@ -66,7 +71,7 @@
     </div>
 
     @foreach( $messages as $message )
-        @include('analytics.modals.details')
+        @include('messages.modals.details')
     @endforeach
 
 @endsection

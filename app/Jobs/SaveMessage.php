@@ -14,10 +14,10 @@ class SaveMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $carrier_id, $number_id, $to, $from, $message, $messageID, $submitted_at, $reply_with;
+    protected $carrier_id, $number_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction;
 
 
-    public function __construct( $carrier_id, $number_id, $to, $from, $message, $messageID, $submitted_at, $reply_with )
+    public function __construct( $carrier_id, $number_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction )
     {
         $this->carrier_id = $carrier_id;
         $this->number_id = $number_id;
@@ -27,6 +27,8 @@ class SaveMessage implements ShouldQueue
         $this->messageID = $messageID;
         $this->submitted_at = $submitted_at;
         $this->reply_with = $reply_with;
+        $this->carrier_message_uid = $carrier_message_uid;
+        $this->direction = $direction;
     }
 
 
@@ -42,6 +44,8 @@ class SaveMessage implements ShouldQueue
             $message->messageID = $this->messageID;
             $message->submitted_at = $this->submitted_at;
             $message->reply_with = $this->reply_with;
+            $message->carrier_message_uid = $this->carrier_message_uid;
+            $message->direction = $this->direction;
             $message->save();
         }
         catch( Exception $e ){

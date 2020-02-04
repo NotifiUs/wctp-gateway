@@ -81,7 +81,9 @@ class SendTwilioSMS implements ShouldQueue
             encrypt( $this->message ),
             $this->messageID,
             Carbon::now(),
-            $this->reply_with
+            $this->reply_with,
+            $msg->sid,
+            'outbound'
         );
 
         return true;

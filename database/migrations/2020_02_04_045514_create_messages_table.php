@@ -20,6 +20,8 @@ class CreateMessagesTable extends Migration
             $table->string('to');
             $table->string('from');
             $table->text('message');
+            $table->string('carrier_message_uid');
+            $table->string('direction');
             $table->bigInteger('messageID')->nullable();
             $table->bigInteger('reply_with')->nullable();
             $table->string('status')->default('pending');

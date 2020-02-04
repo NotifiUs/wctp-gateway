@@ -5,6 +5,8 @@ namespace App\Http\Controllers\SMS;
 use Exception;
 use App\Number;
 use App\Carrier;
+use Carbon\Carbon;
+use App\Jobs\SaveMessage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -21,7 +23,7 @@ class PrimaryHandler extends Controller
             return $this->respond();
         }
 
-        $this->carrier = Carrier::Where('enabled',1)->where('id', $this->number->carrier_id )->first();
+        $this->carrier = Carrier::where('enabled',1)->where('id', $this->number->carrier_id )->first();
 
         if( is_null( $this->carrier ) ){
             return $this->respond();
@@ -30,6 +32,38 @@ class PrimaryHandler extends Controller
         if( ! $this->verify() ) {
             return $this->respond();
         }
+
+        if( $this->carrier->api == 'twilio' )
+        {
+            SaveMessage::dispatch(
+                $this->carrier->id,
+                $this->number->id,
+                $request->input('To'),
+                $request->input('From'),
+                encrypt( $request->input('Body') ),
+                null,
+                Carbon::now(),
+                null,
+                $request->input('MessageSid'),
+                'inbound'
+            );
+        }
+        else
+        {
+            SaveMessage::dispatch(
+                $this->carrier->id,
+                $this->number->id,
+                "+1{$request->input('to')}",
+                "+1{$request->input('from')}",
+                encrypt( $request->input('message') ),
+                null,
+                Carbon::now(),
+                null,
+                $request->header('X-sms-guid'),
+                'inbound'
+            );
+        }
+
 
         return $this->respond();
     }

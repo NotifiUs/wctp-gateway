@@ -55,7 +55,7 @@ Route::namespace('Carriers')->group(function () {
 
 Route::namespace('SMS')->group(function(){
    Route::post('/sms/inbound/{identifier}/primary', 'PrimaryHandler' );
-   Route::post('/sms/inbound/{identifier}/fallback', 'FallbackHandler' );
+   Route::post('/sms/inbound/{identifier}/fallback', 'PrimaryHandler' );
    Route::post('/sms/callback/{identifier}/status', 'StatusHandler' );
 });
 
@@ -81,9 +81,9 @@ Route::namespace('WCTP')->group(function(){
     Route::post('/wctp', 'Inbound');
 });
 
-Route::namespace('Analytics')->group(function(){
-    Route::get('/analytics', 'ShowAnalytics');
+Route::namespace('Messages')->group(function(){
+    Route::get('/messages', 'ShowMessages');
 });
 
 
-Route::get('/sticky', 'UnderConstruction');
+//Route::get('/sticky', 'UnderConstruction');
