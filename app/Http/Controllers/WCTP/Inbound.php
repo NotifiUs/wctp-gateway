@@ -135,7 +135,7 @@ class Inbound extends Controller
         $validator = Validator::make([
             'message' => $data['message'],
         ],[
-            'message' => 'required|string|max:1600',
+            'message' => 'required|string|max:910', //thinq is 910, twilio is 1600
         ]);
 
         if( $validator->fails() )

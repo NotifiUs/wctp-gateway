@@ -13,10 +13,21 @@ class ShowMessages extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, $direction = null )
     {
-        $messages = Message::orderBy('created_at', 'desc')->paginate(25);
+        $filter = $direction;
 
-        return view('messages.show')->with('messages', $messages );
+        if( ! is_null( $direction ) && $direction == 'inbound' ){
+            $messages = Message::where( 'direction', 'inbound' )->orderBy('created_at', 'desc')->paginate(25);
+        }
+        elseif( ! is_null( $direction ) && $direction == 'outbound' ){
+            $messages = Message::where( 'direction', 'outbound' )->orderBy('created_at', 'desc')->paginate(25);
+        }
+        else{
+            $filter = null;
+            $messages = Message::orderBy('created_at', 'desc')->paginate(25);
+        }
+
+        return view('messages.show')->with('messages', $messages )->with('filter', $filter );
     }
 }

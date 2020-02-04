@@ -57,12 +57,26 @@ class SendTwilioSMS implements ShouldQueue
 
         try{
             $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->first();
-            $msg = $client->messages->create(
-                "+1{$this->recipient}",
-                array(
+            if( $from->getType() == 'PN')
+            {
+                $params = [
                     'from' => $from->e164,
                     'body' => $this->message
-                )
+                ];
+            }
+            else
+            {
+                $params = [
+                    'messagingServiceSid' => $from->identifier,
+                    'body' => $this->message
+                ];
+            }
+
+
+
+            $msg = $client->messages->create(
+                "+1{$this->recipient}",
+                $params
             );
         }
         catch( Exception $e ){

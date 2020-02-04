@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SMS;
 
+use Carbon\Carbon;
 use Exception;
 use App\Number;
 use App\Carrier;
@@ -51,8 +52,27 @@ class StatusHandler extends Controller
             return $this->respond();
         }
 
-        $message->status = $request->input('status') ?? $request->input('send_status');
-        $message->save();
+        $message->status = $request->input('MessageStatus') ?? $request->input('send_status');
+        switch ($message->status) {
+            case "sent":
+            case "DELIVRD":
+            case "delivered":
+                $message->delivered_at = Carbon::now();
+                break;
+            case "REJECTD":
+            case "EXPIRED":
+            case "DELETED":
+            case "UNKNOWN":
+            case "failed":
+            case "undelivered":
+            case "UNDELIV":
+                $message->failed_at = Carbon::now();
+                break;
+            default:
+                break;
+        }
+
+        $message->save(); //exception will cause carrier to retry, promising some level of consistency
 
         return $this->respond();
     }

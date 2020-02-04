@@ -4,11 +4,12 @@ namespace App\Jobs;
 
 use Exception;
 use App\Message;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class SaveMessage implements ShouldQueue
 {
@@ -43,6 +44,7 @@ class SaveMessage implements ShouldQueue
             $message->message = $this->message;
             $message->messageID = $this->messageID;
             $message->submitted_at = $this->submitted_at;
+            $message->processed_at = Carbon::now();
             $message->reply_with = $this->reply_with;
             $message->carrier_message_uid = $this->carrier_message_uid;
             $message->direction = $this->direction;

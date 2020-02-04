@@ -169,6 +169,41 @@ class Number extends Model
                 $sms_routing_profile = $profile['id'];
 
             }
+            else
+            {
+                //update it so we enesure it has our most recent url
+                $webhook = secure_url("/sms/inbound/{$this->identifier}/primary" );
+                $body = [
+                    "sms_routing_profile" => [
+                        'name' => $this->identifier,
+                        'url' => $webhook,
+                        'attachment_type' => 'url'
+                    ]
+                ];
+
+                $url = "/account/{$this->carrier->thinq_account_id}/product/origination/sms/profile/{$sms_routing_profile}";
+                try{
+                    $res = $thinq->put($url, ['body' => json_encode( $body ) ]);
+                }
+                catch( Exception $e ){ Log::debug($e->getMessage());return false; }
+
+            }
+
+            //set our outbound message status url
+            //update it so we enesure it has our most recent url
+            $webhook = secure_url("/sms/callback/{$this->identifier}/status" );
+            $body = [
+                "settings" => [
+                    'deliveryConfirmationUrl' => $webhook,
+                    'deliveryNotificationType' => 'form-data',
+                ]
+            ];
+
+            $url = "/account/{$this->carrier->thinq_account_id}/product/origination/sms/settings/outbound";
+            try{
+                $res = $thinq->post($url, ['body' => json_encode( $body ) ]);
+            }
+            catch( Exception $e ){ Log::debug($e->getMessage());return false; }
 
             //create a feature order to do the following:
             //  enable SMS

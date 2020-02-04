@@ -10,7 +10,7 @@
     @include('layouts.status')
 
     <h5 class="text-muted-light mt-2 mt-md-0">
-        {{ __('Messages') }}
+        @if( $filter ) {{ ucwords($filter) }} @endif {{ __('Messages') }}
         @if( request('page') )
             &middot; Page {{ request('page') }}
         @endif
@@ -23,10 +23,11 @@
                 <table class="table table-striped table-hover m-0">
                     <thead>
                     <tr class="text-center">
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('From') }}</th>
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('To') }}</th>
-                        <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Status') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Timestamp') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Direction') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('From') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('To') }}</th>
+                        <th class="font-weight-bold text-muted-light text-left">{{ __('Status') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -34,12 +35,14 @@
                         @foreach( $messages as $message )
                             <tr class="align-text-bottom">
                                 <td class="text-muted text-small font-weight-bold text-nowrap">
-                                    @if($message->direction == 'outbound')
-                                        <i class="fas fa-long-arrow-alt-up text-primary"></i>
-                                    @else
-                                        <i class="fas fa-long-arrow-alt-down text-info"></i>
-                                    @endif
                                     {{ $message->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
+                                </td>
+                                <td class="text-small">
+                                    @if($message->direction == 'outbound')
+                                        <i class="fas fa-long-arrow-alt-up text-primary"></i> outbound
+                                    @else
+                                        <i class="fas fa-long-arrow-alt-down text-indigo"></i> inbound
+                                    @endif
                                 </td>
                                 <td class=" text-truncate text-center">
                                    {{ $message->from }}
@@ -47,9 +50,30 @@
                                 <td class=" align-text-bottom">
                                     {{ $message->to }}
                                 </td>
-                                <td class="text-truncate text-muted text-small">
-                                    <a href="#" data-toggle="modal" data-target="#detailsMessageModal{{ $message->id}}" ><i class="fas fa-search text-muted-light"></i></a>
-                                    {{ $message->status }}
+                                <td class="text-truncate text-muted text-small text-right">
+                                    @switch( $message->status )
+                                        @case("sent")
+                                        @case("DELIVRD")
+                                        @case("delivered")
+                                            <span class="badge badge-light border border-success shadow-sm px-2 py-1">
+                                            @break
+                                        @case("UNDELIV")
+                                        @case("undelivered")
+                                        @case("failed")
+                                        @case("UNKNOWN")
+                                        @case("DELETED")
+                                        @case("EXPIRED")
+                                        @case("REJECTD")
+                                            <span class="badge badge-danger px-2 py-1">
+                                            @break
+                                        @default
+                                            <span class="badge badge-light border border-secondary shadow-sm px-2 py-1">
+                                    @endswitch
+
+                                    {{ ucwords( $message->status ) }}
+                                    </span>
+                                    <a href="#" class="ml-2" data-toggle="modal" data-target="#detailsMessageModal{{ $message->id}}" ><i class="fas fa-search text-muted-light"></i></a>
+
                                 </td>
 
                             </tr>

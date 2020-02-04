@@ -32,7 +32,7 @@
                     <div class="card-body text-center my-0">
                         <i class="fas fa-3x fa-chevron-circle-up text-primary"></i>
                         <h5 class="text-muted mt-2 mb-0">{{ $outboundCount }}</h5>
-                        <a href="/messages" class="text-primary">Outbound Messages</a>
+                        <a href="/messages/outbound" class="text-primary">Outbound Messages</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     <div class="card-body text-center my-0">
                         <i class="fas fa-3x fa-chevron-circle-down text-primary"></i>
                         <h5 class="text-muted mt-2 mb-0">{{ $inboundCount }}</h5>
-                        <a href="/messages" class="text-primary">Inbound Messages</a>
+                        <a href="/messages/inbound" class="text-primary">Inbound Messages</a>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,6 @@
                             {{ __('Carrier Gateway') }}
                         </dd>
 
-
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Version Support') }}
                         </dt>
@@ -82,8 +81,6 @@
                                 WCTP v1r3 Update 1 <small><i class="fas fa-external-link-alt"></i></small>
                             </a>
                         </dd>
-
-
 
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Carrier Gateway Endpoint') }}
@@ -125,7 +122,6 @@
             </div>
         </div>
     </div>
-
 
 
     <h5 class="text-muted-light mt-2">{{ __('Recent Events') }}

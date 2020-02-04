@@ -14,7 +14,6 @@
 // No registration allowed, user must verify email.
 Auth::routes(['register' => false, 'verify' => true ]);
 
-//
 Route::get('/', 'RedirectToDashboard');
 
 Route::get('/home', 'ShowDashboard')->name('home');
@@ -54,14 +53,15 @@ Route::namespace('Carriers')->group(function () {
 });
 
 Route::namespace('SMS')->group(function(){
-   Route::post('/sms/inbound/{identifier}/primary', 'PrimaryHandler' );
-   Route::post('/sms/inbound/{identifier}/fallback', 'PrimaryHandler' );
-   Route::post('/sms/callback/{identifier}/status', 'StatusHandler' );
+    Route::post('/sms/inbound/{identifier}/primary', 'PrimaryHandler' );
+    Route::post('/sms/inbound/{identifier}/fallback', 'PrimaryHandler' );
+    Route::post('/sms/callback/{identifier}/status', 'StatusHandler' );
 });
 
 Route::namespace('Numbers')->group(function(){
-   Route::get('/numbers', 'ShowNumbers');
-   Route::post('/numbers', 'CreateNumber');
+    Route::get('/numbers', 'ShowNumbers');
+    Route::get('/numbers/available', 'ShowAvailable');
+    Route::post('/numbers', 'CreateNumber');
     Route::post('/numbers/{number}/enable', 'EnableNumber');
     Route::post('/numbers/{number}/disable', 'DisableNumber');
     Route::post('/numbers/{number}/delete', 'DeleteNumber');
@@ -82,7 +82,8 @@ Route::namespace('WCTP')->group(function(){
 });
 
 Route::namespace('Messages')->group(function(){
-    Route::get('/messages', 'ShowMessages');
+    Route::get('/messages/{direction?}', 'ShowMessages');
+
 });
 
 

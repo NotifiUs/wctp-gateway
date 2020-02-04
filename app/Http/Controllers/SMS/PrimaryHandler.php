@@ -33,8 +33,16 @@ class PrimaryHandler extends Controller
             return $this->respond();
         }
 
+
         if( $this->carrier->api == 'twilio' )
         {
+            $reply_phrase = preg_match('/\b\d+( ?ok(ay)?)\b/i', $request->input('Body'), $matches );
+            if( $reply_phrase && isset($matches[0]) )
+            {
+                $reply_with = str_replace(['ok','okay'], '', $matches[0]);
+            }
+            else{ $reply_with = null; }
+
             SaveMessage::dispatch(
                 $this->carrier->id,
                 $this->number->id,
@@ -43,13 +51,21 @@ class PrimaryHandler extends Controller
                 encrypt( $request->input('Body') ),
                 null,
                 Carbon::now(),
-                null,
+                $reply_with,
                 $request->input('MessageSid'),
                 'inbound'
             );
+
         }
         else
         {
+            $reply_phrase = preg_match('/\b\d+( ?ok(ay)?)\b/i', $request->input('message'), $matches );
+            if( $reply_phrase && isset($matches[0]) )
+            {
+                $reply_with = trim( str_replace(['ok','okay'], '', $matches[0]));
+            }
+            else{ $reply_with = null; }
+
             SaveMessage::dispatch(
                 $this->carrier->id,
                 $this->number->id,
@@ -58,7 +74,7 @@ class PrimaryHandler extends Controller
                 encrypt( $request->input('message') ),
                 null,
                 Carbon::now(),
-                null,
+                $reply_with,
                 $request->header('X-sms-guid'),
                 'inbound'
             );
