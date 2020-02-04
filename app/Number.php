@@ -57,7 +57,7 @@ class Number extends Model
                             'fallbackUrl' => secure_url("/sms/inbound/{$this->identifier}/fallback" ),
                             'fallbackMethod' => 'POST',
                             'statusCallback' => secure_url("/sms/callback/{$this->identifier}/status"),
-                            //'statusCallbackMethod' => 'POST',
+                            //'statusCallbackMethod' => 'POST', //not in docs
                         ]);
                 }
                 else

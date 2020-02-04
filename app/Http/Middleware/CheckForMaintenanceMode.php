@@ -12,9 +12,7 @@ class CheckForMaintenanceMode extends Middleware
      * @var array
      */
     protected $except = [
-        'wctp',
-        'login',
-        'logout'
-
+        '/wctp',
+        '/sms/*',
     ];
 }

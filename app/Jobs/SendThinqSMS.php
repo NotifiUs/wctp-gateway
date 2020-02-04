@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Carbon\Carbon;
 use Exception;
 use App\Carrier;
 use App\EnterpriseHost;
@@ -16,27 +17,37 @@ class SendThinqSMS implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $host, $carrier, $recipient, $message;
+    /**
+     * Delete the job if its models no longer exist.
+     *
+     * @var bool
+     */
+    public $deleteWhenMissingModels = true;
+
+    protected $host, $carrier, $recipient, $message, $messageID, $reply_with;
 
 
-    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message  )
+    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int $messageID, $reply_with  )
     {
         $this->host = $host;
         $this->carrier = $carrier;
         $this->recipient = $recipient;
         $this->message = $message;
+        $this->messageID = $messageID;
+        $this->reply_with = $reply_with;
     }
 
     public function handle()
     {
         try{
+            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->first();
             $thinq = new Guzzle([
                 'timeout' => 10.0,
                 'base_uri' => 'https://api.thinq.com',
                 'auth' => [ $this->carrier->thinq_api_username, decrypt($this->carrier->thinq_api_token)],
                 'headers' => [ 'content-type' => 'application/json' ],
                 'json' => [
-                    'from_did' => substr( $this->carrier->numbers()->first()->e164, 2),
+                    'from_did' => substr( $from->e164, 2),
                     'to_did' => $this->recipient,
                     'message' => $this->message,
                 ],
@@ -45,7 +56,7 @@ class SendThinqSMS implements ShouldQueue
         catch( Exception $e ){
             LogEvent::dispatch(
                 "Failed decrypting carrier api token",
-                get_class( $this ), 'info', json_encode($this->carrier->toArray()), null
+                get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
             );
             return false;
         }
@@ -55,7 +66,7 @@ class SendThinqSMS implements ShouldQueue
         {
             LogEvent::dispatch(
                 "Failure submitting message",
-                get_class( $this ), 'info', json_encode($result->getReasonPhrase()), null
+                get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
             );
             return false;
         }
@@ -66,10 +77,21 @@ class SendThinqSMS implements ShouldQueue
         {
             LogEvent::dispatch(
                 "No message GUID returned from carrier",
-                get_class( $this ), 'info', json_encode($arr), null
+                get_class( $this ), 'error', json_encode($arr), null
             );
             return false;
         }
+
+        SaveMessage::dispatch(
+            $this->carrier->id,
+            $from->id,
+            "+1{$this->recipient}",
+            $from->e164,
+            encrypt( $this->message ),
+            $this->messageID,
+            Carbon::now(),
+            $this->reply_with
+        );
 
         return true;
     }

@@ -3,7 +3,9 @@
 namespace App\Jobs;
 
 use Exception;
+use App\Message;
 use App\Carrier;
+use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -17,37 +19,48 @@ class SendTwilioSMS implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $host, $carrier, $recipient, $message;
+    /**
+     * Delete the job if its models no longer exist.
+     *
+     * @var bool
+     */
+    public $deleteWhenMissingModels = true;
 
-    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message  )
+    protected $host, $carrier, $recipient, $message, $messageID, $reply_with;
+
+    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int $messageID, $reply_with  )
     {
         $this->host = $host;
         $this->carrier = $carrier;
         $this->recipient = $recipient;
         $this->message = $message;
+        $this->messageID = $messageID;
+        $this->reply_with = $reply_with;
+
     }
 
     public function handle()
     {
         try{
             $client = new TwilioClient(
-                $this->host->twilio_account_sid,
-                $this->host->twilio_auth_token
+                $this->carrier->twilio_account_sid,
+                decrypt( $this->carrier->twilio_auth_token )
             );
         }
         catch( Exception $e ){
             LogEvent::dispatch(
                 "Failure submitting message",
-                get_class( $this ), 'info', json_encode($e->getMessage()), null
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
             return false;
         }
 
         try{
-            $client->messages->create(
+            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->first();
+            $msg = $client->messages->create(
                 "+1{$this->recipient}",
                 array(
-                    'from' => $this->carrier->numbers()->first()->e164,
+                    'from' => $from->e164,
                     'body' => $this->message
                 )
             );
@@ -55,10 +68,21 @@ class SendTwilioSMS implements ShouldQueue
         catch( Exception $e ){
             LogEvent::dispatch(
                 "Failure sending message",
-                get_class( $this ), 'info', json_encode($e->getMessage()), null
+                get_class( $this ), 'error', json_encode([$e->getMessage(), $from]), null
             );
             return false;
         }
+
+        SaveMessage::dispatch(
+            $this->carrier->id,
+            $from->id,
+            "+1{$this->recipient}",
+            $from->e164,
+            encrypt( $this->message ),
+            $this->messageID,
+            Carbon::now(),
+            $this->reply_with
+        );
 
         return true;
     }

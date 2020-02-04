@@ -21,15 +21,30 @@ class Inbound extends Controller
 
         $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0];
         $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0];
-
+        $messageID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID')[0];
         $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
         $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
+
+        $reply_with = null;
+        $reply_phrase = preg_match('/\bReply with \d+$/i', $message, $matches );
+
+        if( $reply_phrase && isset($matches[0]) )
+        {
+
+            $parts = explode(" ", $matches[0] );
+            if( isset( $parts[2] ) )
+            {
+                $reply_with = $parts[2];
+            }
+        }
 
         $paramCheck = $this->checkParams([
             'recipient' => $recipient,
             'message' => $message,
             'senderID' => $senderID,
             'securityCode' => $securityCode,
+            'messageID' => $messageID,
+            'reply_with' => $reply_with,
         ]);
 
         if( ! $paramCheck['success'] )
@@ -38,7 +53,8 @@ class Inbound extends Controller
                 $paramCheck['errorDesc']);
         }
 
-        $host = EnterpriseHost::where('senderID', $senderID )->first();
+        //we're assuming sender ids are unique here
+        $host = EnterpriseHost::where('senderID', $senderID )->where('enabled', 1)->first();
 
         if( is_null( $host ) )
         {
@@ -59,6 +75,7 @@ class Inbound extends Controller
         }
 
         $carrier = Carrier::where('enabled', 1)->orderBy('priority')->first();
+
         if( is_null($carrier)){
             return $this->showError( 606, 'Service Unavailable',
                 'No upstream carriers are enabled');
@@ -66,12 +83,12 @@ class Inbound extends Controller
 
         if( $carrier->api == 'twilio' )
         {
-            SendTwilioSMS::dispatch( $host, $carrier, $recipient, $message );
+            SendTwilioSMS::dispatch( $host, $carrier, $recipient, $message, $messageID, $reply_with );
 
         }
         elseif( $carrier->api == 'thinq' )
         {
-            SendThinqSMS::dispatch( $host, $carrier, $recipient, $message );
+            SendThinqSMS::dispatch( $host, $carrier, $recipient, $message, $messageID, $reply_with );
         }
         else
         {
@@ -160,6 +177,38 @@ class Inbound extends Controller
                 'errorCode' => 402,
                 'errorText' => 'Invalid security code',
                 'errorDesc' => 'The security code for this senderID is invalid',
+            ];
+        }
+
+        $validator = Validator::make([
+            'messageID' => $data['messageID'],
+        ],[
+            'messageID' => 'required|string|max:32',
+        ]);
+
+        if( $validator->fails() )
+        {
+            return [
+                'success' => false,
+                'errorCode' => 400,
+                'errorText' => 'Function not supported',
+                'errorDesc' => 'The messageID is invalid',
+            ];
+        }
+
+        $validator = Validator::make([
+            'reply_with' => $data['reply_with'],
+        ],[
+            'reply_with' => 'nullable|numeric',
+        ]);
+
+        if( $validator->fails() )
+        {
+            return [
+                'success' => false,
+                'errorCode' => 403,
+                'errorText' => 'Invalid reply number from Amtelco',
+                'errorDesc' => 'The reply number was included but is not an integer',
             ];
         }
 

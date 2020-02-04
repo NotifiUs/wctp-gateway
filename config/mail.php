@@ -2,6 +2,8 @@
 
 return [
 
+    'notifications' => env('MAIL_QUEUE_NOTIFICATIONS', 'root@localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Mail Driver

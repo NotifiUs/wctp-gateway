@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE wctp-Operation SYSTEM "https://demo.wctp.io/wctp/wctp-dtd-v1r1.dtd">
+<wctp-Operation wctpVersion="wctp-dtd-v1r1">
+    <wctp-SubmitRequest>
+        <wctp-SubmitHeader submitTimestamp="2020-02-03T03:10:22">
+            <wctp-Originator senderID="silver-lapwing" securityCode="f09cf4c0a547b183" />
+            <wctp-MessageControl messageID="94" notifyWhenDelivered="true" preformatted="true" />
+            <wctp-Recipient recipientID="6145551234" />
+        </wctp-SubmitHeader>
+        <wctp-Payload>
+            <wctp-Alphanumeric>This is a test message.
+                Reply with 1</wctp-Alphanumeric>
+        </wctp-Payload>
+    </wctp-SubmitRequest>
+</wctp-Operation>

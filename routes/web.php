@@ -53,6 +53,12 @@ Route::namespace('Carriers')->group(function () {
     Route::post('/carriers/verify', 'VerifyCarrier');
 });
 
+Route::namespace('SMS')->group(function(){
+   Route::post('/sms/inbound/{identifier}/primary', 'PrimaryHandler' );
+   Route::post('/sms/inbound/{identifier}/fallback', 'FallbackHandler' );
+   Route::post('/sms/callback/{identifier}/status', 'StatusHandler' );
+});
+
 Route::namespace('Numbers')->group(function(){
    Route::get('/numbers', 'ShowNumbers');
    Route::post('/numbers', 'CreateNumber');
@@ -75,6 +81,9 @@ Route::namespace('WCTP')->group(function(){
     Route::post('/wctp', 'Inbound');
 });
 
+Route::namespace('Analytics')->group(function(){
+    Route::get('/analytics', 'ShowAnalytics');
+});
 
-Route::get('/analytics', 'UnderConstruction');
+
 Route::get('/sticky', 'UnderConstruction');
