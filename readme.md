@@ -21,9 +21,11 @@ The modern WCTP engine brings the following features and more:
 - Bring your own Twilio or ThinQ accounts
 - Support for using Twilio Messaging Services or Phone Numbers
 - Carrier priority and automatic fail-over
+- TLS/SSL required by default
+
+**Coming Soon**
 - Sticky sending by recipient to favor specific carriers
 - IP Whitelisting, MFA, and login notifications
-- TLS/SSL required by default
 
 ## Status
 
@@ -39,7 +41,7 @@ We use application, language, and OS features that require the following tools a
 - **Ubuntu** linux
 - **PHP 7.2+** for web application scripting
 - **nginx with php-fpm** for web server
-- **redis-server** for caching
+- **redis-server** for caching/queue
 - **mysql** for storage
 - **supervisord** to watch queue processes
 

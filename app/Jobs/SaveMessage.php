@@ -6,6 +6,7 @@ use Exception;
 use App\Message;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use App\Jobs\SubmitToEnterpriseHost;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -56,7 +57,7 @@ class SaveMessage implements ShouldQueue
 
         if( $message->direction == 'inbound' )
         {
-            //dispatch job to handle inbound message
+            SubmitToEnterpriseHost::dispatch( $message );
         }
     }
 }

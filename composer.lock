@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6be22b8319660d08340b35b8899ea31",
+    "content-hash": "12455e8cc157d0b392c2f0a45b0741b8",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1994,6 +1994,55 @@
                 "php"
             ],
             "time": "2019-11-08T13:50:10+00:00"
+        },
+        {
+            "name": "notifius/php-wctp",
+            "version": "v0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NotifiUs/php-wctp.git",
+                "reference": "a77da7018916e81f2b8ea0a1b433cbf35784b78f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NotifiUs/php-wctp/zipball/a77da7018916e81f2b8ea0a1b433cbf35784b78f",
+                "reference": "a77da7018916e81f2b8ea0a1b433cbf35784b78f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "^7.3",
+                "nesbot/carbon": "^2.24.0",
+                "php": "^7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NotifiUs\\": "src/notifius/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Labbett",
+                    "email": "patrick@labbett.net",
+                    "homepage": "https://labbett.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP library for creating and handling XML request/response objects for the WCTP v1.3r1 specification.",
+            "homepage": "https://github.com/notifius/php-wctp",
+            "keywords": [
+                "php",
+                "wctp",
+                "xml"
+            ],
+            "time": "2019-09-01T01:18:40+00:00"
         },
         {
             "name": "opis/closure",

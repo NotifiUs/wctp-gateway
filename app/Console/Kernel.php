@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         StatusCommand::class,
         Commands\PurgeEventLog::class,
         Commands\CreateAdminUser::class,
+        Commands\SendPendingInbound::class,
     ];
 
     /**
@@ -29,7 +30,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('eventlog:purge')->daily();
         $schedule->command('telescope:prune')->daily();
+        $schedule->command('pending:inbound')->everyMinute();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+
     }
 
     /**
