@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/NotifiUs/wctp-gateway.svg?branch=master)](https://travis-ci.org/NotifiUs/wctp-gateway)
 [![GitHub license](https://img.shields.io/github/license/notifius/wctp-gateway?color=blue)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
-![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)
+[![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
 </div>
 
 ## About WCTP Gateway
@@ -27,10 +27,11 @@ The modern WCTP engine brings the following features and more:
 
 ## Status
 
-We're putting the final touches on to publish our first release candidate version in January 2020.
+Full inbound/outbound support with Amtelco begins in `v0.9.2`
 
-![Software Release Life Cycle Status](https://img.shields.io/badge/release%20status-closed--beta-blueviolet)
+[![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
 
+Before we go live (1.0.0) we are doing more testing on MessageReply message associations and StatusInfo requests.
 
 ## Requirements
 
