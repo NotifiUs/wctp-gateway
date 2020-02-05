@@ -66,6 +66,7 @@ Route::namespace('Numbers')->group(function(){
     Route::post('/numbers/{number}/disable', 'DisableNumber');
     Route::post('/numbers/{number}/delete', 'DeleteNumber');
     Route::post('/numbers/{number}/setup', 'SetupNumber');
+    Route::post('/numbers/{number}/assign', 'AssignHost');
 });
 
 Route::namespace('EnterpriseHosts')->group(function(){

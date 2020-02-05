@@ -56,7 +56,16 @@ class SendTwilioSMS implements ShouldQueue
         }
 
         try{
-            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->first();
+            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
+            if( is_null( $from ) )
+            {
+                LogEvent::dispatch(
+                    "Failure submitting message",
+                    get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
+                );
+                return false;
+            }
+
             if( $from->getType() == 'PN')
             {
                 $params = [
@@ -71,8 +80,6 @@ class SendTwilioSMS implements ShouldQueue
                     'body' => $this->message
                 ];
             }
-
-
 
             $msg = $client->messages->create(
                 "+1{$this->recipient}",
@@ -90,6 +97,7 @@ class SendTwilioSMS implements ShouldQueue
         SaveMessage::dispatch(
             $this->carrier->id,
             $from->id,
+            $this->host->id,
             "+1{$this->recipient}",
             $from->e164,
             encrypt( $this->message ),

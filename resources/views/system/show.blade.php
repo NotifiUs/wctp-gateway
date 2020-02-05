@@ -74,13 +74,13 @@
     <div class="row justify-content-start my-2">
 
         <div class="col-md-6">
-            <h5 class="text-muted-light mt-4">{{ __('Maintenance Mode') }}</h5>
-            @include('system.maintenance')
+            <h5 class="text-muted-light mt-4">{{ __('User Management') }}</h5>
+            @include('system.users')
         </div>
 
         <div class="col-md-6">
-            <h5 class="text-muted-light mt-4">{{ __('User Management') }}</h5>
-            @include('system.users')
+            <h5 class="text-muted-light mt-4">{{ __('Maintenance Mode') }}</h5>
+            @include('system.maintenance')
         </div>
 
     </div>

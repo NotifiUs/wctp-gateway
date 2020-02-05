@@ -20,6 +20,19 @@
                     <p class="text-muted">
                         Any existing SMS settings for this number will be removed completely.
                     </p>
+                    <div class="form-group row col-md-6">
+                        <label class="">Enterprise Host</label>
+                        <select required name="enterprise_host_id" class="form-control">
+                            @foreach( \App\EnterpriseHost::all() as $eh )
+                                <option value="{{ $eh->id }}">{{ $eh->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group row col">
+                        <p class="form-text text-small text-muted">
+                            Select the Enterprise Host to associate with this number. Inbound messages to this number will be routed to this Enterprise Host. Outbound messages from the Enterprise Host will use this number (along with any other currently assigned.)
+                        </p>
+                    </div>
                     <a class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#collapse{{$number['id']}}" role="button" aria-expanded="false" aria-controls="collapse{{$number['id']}}">
                         <i class="fas fa-info-circle"></i> Toggle Details
                     </a>

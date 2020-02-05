@@ -17,6 +17,7 @@ class CreateNumbersTable extends Migration
             $table->bigIncrements('id');
             $table->string('e164');
             $table->bigInteger('carrier_id');
+            $table->bigInteger('enterprise_host_id');
             $table->string('identifier');
             $table->boolean('enabled')->default(false );
             $table->timestamps();

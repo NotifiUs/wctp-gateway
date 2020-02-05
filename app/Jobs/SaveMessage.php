@@ -15,13 +15,13 @@ class SaveMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $carrier_id, $number_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction;
+    protected $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction;
 
-
-    public function __construct( $carrier_id, $number_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction )
+    public function __construct( $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction )
     {
         $this->carrier_id = $carrier_id;
         $this->number_id = $number_id;
+        $this->enterprise_host_id = $enterprise_host_id;
         $this->to = $to;
         $this->from = $from;
         $this->message = $message;
@@ -32,13 +32,13 @@ class SaveMessage implements ShouldQueue
         $this->direction = $direction;
     }
 
-
     public function handle()
     {
         try{
             $message = new Message;
             $message->carrier_id = $this->carrier_id;
             $message->number_id = $this->number_id;
+            $message->enterprise_host_id = $this->enterprise_host_id;
             $message->to = $this->to;
             $message->from = $this->from;
             $message->message = $this->message;
@@ -54,5 +54,9 @@ class SaveMessage implements ShouldQueue
             return false;
         }
 
+        if( $message->direction == 'inbound' )
+        {
+            //dispatch job to handle inbound message
+        }
     }
 }

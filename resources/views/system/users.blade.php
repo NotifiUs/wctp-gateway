@@ -23,6 +23,7 @@
                                 <a href="#" data-toggle="modal" data-target="#editUserModal{{ $user->id }}">
                                     {{ $user->email }}
                                 </a>
+                                @if( Auth::user()->id == $user->id ) {!!  '<small>(you)</small>'  !!} @endif
                             </td>
                             <td class="text-right">
                                 <a href="#" class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#deleteUserModal{{ $user->id }}">

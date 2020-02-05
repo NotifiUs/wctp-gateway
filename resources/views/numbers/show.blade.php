@@ -22,8 +22,8 @@
                     <thead>
                     <tr>
                         <th class="font-weight-bold text-muted-light">{{ __('Phone Number') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('API Provider') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('Carrier Name') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Carrier Info') }}</th>
+                        <th class="font-weight-bold text-muted-light">{{ __('Enterprise Host') }}</th>
                         <th class="font-weight-bold text-muted-light">{{ __('Status') }}</th>
                         <!--<th class="font-weight-bold text-muted-light"></th>-->
                         <th style="max-width:20%;"></th>
@@ -34,11 +34,12 @@
                         @php
                             $c = \App\Carrier::find( $number['carrier_id'] );
                             $type = \App\Number::find( $number['id'] )->getFriendlyType();
+                            $eh = \App\EnterpriseHost::find( $number['enterprise_host_id']);
                         @endphp
                         <tr>
-                            <td class="text-muted">{{ $number['e164'] }}</td>
-                            <td class="font-weight-bold text-small">{{ ucwords( $c->api ) }} {{ $type }}</td>
-                            <td class="">{{ $c->name  }} </td>
+                            <td title="{{ $type }}" class="text-muted">{{ $number['e164'] }}</td>
+                            <td class="text-small"><strong>{{ ucwords( $c->api ) }}</strong> &middot; {{ $c->name  }}</td>
+                            <td class="text-small">{{ $eh->name }} </td>
                             <td>
 
                                 @if( $number['enabled'])
@@ -61,6 +62,7 @@
 
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#infoPhoneNumberModal{{ $number['identifier']}}">{{ __('Number Information') }}</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#hostAssignmentModal{{ $number['identifier']}}">{{ __('Host Assignment') }}</a>
 
                                         <div class="dropdown-divider"></div>
                                         @if( $number['enabled'] )
@@ -92,6 +94,7 @@
         @include('numbers.modals.enable')
         @include('numbers.modals.setup')
         @include('numbers.modals.info')
+        @include('numbers.modals.assign')
     @endforeach
 
     @include('numbers.modals.invalid')

@@ -34,7 +34,7 @@
                     @if( $messages->count() )
                         @foreach( $messages as $message )
                             <tr class="align-text-bottom">
-                                <td class="text-muted text-small font-weight-bold text-nowrap">
+                                <td class="text-muted text-small text-nowrap">
                                     {{ $message->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
                                 </td>
                                 <td class="text-small">
@@ -80,7 +80,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="4" class="text-muted text-center text-small font-weight-bold">
+                            <td colspan="5" class="text-muted text-center text-small font-weight-bold">
                                 <i class="fas fa-ban text-muted-light"></i> No messages found
                             </td>
                         </tr>

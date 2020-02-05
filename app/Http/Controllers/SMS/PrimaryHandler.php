@@ -6,6 +6,7 @@ use Exception;
 use App\Number;
 use App\Carrier;
 use Carbon\Carbon;
+use App\EnterpriseHost;
 use App\Jobs\SaveMessage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,12 +15,19 @@ class PrimaryHandler extends Controller
 {
     private $carrier;
     private $number;
+    private $host;
 
     public function __invoke(Request $request, string $identifier)
     {
         $this->number = Number::where('enabled', 1)->where('identifier', $identifier)->first();
 
         if( is_null( $this->number ) ){
+            return $this->respond();
+        }
+
+        $this->host = EnterpriseHost::where('enabled', 1)->where('id', $this->number->enterprise_host_id )->first();
+        if( is_null( $this->host ) )
+        {
             return $this->respond();
         }
 
@@ -46,6 +54,7 @@ class PrimaryHandler extends Controller
             SaveMessage::dispatch(
                 $this->carrier->id,
                 $this->number->id,
+                $this->host->id,
                 $request->input('To'),
                 $request->input('From'),
                 encrypt( $request->input('Body') ),
@@ -69,6 +78,7 @@ class PrimaryHandler extends Controller
             SaveMessage::dispatch(
                 $this->carrier->id,
                 $this->number->id,
+                $this->host->id,
                 "+1{$request->input('to')}",
                 "+1{$request->input('from')}",
                 encrypt( $request->input('message') ),

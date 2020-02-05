@@ -9,7 +9,14 @@
 @endpush
 
 @section('content')
-    <h5 class="text-muted-light mt-2 mt-md-0">{{ __('Quick Glance') }}</h5>
+    <h5 class="text-muted-light mt-2 mt-md-0">
+        {{ __('Quick Glance') }}
+        <small class="text-small float-right text-muted">
+            <a href="/home" title="{{ $activityPeriod->timezone(Auth::user()->timezone)->format("m/d/Y g:i:sA T") }} &mdash; {{ $activityPeriod->copy()->addHours(24)->format("m/d/Y g:i:sA T") }}">
+                <i class="fas fa-sync text-small"></i> Refresh
+            </a>
+        </small>
+    </h5>
     <div class="row justify-content-center mb-2">
 
         <div class="col-md-4">

@@ -9,7 +9,7 @@
     @include('layouts.error')
     @include('layouts.status')
 
-    <h5 class="text-muted-light mt-4">
+    <h5 class="text-muted-light">
         {{ __('Available Numbers') }}
         <a href="/numbers" class="float-right text-muted text-small">In-Use Numbers</a>
     </h5>

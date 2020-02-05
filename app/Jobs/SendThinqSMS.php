@@ -40,7 +40,7 @@ class SendThinqSMS implements ShouldQueue
     public function handle()
     {
         try{
-            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->first();
+            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
             $thinq = new Guzzle([
                 'timeout' => 10.0,
                 'base_uri' => 'https://api.thinq.com',
@@ -85,6 +85,7 @@ class SendThinqSMS implements ShouldQueue
         SaveMessage::dispatch(
             $this->carrier->id,
             $from->id,
+            $this->host->id,
             "+1{$this->recipient}",
             $from->e164,
             encrypt( $this->message ),

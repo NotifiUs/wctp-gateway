@@ -24,8 +24,9 @@ class ShowDashboard extends Controller
         $checklist = Checklist::get();
         $events = EventLog::take(10)->orderBy('created_at', 'desc')->get();
 
-        $inboundCount = Message::where('direction', 'inbound')->where('created_at', '>=', Carbon::now()->subHours(24))->count();
-        $outboundCount = Message::where('direction', 'outbound')->where('created_at', '>=', Carbon::now()->subHours(24))->count();
+        $activityPeriod = Carbon::now()->subHours(24);
+        $inboundCount = Message::where('direction', 'inbound')->where('created_at', '>=', $activityPeriod )->count();
+        $outboundCount = Message::where('direction', 'outbound')->where('created_at', '>=', $activityPeriod )->count();
 
         return view('home')
             ->with('server', $server )
@@ -33,6 +34,7 @@ class ShowDashboard extends Controller
             ->with('checklist', $checklist )
             ->with('inboundCount', $inboundCount )
             ->with('outboundCount', $outboundCount )
+            ->with('activityPeriod', $activityPeriod )
             ->with('events', $events );
     }
 }

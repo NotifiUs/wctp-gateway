@@ -21,13 +21,15 @@ class CreateNumber extends Controller
         $this->validate( $request, [
             'identifier' => 'required|string|unique:numbers,identifier',
             'e164' => 'required|unique:numbers,e164',
-            'carrier_id' => 'required|exists:carriers,id'
+            'carrier_id' => 'required|exists:carriers,id',
+            'enterprise_host_id' => 'required|exists:enterprise_hosts,id'
         ]);
 
         $number = new Number;
         $number->identifier = $request->input('identifier');
         $number->e164 = $request->input('e164');
         $number->carrier_id = $request->input('carrier_id' );
+        $number->enterprise_host_id = $request->input('enterprise_host_id' );
 
         try{ $number->save(); }catch( Exception $e ){ return redirect()->to('/numbers')->withErrors([__('Unable to save number')]); }
 
