@@ -8,6 +8,7 @@ use App\Carrier;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
+use Illuminate\Support\Facades\App;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,37 +18,43 @@ class SendThinqSMS implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Delete the job if its models no longer exist.
-     *
-     * @var bool
-     */
     public $deleteWhenMissingModels = true;
 
-    protected $host, $carrier, $recipient, $message, $messageID, $reply_with;
-
+    protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
     public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int $messageID, $reply_with  )
     {
+        $this->queue = 'outbound-throttled';
         $this->host = $host;
         $this->carrier = $carrier;
         $this->recipient = $recipient;
         $this->message = $message;
         $this->messageID = $messageID;
         $this->reply_with = $reply_with;
+        $this->from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
+        if( is_null( $this->from ) )
+        {
+            LogEvent::dispatch(
+                "Failure submitting message",
+                get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
+            );
+            return false;
+        }
+        else{
+            //$this->queue = $this->from->e164;
+        }
     }
 
     public function handle()
     {
         try{
-            $from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
             $thinq = new Guzzle([
                 'timeout' => 10.0,
                 'base_uri' => 'https://api.thinq.com',
                 'auth' => [ $this->carrier->thinq_api_username, decrypt($this->carrier->thinq_api_token)],
                 'headers' => [ 'content-type' => 'application/json' ],
                 'json' => [
-                    'from_did' => substr( $from->e164, 2),
+                    'from_did' => substr( $this->from->e164, 2),
                     'to_did' => $this->recipient,
                     'message' => $this->message,
                 ],
@@ -84,10 +91,10 @@ class SendThinqSMS implements ShouldQueue
 
         SaveMessage::dispatch(
             $this->carrier->id,
-            $from->id,
+            $this->from->id,
             $this->host->id,
             "+1{$this->recipient}",
-            $from->e164,
+            $this->from->e164,
             encrypt( $this->message ),
             $this->messageID,
             Carbon::now(),

@@ -80,6 +80,8 @@ return [
 
     'waits' => [
         'redis:default' => 10,
+        'redis:mail' => 60,
+        'redis:events' => 90
     ],
 
     /*
@@ -154,7 +156,13 @@ return [
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [
+                    'default',
+                    'enterprise-host' ,
+                    'messages',
+                    'outbound',
+                    'outbound-throttled'
+                ],
                 'balance' => 'simple',
                 'processes' => 1,
                 'tries' => 3,

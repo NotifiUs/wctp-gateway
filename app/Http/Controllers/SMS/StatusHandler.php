@@ -66,9 +66,8 @@ class StatusHandler extends Controller
             case "failed":
             case "undelivered":
             case "UNDELIV":
-                $message->failed_at = Carbon::now();
-                break;
             default:
+                $message->failed_at = Carbon::now();
                 break;
         }
 

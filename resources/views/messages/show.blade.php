@@ -73,6 +73,7 @@
                                     {{ ucwords( $message->status ) }}
                                     </span>
                                     <a href="#" class="ml-2" data-toggle="modal" data-target="#detailsMessageModal{{ $message->id}}" ><i class="fas fa-search text-muted-light"></i></a>
+                                    <a href="#" class="ml-2" data-toggle="modal" data-target="#processMessageModal{{ $message->id}}" ><i class="fas fa-recycle text-muted-light"></i></a>
 
                                 </td>
 
@@ -96,6 +97,7 @@
 
     @foreach( $messages as $message )
         @include('messages.modals.details')
+        @include('messages.modals.process')
     @endforeach
 
 @endsection

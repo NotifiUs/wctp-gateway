@@ -5,9 +5,9 @@ namespace App\Console\Commands;
 use Exception;
 use App\Message;
 use Illuminate\Console\Command;
-use App\Jobs\SubmitToEnterpriseHost;
+use App\Jobs\SyncOutboundStatus;
 
-class SendPendingInbound extends Command
+class CheckPendingOutbound extends Command
 {
 
     /**
@@ -15,14 +15,14 @@ class SendPendingInbound extends Command
      *
      * @var string
      */
-    protected $signature = 'pending:inbound';
+    protected $signature = 'pending:outbound';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Attempts to send any pending inbound messages to their host';
+    protected $description = 'Attempts to check and update any pending outbound messages against carrier status';
 
     /**
      * Create a new command instance.
@@ -41,23 +41,23 @@ class SendPendingInbound extends Command
      */
     public function handle()
     {
-        $this->info("Getting pending inbound messages...");
+        $this->info("Getting pending outbound messages...");
         try{
-            $messages = Message::whereNull('delivered_at')->where('direction', '=', 'inbound' )->where('status', 'pending')->get();
+            $messages = Message::whereNull('delivered_at')->whereNull('failed_at')->where('direction', 'outbound' )->where('status', 'pending')->get();
         }
         catch( Exception $e )
         {
-            $this->error("Unable to get pending inbound messages");
+            $this->error("Unable to get pending outbound messages");
             return;
         }
 
-        $this->info( $messages->count() . " pending inbound message(s) found");
+        $this->info( $messages->count() . " pending outbound message(s) found");
 
         foreach( $messages as $message )
         {
-            SubmitToEnterpriseHost::dispatch( $message );
+            SyncOutboundStatus::dispatch( $message );
         }
 
-        $this->info("Pending inbound messages processed");
+        $this->info("Pending outbound messages updated");
     }
 }

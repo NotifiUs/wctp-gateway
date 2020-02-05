@@ -28,6 +28,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
 
     public function __construct( Message $message )
     {
+        $this->queue = 'enterprise-host';
         $this->message = $message;
     }
 
@@ -93,7 +94,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
             );
         }
 
-        $body = $result->getBody();
+        $body = simplexml_load_string( $result->getBody()->getContents() );
         LogEvent::dispatch(
             "Enterprise Host response",
             get_class( $this ), 'info', json_encode($body), null

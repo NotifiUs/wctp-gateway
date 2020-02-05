@@ -15,7 +15,6 @@ class LogEvent implements ShouldQueue
 
     protected $event, $source, $severity, $details, $user_id;
 
-
     public function __construct( $event, $source, $severity = 'info', $details = null, $user_id = null )
     {
         $this->event = $event;
