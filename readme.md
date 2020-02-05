@@ -4,9 +4,7 @@
 
 [![Build Status](https://travis-ci.org/NotifiUs/wctp-gateway.svg?branch=master)](https://travis-ci.org/NotifiUs/wctp-gateway)
 [![GitHub license](https://img.shields.io/github/license/notifius/wctp-gateway?color=blue)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
-![GitHub All Releases](https://img.shields.io/github/downloads/NotifiUs/wctp-gateway/total)
-![Software Release Life Cycle Status](https://img.shields.io/badge/release%20status-closed--beta-blueviolet)
-
+![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)
 </div>
 
 ## About WCTP Gateway
@@ -39,7 +37,7 @@ We're putting the final touches on to publish our first release candidate versio
 We use application, language, and OS features that require the following tools and technologies:
 
 - **Ubuntu** linux
-- **PHP 7.2+** for web application scripting
+- **PHP 7.3+** for web application scripting
 - **nginx with php-fpm** for web server
 - **redis-server** for caching/queue
 - **mysql** for storage
