@@ -27,11 +27,10 @@ The modern WCTP engine brings the following features and more:
 
 ## Status
 
-Full inbound/outbound support with Amtelco begins in `v0.9.2`
+We're actively testing with customers! Version 1.0.0 coming soon!
 
 [![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
 
-Before we go live (1.0.0) we are doing more testing on MessageReply message associations and StatusInfo requests.
 
 ## Requirements
 
