@@ -130,20 +130,29 @@ class SyncOutboundStatus implements ShouldQueue
 
             foreach( $arr['delivery_notifications'] as $dn )
             {
-                $status = $dn['send_status'];
+                switch( $dn['send_status'] ) {
+                    case "sent":
+                    case "DELIVRD":
+                    case "delivered":
+                        $this->message->status = $dn['send_status'];
+                        $this->message->delivered_at = Carbon::now();
+                        break;
+                    case "REJECTD":
+                    case "EXPIRED":
+                    case "DELETED":
+                    case "UNKNOWN":
+                    case "failed":
+                    case "undelivered":
+                    case "UNDELIV":
+                        $this->message->status = $dn['send_status'];
+                        $this->message->failed_at = Carbon::now();
+                        break;
+                    default:
+                        break;
+                }
             }
 
             try{
-                $this->message->status = $status;
-                if( $status == 'sent' || $status == 'delivered')
-                {
-                    $this->message->delivered_at = Carbon::now();
-                }
-                else
-                {
-                    $this->message->failed_at = Carbon::now();
-                }
-
                 $this->message->save();
             }
             catch( Exception $e ){

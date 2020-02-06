@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Exception;
 use App\Message;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Jobs\SyncOutboundStatus;
 
@@ -43,7 +44,7 @@ class CheckPendingOutbound extends Command
     {
         $this->info("Getting pending outbound messages...");
         try{
-            $messages = Message::whereNull('delivered_at')->whereNull('failed_at')->where('direction', 'outbound' )->where('status', 'pending')->get();
+            $messages = Message::where('created_at', '>=', Carbon::now()->subHours(4 ) )->where('direction', 'outbound' )->whereIn('status', ['pending','sent'])->get();
         }
         catch( Exception $e )
         {

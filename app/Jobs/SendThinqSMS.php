@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
-use Carbon\Carbon;
 use Exception;
 use App\Carrier;
+use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -47,62 +47,69 @@ class SendThinqSMS implements ShouldQueue
 
     public function handle()
     {
-        try{
-            $thinq = new Guzzle([
-                'timeout' => 10.0,
-                'base_uri' => 'https://api.thinq.com',
-                'auth' => [ $this->carrier->thinq_api_username, decrypt($this->carrier->thinq_api_token)],
-                'headers' => [ 'content-type' => 'application/json' ],
-                'json' => [
-                    'from_did' => substr( $this->from->e164, 2),
-                    'to_did' => $this->recipient,
-                    'message' => $this->message,
-                ],
-            ]);
-        }
-        catch( Exception $e ){
-            LogEvent::dispatch(
-                "Failed decrypting carrier api token",
-                get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
-            );
-            return false;
-        }
-
-        $result = $thinq->post("account/{$this->carrier->thinq_account_id}/product/origination/sms/send");
-        if( $result->getStatusCode() != 200 )
+        //This throttles 1 per second based on the sending DID!
+        Redis::throttle( "throttle_" . substr( $this->from->e164, 2) )->allow(1)->every(1)->then(function ()
         {
-            LogEvent::dispatch(
-                "Failure submitting message",
-                get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
+            try{
+                $thinq = new Guzzle([
+                    'timeout' => 10.0,
+                    'base_uri' => 'https://api.thinq.com',
+                    'auth' => [ $this->carrier->thinq_api_username, decrypt($this->carrier->thinq_api_token)],
+                    'headers' => [ 'content-type' => 'application/json' ],
+                    'json' => [
+                        'from_did' => substr( $this->from->e164, 2),
+                        'to_did' => $this->recipient,
+                        'message' => $this->message,
+                    ],
+                ]);
+            }
+            catch( Exception $e ){
+                LogEvent::dispatch(
+                    "Failed decrypting carrier api token",
+                    get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
+                );
+                return false;
+            }
+
+            $result = $thinq->post("account/{$this->carrier->thinq_account_id}/product/origination/sms/send");
+            if( $result->getStatusCode() != 200 )
+            {
+                LogEvent::dispatch(
+                    "Failure submitting message",
+                    get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
+                );
+                return false;
+            }
+            $body = $result->getBody();
+            $json = $body->getContents();
+            $arr = json_decode( $json, true );
+            if( ! isset( $arr['guid']))
+            {
+                LogEvent::dispatch(
+                    "No message GUID returned from carrier",
+                    get_class( $this ), 'error', json_encode($arr), null
+                );
+                return false;
+            }
+
+            SaveMessage::dispatch(
+                $this->carrier->id,
+                $this->from->id,
+                $this->host->id,
+                "+1{$this->recipient}",
+                $this->from->e164,
+                encrypt( $this->message ),
+                $this->messageID,
+                Carbon::now(),
+                $this->reply_with,
+                $arr['guid'],
+                'outbound'
             );
-            return false;
-        }
-        $body = $result->getBody();
-        $json = $body->getContents();
-        $arr = json_decode( $json, true );
-        if( ! isset( $arr['guid']))
+
+            return true;
+        }, function ()
         {
-            LogEvent::dispatch(
-                "No message GUID returned from carrier",
-                get_class( $this ), 'error', json_encode($arr), null
-            );
-            return false;
-        }
-
-        SaveMessage::dispatch(
-            $this->carrier->id,
-            $this->from->id,
-            $this->host->id,
-            "+1{$this->recipient}",
-            $this->from->e164,
-            encrypt( $this->message ),
-            $this->messageID,
-            Carbon::now(),
-            $this->reply_with,
-            $arr['guid'],
-            'outbound'
-        );
-
-        return true;
+            return $this->release(10 );
+        });
     }
 }
