@@ -3,16 +3,13 @@
 namespace App\Jobs;
 
 use Exception;
-use App\Number;
-use App\Carrier;
-use App\Version;
 use App\Message;
 use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
+use NotifiUs\WCTP\XML\MessageReply;
 use NotifiUs\WCTP\XML\SubmitRequest;
-//use NotifiUs\WCTP\XML\MessageReply;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,7 +35,6 @@ class SubmitToEnterpriseHost implements ShouldQueue
 
         if( is_null( $host ) )
         {
-            //no host to submit the message to
             LogEvent::dispatch(
                 "Failure submitting reply",
                 get_class( $this ), 'error', json_encode("No host found"), null
@@ -46,23 +42,57 @@ class SubmitToEnterpriseHost implements ShouldQueue
             return false;
         }
 
-        $submitRequest = new SubmitRequest( );
-
-        try{
-            $xml = $submitRequest
-                ->submitTimestamp( Carbon::now() )
-                ->senderID( substr( $this->message->from, 2) )
-                ->recipientID( substr($this->message->to, 2) )
-                ->messageID( $this->message->messageID ?? $this->message->id )
-                ->payload( decrypt($this->message->message ) )
-                ->xml();
+        $responding_to = null;
+        if( $this->message->reply_with )
+        {
+            $responding_to = Message::where('reply_with', $this->message->reply_with )
+                ->where('direction','outbound')
+                ->where('to', $this->message->from )
+                ->where('from', $this->message->to )
+                ->where('created_at', '>=', Carbon::now()->subHours(4 ) )
+                ->first();
         }
-        catch( Exception $e ){
-            LogEvent::dispatch(
-                "Failure creating SubmitRequest",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
-            );
-            return false;
+
+        if( ! is_null($responding_to))
+        {
+            $messageReply = new MessageReply();
+            try{
+                $xml = $messageReply
+                    ->responseToMessageID( $responding_to->messageID )
+                    ->submitTimestamp( Carbon::now() )
+                    ->senderID( substr( $this->message->from, 2) )
+                    ->recipientID( substr($this->message->to, 2) )
+                    ->messageID( $this->message->id )
+                    ->payload( decrypt($this->message->message ) )
+                    ->xml();
+            }
+            catch( Exception $e ){
+                LogEvent::dispatch(
+                    "Failure creating MessageReply",
+                    get_class( $this ), 'error', json_encode($e->getMessage()), null
+                );
+                return false;
+            }
+        }
+        else
+        {
+            $submitRequest = new SubmitRequest( );
+            try{
+                $xml = $submitRequest
+                    ->submitTimestamp( Carbon::now() )
+                    ->senderID( substr( $this->message->from, 2) )
+                    ->recipientID( substr($this->message->to, 2) )
+                    ->messageID( $this->message->messageID ?? $this->message->id )
+                    ->payload( decrypt($this->message->message ) )
+                    ->xml();
+            }
+            catch( Exception $e ){
+                LogEvent::dispatch(
+                    "Failure creating SubmitRequest",
+                    get_class( $this ), 'error', json_encode($e->getMessage()), null
+                );
+                return false;
+            }
         }
 
         $enterpriseHost = new Guzzle([

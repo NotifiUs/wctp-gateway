@@ -19,7 +19,7 @@
         "laravel/tinker": "^1.0",
         "laravel/vapor-cli": "^1.4",
         "laravel/vapor-core": "^2.2",
-        "notifius/php-wctp": "^0.0.3",
+        "notifius/php-wctp": "^0.0.4",
         "predis/predis": "^1.1",
         "twilio/sdk": "^5.41"
     },
