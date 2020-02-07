@@ -145,7 +145,13 @@ return [
         'production' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => [
+                    'default',
+                    'enterprise-host' ,
+                    'messages',
+                    'outbound',
+                    'outbound-throttled'
+                ],
                 'balance' => 'auto',
                 'minProcesses' => 1,
                 'maxProcesses' => 10,
