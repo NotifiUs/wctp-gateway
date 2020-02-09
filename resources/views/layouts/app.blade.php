@@ -26,7 +26,10 @@
                 <div class="row justify-content-center">
                     <!-- this needs cleaned up some, better use of templates, split out account side menu? -->
                     @if( Auth::check() )
-                        @if( ! Str::startsWith( request()->path(), 'account' ) )
+                        @if( ! Str::startsWith( request()->path(), 'account' )
+                            && ! Str::startsWith( request()->path(), 'mfa' )
+                            && ! Str::startsWith( request()->path(), 'password')
+                            )
                             <div class="col-md-4">
                                 @include('layouts.side')
                             </div>

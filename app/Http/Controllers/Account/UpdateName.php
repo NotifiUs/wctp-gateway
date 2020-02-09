@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UpdateName extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [

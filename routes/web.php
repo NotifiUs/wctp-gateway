@@ -18,6 +18,12 @@ Route::get('/', 'RedirectToDashboard');
 
 Route::get('/home', 'ShowDashboard')->name('home');
 
+Route::namespace('Auth')->group(function () {
+    Route::get('/mfa', 'MFAController@show' );
+    Route::post('/mfa', 'MFAController@checkCode' );
+});
+
+
 Route::namespace('Account')->group(function () {
     Route::get('/account', 'ShowAccount');
     Route::get('/account/verify-email', 'VerifyEmail')->middleware('verified');
@@ -25,6 +31,9 @@ Route::namespace('Account')->group(function () {
     Route::post('/account/timezone', 'UpdateTimezone');
     Route::post('/account/email', 'ChangeEmail');
     Route::post('/account/password', 'ChangePassword');
+    Route::get('/account/mfa', 'ShowMFA');
+    Route::post('/account/mfa', 'EnableMFA');
+    Route::post('/account/mfa/remove', 'DisableMFA');
 });
 
 Route::namespace('Events')->group(function () {

@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.3",
         "edwindayot/faker-provider-animals": "^1.0",
+        "endroid/qr-code": "^3.7",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.5",
         "jzonta/faker-restaurant": "^1.1",
@@ -21,6 +22,7 @@
         "laravel/vapor-core": "^2.2",
         "notifius/php-wctp": "^0.0.4",
         "predis/predis": "^1.1",
+        "robthree/twofactorauth": "^1.7",
         "twilio/sdk": "^5.41"
     },
     "require-dev": {

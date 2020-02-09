@@ -10,6 +10,11 @@ use Exception;
 
 class ChangeEmail extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -26,7 +31,7 @@ class ChangeEmail extends Controller
         {
             $user->email_verified_at = null;
         }
-        
+
         $user->email = $request->input('email');
 
         try{
