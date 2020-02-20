@@ -95,10 +95,18 @@ class SubmitToEnterpriseHost implements ShouldQueue
             }
         }
 
+        $verify = true;
+
+        if( config('tls.no_verify' ) === true )
+        {
+            $verify = false;
+        }
+
         $enterpriseHost = new Guzzle([
             'timeout' => 10.0,
             'headers' => [ 'content-type' => 'application/xml' ],
             'body' => $xml->asXML(),
+            'verify' => $verify,
         ]);
 
         $result = $enterpriseHost->post( $host->url );
