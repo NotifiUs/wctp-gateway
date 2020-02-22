@@ -21,6 +21,9 @@
 <body>
     <div id="app">
         @include('layouts.nav')
+        @if( config('tls.no_verify'))
+            @include('layouts.tls-warning')
+        @endif
         <main class="py-4">
             <div class="container">
                 <div class="row justify-content-center">
