@@ -99,13 +99,9 @@ class SubmitToEnterpriseHost implements ShouldQueue
             'timeout' => 10.0,
             'headers' => [ 'content-type' => 'application/xml' ],
             'body' => $xml->asXML(),
+            'verify' => config('tls.verify_certificates'),
+            'curl' => [ CURLOPT_SSLVERSION => constant( config('tls.protocol_support' ) ) ],
         ];
-
-        if( config('tls.no_verify' ) === true )
-        {
-            $guzzleConfig['verify'] = false;
-            $guzzleConfig['curl'] = [ CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1 ];
-        }
 
         $enterpriseHost = new Guzzle( $guzzleConfig );
 

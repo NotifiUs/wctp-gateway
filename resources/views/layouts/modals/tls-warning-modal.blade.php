@@ -15,13 +15,13 @@
                         This warning message will not dismiss until you disable insecure TLS support.
                     </p>
                     <div class="alert shadow-sm alert-warning border-warning font-weight-bold">
-                        <i class="fas fa-exclamation-triangle"></i> This is generally not recommended or considered compliant for most regulations (HIPAA, PCI, SOX, etc.)
+                        <i class="fas fa-exclamation-triangle"></i> Configuration not recommended or considered compliant for most regulations (HIPAA, PCI, SOX, etc.)
                     </div>
                       <p>
-                          This option can only be enabled or disabled by accessing this servers environment configuration file from the console of the server (or remote access such as <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">SSH with public keys</a>) and adding or editing the value below.
+                          These options can only be enabled or disabled by accessing this servers environment configuration file from the console of the server (or remote access such as <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">SSH with public keys</a>) and adding or editing the value below.
                       </p>
                           <blockquote>
-                              By default, this option is omitted, meaning it is disabled and <b>your Enterprise Host (your IS web server)</b> must support at least TLS version(s) 1.2+ with a <a href="https://letsencrypt.org/">valid SSL/TLS certificate</a>
+                              By default <b>your Enterprise Host (your IS web server)</b> must support at least TLS version(s) 1.2+ with a <a href="https://letsencrypt.org/">valid SSL/TLS certificate</a>
                           </blockquote>
 
                         <div class="card">
@@ -31,15 +31,18 @@
                             <span class="text-dark"># Sets Guzzle HTTP library to ignore certificate errors<br>
                                 # and support older TLS versions when connecting to Enterprise Host urls.<br>
                             </span>
-                            TLS_ALLOW_UNSECURED=true<br>
+                                TLS_VERIFY_CERTIFICATES=false<br>
+                                TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_0<br>
                                 <br>
                                 <span class="text-dark"># Sets Guzzle HTTP library to verify certificates<br>
-                            # and use the latest TLS versions when connecting to Enterprise Host urls.<br>
+                            # and use the latest TLS version when connecting to Enterprise Host urls.<br>
                                 </span>
-                            TLS_ALLOW_UNSECURED=false<br>
+                                TLS_VERIFY_CERTIFICATES=true<br>
+                                TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_3<br>
                                 <br>
                             <span class="text-dark"># This is the default configuration<br>
-                            # Same as TLS_ALLOW_UNSECURED=false<br>
+                            # Defaults: TLS_VERIFY_CERTIFICATES=true<br>
+                            # Defaults: TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_2<br>
                             # (omitted)<br>
                             </span>
 
