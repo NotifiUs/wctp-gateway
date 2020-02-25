@@ -105,13 +105,19 @@ class SubmitToEnterpriseHost implements ShouldQueue
 
         $enterpriseHost = new Guzzle( $guzzleConfig );
 
-        $result = $enterpriseHost->post( $host->url );
+        try{
+            $result = $enterpriseHost->post( $host->url );
+        }
+        catch( Exception $e )
+        {
+            //continue so we can log reply
+        }
 
         if( $result->getStatusCode() != 200 )
         {
             LogEvent::dispatch(
-                "Failure submitting reply",
-                get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
+                "Failure submitting message",
+                get_class( $this ), 'error', json_encode([$result->getReasonPhrase(), $result->getBody()->getContents() ]), null
             );
             return false;
         }
