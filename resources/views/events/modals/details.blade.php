@@ -27,7 +27,7 @@
                         </tbody>
                     </table>
                    <div class="alert alert-light border-light text-muted-light bg-striped">
-                       <pre class="text-muted overflow-hidden">{!! json_encode( json_decode($event->toArray()['details'], true ), JSON_PRETTY_PRINT) !!}</pre>
+                       <pre class="text-muted">{!! json_encode( json_decode($event->toArray()['details'], true ), JSON_PRETTY_PRINT) !!}</pre>
                    </div>
                </div>
             </div>
