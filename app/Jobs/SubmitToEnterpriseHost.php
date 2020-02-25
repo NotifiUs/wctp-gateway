@@ -96,6 +96,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
         }
 
         $guzzleConfig = [
+            'http_errors' => false, //don't throw exception
             'timeout' => 10.0,
             'headers' => [ 'content-type' => 'application/xml' ],
             'body' => $xml->asXML(),
@@ -112,7 +113,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
         {
             LogEvent::dispatch(
                 "Failure submitting message",
-                get_class( $this ), 'error', json_encode($e->getMEssage() ), null
+                get_class( $this ), 'error', json_encode($e->getMessage() ), null
             );
             return false;
         }
