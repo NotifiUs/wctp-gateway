@@ -110,7 +110,11 @@ class SubmitToEnterpriseHost implements ShouldQueue
         }
         catch( Exception $e )
         {
-            //continue so we can log reply
+            LogEvent::dispatch(
+                "Failure submitting message",
+                get_class( $this ), 'error', json_encode($e->getMEssage() ), null
+            );
+            return false;
         }
 
         if( $result->getStatusCode() != 200 )
