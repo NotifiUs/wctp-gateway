@@ -86,7 +86,7 @@ class StatusHandler extends Controller
             if( $validator->validate(
                 $request->header('x-twilio-signature' ),
                 $request->url(),
-                $request->post()
+                $_POST
             ))
             {
                 return true;
