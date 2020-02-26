@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\SMS;
 
-use Carbon\Carbon;
 use Exception;
 use App\Number;
 use App\Carrier;
 use App\Message;
+use Carbon\Carbon;
+use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Twilio\Security\RequestValidator;
 
@@ -82,16 +82,30 @@ class StatusHandler extends Controller
     {
         if( $this->carrier->api == 'twilio' )
         {
-            $validator = new RequestValidator( $this->carrier->twilio_auth_token );
-            Log::debug( $request->header('x-twilio-signature'));
+            try{
+                $validator = new RequestValidator( decrypt( $this->carrier->twilio_auth_token )  );
+            }
+            catch( Exception $e )
+            {
+                LogEvent::dispatch(
+                    "Failed inbound message",
+                    get_class( $this ), 'error', json_encode("Unable to decrypt twilio auth token"), null
+                );
+            }
+
             if( $validator->validate(
                 $request->header('x-twilio-signature' ),
                 $request->url(),
-                $_POST
+                $request->all()
             ))
             {
                 return true;
             }
+
+            LogEvent::dispatch(
+                "Failed inbound message",
+                get_class( $this ), 'error', json_encode("Unable to verify twilio request"), null
+            );
 
             return false;
 
@@ -105,6 +119,11 @@ class StatusHandler extends Controller
             {
                 return true;
             }
+
+            LogEvent::dispatch(
+                "Failed inbound message",
+                get_class( $this ), 'error', json_encode("Request not from ThinQ documented IP address"), null
+            );
 
             return false;
         }
