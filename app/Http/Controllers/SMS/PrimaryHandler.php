@@ -10,6 +10,7 @@ use App\EnterpriseHost;
 use App\Jobs\SaveMessage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Twilio\Security\RequestValidator;
 
 class PrimaryHandler extends Controller
 {
@@ -37,7 +38,7 @@ class PrimaryHandler extends Controller
             return $this->respond();
         }
 
-        if( ! $this->verify() ) {
+        if( ! $this->verify($request) ) {
             return $this->respond();
         }
 
@@ -94,23 +95,41 @@ class PrimaryHandler extends Controller
         return $this->respond();
     }
 
-    protected function verify()
+    protected function verify( Request $request )
     {
         if( $this->carrier->api == 'twilio' )
         {
-            //use verification
+            $validator = new RequestValidator( $this->carrier->twilio_auth_token );
+
+            if( $validator->validate(
+                $request->header('HTTP_X_TWILIO_SIGNATURE' ),
+                $request->fullUrl(),
+                $request->all()
+            ))
+            {
+                return true;
+            }
+
+            return false;
+
         }
         elseif( $this->carrier->api == 'thinq' )
         {
-            //useragent == 'thinq-sms'
-            //X-sms-guid is set
+            //https://apidocs.thinq.com/?version=latest#7c5909e8-596c-47b3-9f24-438196eef374
+            //comes from 192.81.236.250 //debating on leaving this up to network firewall?
+            //move to system settings or carrier settings?
+            if( $request->getClientIp() == '192.81.236.250')
+            {
+                return true;
+            }
+
+            return false;
         }
         else
         {
             return false;
         }
 
-        return true;
     }
 
     protected function respond()
