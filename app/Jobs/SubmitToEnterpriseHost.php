@@ -122,7 +122,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
         {
             LogEvent::dispatch(
                 "Failure submitting message",
-                get_class( $this ), 'error', json_encode([$result->getBody()->getContents(), $result->getReasonPhrase() ]), null
+                get_class( $this ), 'error', json_encode([nl2br($result->getBody()->getContents()), $result->getReasonPhrase() ]), null
             );
             return false;
         }
