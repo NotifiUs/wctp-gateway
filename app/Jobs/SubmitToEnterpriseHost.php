@@ -43,6 +43,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
         }
 
         $responding_to = null;
+
         if( $this->message->reply_with )
         {
             $responding_to = Message::where('reply_with', $this->message->reply_with )
