@@ -10,6 +10,7 @@ use App\EnterpriseHost;
 use App\Jobs\SaveMessage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Twilio\Security\RequestValidator;
 
 class PrimaryHandler extends Controller
@@ -100,7 +101,7 @@ class PrimaryHandler extends Controller
         if( $this->carrier->api == 'twilio' )
         {
             $validator = new RequestValidator( $this->carrier->twilio_auth_token );
-
+            Log::debug( $request->header('x-twilio-signature'));
             if( $validator->validate(
                 $request->header('x-twilio-signature' ),
                 $request->url(),

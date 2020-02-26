@@ -8,6 +8,7 @@ use App\Number;
 use App\Carrier;
 use App\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Twilio\Security\RequestValidator;
 
@@ -82,7 +83,7 @@ class StatusHandler extends Controller
         if( $this->carrier->api == 'twilio' )
         {
             $validator = new RequestValidator( $this->carrier->twilio_auth_token );
-
+            Log::debug( $request->header('x-twilio-signature'));
             if( $validator->validate(
                 $request->header('x-twilio-signature' ),
                 $request->url(),
