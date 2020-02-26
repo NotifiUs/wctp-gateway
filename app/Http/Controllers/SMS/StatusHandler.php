@@ -84,8 +84,8 @@ class StatusHandler extends Controller
             $validator = new RequestValidator( $this->carrier->twilio_auth_token );
 
             if( $validator->validate(
-                $request->header('HTTP_X_TWILIO_SIGNATURE' ),
-                $request->fullUrl(),
+                $request->header('x-twilio-signature' ),
+                $request->url(),
                 $request->all()
             ))
             {
