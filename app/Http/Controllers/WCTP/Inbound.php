@@ -28,6 +28,9 @@ class Inbound extends Controller
         $reply_with = null;
         $reply_phrase = preg_match('/\bReply with \d+$/i', $message, $matches );
 
+        //strip anything other than digits
+        $recipient = preg_replace('/\D+/i', '', $recipient );
+
         if( $reply_phrase && isset($matches[0]) )
         {
 
