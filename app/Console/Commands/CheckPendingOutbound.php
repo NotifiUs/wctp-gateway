@@ -44,7 +44,7 @@ class CheckPendingOutbound extends Command
     {
         $this->info("Getting pending outbound messages...");
         try{
-            $messages = Message::where('created_at', '>=', Carbon::now()->subHours(4 ) )->where('direction', 'outbound' )->whereIn('status', ['pending','sent'])->get();
+            $messages = Message::where('created_at', '>=', Carbon::now()->subHours(24 ) )->where('direction', 'outbound' )->whereIn('status', ['pending','sent'])->get();
         }
         catch( Exception $e )
         {
