@@ -12,11 +12,16 @@ class CheckPendingOutbound extends Command
 {
 
     /**
+     * The number of hours to check for pending messages
+     */
+    public $hours = 24;
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pending:outbound';
+    protected $signature = 'pending:outbound {--hours=24 : The number of hours to check for}';
 
     /**
      * The console command description.
@@ -25,15 +30,6 @@ class CheckPendingOutbound extends Command
      */
     protected $description = 'Attempts to check and update any pending outbound messages against carrier status';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -42,9 +38,11 @@ class CheckPendingOutbound extends Command
      */
     public function handle()
     {
-        $this->info("Getting pending outbound messages...");
+        $this->hours = $this->option('hours');
+
+        $this->info("Getting pending outbound messages in the last {$this->hours} hour(s)...");
         try{
-            $messages = Message::where('created_at', '>=', Carbon::now()->subHours(24 ) )->where('direction', 'outbound' )->whereIn('status', ['pending','sent'])->get();
+            $messages = Message::where('created_at', '>=', Carbon::now()->subHours( $this->hours ) )->where('direction', 'outbound' )->whereIn('status', ['pending','sent'])->get();
         }
         catch( Exception $e )
         {
