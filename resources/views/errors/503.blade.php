@@ -3,4 +3,4 @@
 @section( 'title', __('Service Unavailable') )
 @section( 'message', __('Service Unavailable') )
 @section( 'image', '/images/illustrations/service_down.svg')
-@section( 'link', '/home' )
+@section( 'link', secure_url('/home') )

@@ -3,4 +3,4 @@
 @section( 'title', __('Unauthorized') )
 @section( 'message', __('Unauthorized') )
 @section( 'image', '/images/illustrations/reminder.svg')
-@section( 'link', '/home' )
+@section( 'link', secure_url('/home') )

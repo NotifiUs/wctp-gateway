@@ -3,4 +3,4 @@
 @section( 'title', __('Bad Gateway') )
 @section( 'message', __('Bad Gateway') )
 @section( 'image', '/images/illustrations/convert.svg')
-@section( 'link', '/home' )
+@section( 'link', secure_url('/home') )
