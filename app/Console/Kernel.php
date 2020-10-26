@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('messages:purge')->daily();
         $schedule->command('eventlog:purge')->daily();
-        $schedule->command('telescope:prune --hours=1')->daily();
+        $schedule->command('telescope:prune --hours=1')->hourly();
         $schedule->command('pending:inbound')->everyMinute();
         $schedule->command('pending:outbound --hours=1')->everyMinute();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();

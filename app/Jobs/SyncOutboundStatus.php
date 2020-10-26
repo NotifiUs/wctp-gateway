@@ -190,7 +190,7 @@ class SyncOutboundStatus implements ShouldQueue
     private function markSent()
     {
         try{
-            $this->message->status = 'sent';
+            $this->message->status = 'delivered';
             $this->message->failed_at = Carbon::now();
             $this->message->save();
         }

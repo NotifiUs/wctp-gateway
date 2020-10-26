@@ -10,7 +10,7 @@ use Illuminate\Console\Command;
 class PurgeMessageList extends Command
 {
 
-    protected $keep_for = 90; //days
+    protected $keep_for = 30; //days
 
     /**
      * The name and signature of the console command.
