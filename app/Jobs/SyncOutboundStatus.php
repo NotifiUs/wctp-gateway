@@ -16,6 +16,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class SyncOutboundStatus implements ShouldQueue
 {
+
+    public $tries = 3;
+
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $deleteWhenMissingModels = true;
@@ -34,10 +37,10 @@ class SyncOutboundStatus implements ShouldQueue
         if( is_null( $this->carrier ) )
         {
             LogEvent::dispatch(
-                "Unable to process outbound message",
+                "Failure synchronizing message status",
                 get_class( $this ), 'error', json_encode("No enabled carrier for message"), null
             );
-            return false;
+            return $this->markSent();
         }
 
         if( $this->carrier->api == 'twilio' )
@@ -51,7 +54,7 @@ class SyncOutboundStatus implements ShouldQueue
             }
             catch( Exception $e ){
                 LogEvent::dispatch(
-                    "Failure submitting message",
+                    "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
                 return false;
@@ -81,7 +84,7 @@ class SyncOutboundStatus implements ShouldQueue
             }
             catch( Exception $e ){
                 LogEvent::dispatch(
-                    "Failure sending message",
+                    "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode([$e->getMessage(), $this->from]), null
                 );
                 return false;
@@ -104,17 +107,29 @@ class SyncOutboundStatus implements ShouldQueue
                     "Failed decrypting carrier api token",
                     get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
                 );
-                return false;
+                return $this->markSent();
             }
 
-            $result = $thinq->get("account/{$this->carrier->thinq_account_id}/product/origination/sms/{$this->message->carrier_message_uid}");
+            try{
+                $result = $thinq->get("account/{$this->carrier->thinq_account_id}/product/origination/sms/{$this->message->carrier_message_uid}");
+            }
+            catch( Exception $e )
+            {
+                LogEvent::dispatch(
+                    "Failure synchronizing message status",
+                    get_class( $this ), 'error', json_encode($e->getMessage()), null
+                );
+
+                return $this->markSent();
+            }
+
             if( $result->getStatusCode() != 200 )
             {
                 LogEvent::dispatch(
-                    "Failure submitting message",
+                    "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
                 );
-                return false;
+                return $this->markSent();
             }
             $body = $result->getBody();
             $json = $body->getContents();
@@ -122,10 +137,10 @@ class SyncOutboundStatus implements ShouldQueue
             if( ! isset( $arr['delivery_notifications']))
             {
                 LogEvent::dispatch(
-                    "No message send_status returned from carrier",
+                    "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode([$arr, $arr['delivery_notifications']]), null
                 );
-                return false;
+                return $this->markSent();
             }
 
             foreach( $arr['delivery_notifications'] as $dn )
@@ -157,7 +172,7 @@ class SyncOutboundStatus implements ShouldQueue
             }
             catch( Exception $e ){
                 LogEvent::dispatch(
-                    "Failure updating status",
+                    "Failure updating message status",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
                 return false;
@@ -165,6 +180,25 @@ class SyncOutboundStatus implements ShouldQueue
         }
         else
         {
+            //unsupported carrier
+            return false;
+        }
+
+        return true;
+    }
+
+    private function markSent()
+    {
+        try{
+            $this->message->status = 'sent';
+            $this->message->failed_at = Carbon::now();
+            $this->message->save();
+        }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Failure updating message status",
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
+            );
             return false;
         }
 
