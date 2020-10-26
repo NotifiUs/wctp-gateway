@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Build Status](https://travis-ci.org/NotifiUs/wctp-gateway.svg?branch=master)](https://travis-ci.org/NotifiUs/wctp-gateway)
+[![Build Status](https://travis-ci.org/NotifiUs/wctp-gateway.svg?branch=main)](https://travis-ci.org/NotifiUs/wctp-gateway)
 [![GitHub license](https://img.shields.io/github/license/notifius/wctp-gateway?color=blue)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
 [![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
 </div>
