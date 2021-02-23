@@ -28,14 +28,14 @@ class Inbound extends Controller
         }
 
         $wctp = simplexml_load_string( $xmlCheck );
+        $xmlError = libxml_get_last_error();
+        libxml_clear_errors();
 
-        if( $wctp === false || libxml_get_last_error() !== false ) {
-            libxml_clear_errors();
+        if( $wctp === false || $xmlError !== false ) {
+
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
-
-        libxml_clear_errors();
 
         try{
             $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
