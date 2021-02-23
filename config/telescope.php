@@ -93,7 +93,8 @@ return [
     */
 
     'ignore_paths' => [
-        //
+        '/queue',
+        '/queue/*'
     ],
 
     'ignore_commands' => [
