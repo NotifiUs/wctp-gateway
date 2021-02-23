@@ -162,6 +162,41 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
             return false;
         }
 
+        //verify wctpresponse
+        $body = simplexml_load_string( $result->getBody()->getContents() );
+
+        if($body === false)
+        {
+            LogEvent::dispatch(
+                "Response was not XML.",
+                get_class( $this ), 'error', json_encode( $body ), null
+            );
+            return false;
+        }
+        else
+        {
+            try{
+                $wctpConfirmation = (string)$body->xpath('/wctp-Operation/wctp-Confirmation/wctp-Success/@successCode')[0] ?? null;
+            }
+            catch(Exception $e )
+            {
+                LogEvent::dispatch(
+                    "No wctp-Confirmation operation response",
+                    get_class( $this ), 'error', json_encode($e->getMessage() ), null
+                );
+                return false;
+            }
+
+            if(is_null($wctpConfirmation))
+            {
+                LogEvent::dispatch(
+                    "Missing successCode on wctpSuccess element",
+                    get_class( $this ), 'error', json_encode($body ), null
+                );
+                return false;
+            }
+        }
+
         try{
             $this->message->status = 'delivered';
             $this->message->delivered_at = Carbon::now();
@@ -174,7 +209,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
             );
         }
 
-        $body = simplexml_load_string( $result->getBody()->getContents() );
+
         LogEvent::dispatch(
             "Enterprise Host response",
             get_class( $this ), 'info', json_encode($body), null
