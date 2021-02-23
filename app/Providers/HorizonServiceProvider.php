@@ -32,6 +32,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      */
     protected function gate()
     {
+        //according to documentation, this function omits non-authenticated users (i.e., $user being null never hits this)
         Gate::define('viewHorizon', function ($user) {
             return true;
         });

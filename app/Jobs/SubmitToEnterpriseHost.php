@@ -41,7 +41,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
         {
             //Alert a second attempt has to be made
         }
-        elseif( $this->attempts() > 10 )
+        elseif( $this->attempts() === 10 )
         {
             //alert the maximum attempts has been reached, we're cancelling it.
             //update the message to be failed so it stops being processed.
