@@ -23,6 +23,9 @@ class SubmitToEnterpriseHost implements ShouldQueue
 
     public $message;
 
+    public $tries = 10;
+    public $timeout = 60;
+
     public function __construct( Message $message )
     {
         $this->queue = 'enterprise-host';
