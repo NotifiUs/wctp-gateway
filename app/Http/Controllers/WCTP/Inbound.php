@@ -20,7 +20,6 @@ class Inbound extends Controller
         $xmlCheck = $request->getContent() ?? '';
 
         libxml_use_internal_errors(true);
-        libxml_clear_errors();
 
         if($xmlCheck === '' )
         {
@@ -31,17 +30,25 @@ class Inbound extends Controller
         $wctp = simplexml_load_string( $xmlCheck );
 
         if( $wctp === false || libxml_get_last_error() !== false ) {
+            libxml_clear_errors();
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
 
         libxml_clear_errors();
 
-        $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
-        $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0] ?? null;
-        $messageID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID')[0] ?? null;
-        $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0] ?? null;
-        $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0] ?? null;
+        try{
+            $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
+            $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0] ?? null;
+            $messageID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID')[0] ?? null;
+            $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0] ?? null;
+            $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0] ?? null;
+        }
+        catch(Exception $e )
+        {
+            return $this->showError(302, 'XML Validation Error',
+                'recipientID, wctp-Alphanumeric, MessageID, senderID, and securityCode are required.');
+        }
 
         if( is_null($recipient) || is_null($message) || is_null($messageID) || is_null($senderID) || is_null($securityCode) )
         {
