@@ -17,7 +17,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 class SyncOutboundStatus implements ShouldQueue
 {
 
-    public $tries = 3;
+    public $tries = 10;
+    public $timeout = 60;
+    public $uniqueFor = 3600;
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -203,5 +205,10 @@ class SyncOutboundStatus implements ShouldQueue
         }
 
         return true;
+    }
+
+    public function uniqueId()
+    {
+        return $this->message->id;
     }
 }

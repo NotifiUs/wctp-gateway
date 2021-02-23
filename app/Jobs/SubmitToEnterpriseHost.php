@@ -14,8 +14,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class SubmitToEnterpriseHost implements ShouldQueue
+class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -25,6 +26,7 @@ class SubmitToEnterpriseHost implements ShouldQueue
 
     public $tries = 10;
     public $timeout = 60;
+    public $uniqueFor = 3600;
 
     public function __construct( Message $message )
     {
@@ -179,5 +181,10 @@ class SubmitToEnterpriseHost implements ShouldQueue
         );
 
         return true;
+    }
+
+    public function uniqueId()
+    {
+        return $this->message->id;
     }
 }
