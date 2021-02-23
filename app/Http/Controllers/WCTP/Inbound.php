@@ -18,27 +18,24 @@ class Inbound extends Controller
     public function __invoke(Request $request)
     {
         $xmlCheck = $request->getContent() ?? '';
+
+        libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
         if($xmlCheck === '' )
         {
             return $this->showError(301, 'Cannot Parse Input',
                 'Message body is empty');
         }
 
-        try{
-            $wctp = new SimpleXMLElement( $xmlCheck );
-        }
-        catch(Exception $e )
-        {
-            return $this->showError(301, 'Cannot Parse Input',
-                'Message body is not XML');
-        }
+        $wctp = simplexml_load_string( $xmlCheck );
 
-        if( ! $wctp->valid() )
-        {
+        if( $wctp === false || libxml_get_last_error() !== false ) {
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
 
+        libxml_clear_errors();
 
         $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
         $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0] ?? null;
