@@ -34,6 +34,35 @@ class SubmitToEnterpriseHost implements ShouldQueue
 
     public function handle()
     {
+
+        if( $this->attempts() === 2 )
+        {
+            //Alert a second attempt has to be made
+        }
+        elseif( $this->attempts() > 10 )
+        {
+            //alert the maximum attempts has been reached, we're cancelling it.
+            //update the message to be failed so it stops being processed.
+            try{
+                $this->message->status = 'failed';
+                $this->message->failed_at = Carbon::now();
+                $this->message->save();
+            }
+            catch( Exception $e ){
+                LogEvent::dispatch(
+                    "Job status update failed",
+                    get_class( $this ), 'error', json_encode($e->getMessage()), null
+                );
+            }
+
+            $this->delete();
+            return true;
+        }
+        else
+        {
+            //continue...
+        }
+
         $host = EnterpriseHost::where( 'enabled', 1 )->where( 'id', $this->message->enterprise_host_id )->first();
 
         if( is_null( $host ) )
