@@ -7,6 +7,7 @@ use App\Carrier;
 use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\App;
 use Illuminate\Queue\SerializesModels;
 use Twilio\Rest\Client as TwilioClient;
@@ -18,6 +19,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class SendTwilioSMS implements ShouldQueue
 {
+
+    public $tries = 10;
+    public $timeout = 60;
+    public $uniqueFor = 3600;
+
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**

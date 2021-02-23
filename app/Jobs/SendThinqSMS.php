@@ -8,14 +8,19 @@ use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendThinqSMS implements ShouldQueue
+class SendThinqSMS implements ShouldQueue, ShouldBeUnique
 {
+    public $tries = 10;
+    public $timeout = 60;
+    public $uniqueFor = 3600;
+
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $deleteWhenMissingModels = true;

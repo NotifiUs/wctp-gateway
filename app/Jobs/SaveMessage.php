@@ -7,6 +7,7 @@ use App\Message;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use App\Jobs\SubmitToEnterpriseHost;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,6 +15,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class SaveMessage implements ShouldQueue
 {
+    public $tries = 10;
+    public $timeout = 60;
+    public $uniqueFor = 3600;
+
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction;
