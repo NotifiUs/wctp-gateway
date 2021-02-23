@@ -255,12 +255,12 @@ class Number extends Model
                 {
                     $serviceAddons = [];
                     $results = $twilio->messaging->v1->services( $this->identifier )->fetch();
-                    foreach( $results->phoneNumbers->read([], 100) as $num )
+                    foreach( $results->phoneNumbers->read(100, 100) as $num )
                     {
                         $serviceAddons['numbers'][] = $num->toArray();
                     }
 
-                    foreach( $results->shortCodes->read([], 100) as $shortcode )
+                    foreach( $results->shortCodes->read(100, 100) as $shortcode )
                     {
                         $serviceAddons['shortcodes'][] = $shortcode->toArray();
                     }

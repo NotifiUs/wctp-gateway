@@ -33,7 +33,7 @@ class ShowAvailable extends Controller
                 //get list of numbers from messaging services
                 try {
                     $twilio = new Client( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
-                    $services = $twilio->messaging->v1->services->read([], 100);
+                    $services = $twilio->messaging->v1->services->read(100, 100);
 
 
                     foreach ( $services as $record ) {
@@ -42,7 +42,7 @@ class ShowAvailable extends Controller
                         $hasShortCodes = false;
                         $serviceAddons = [];
                         $service_name = $record->friendlyName;
-                        foreach( $record->phoneNumbers->read([], 100) as $num )
+                        foreach( $record->phoneNumbers->read(100, 100) as $num )
                         {
                             $hasNumbers = true;
                             $service_name = $num->phoneNumber;
@@ -50,7 +50,7 @@ class ShowAvailable extends Controller
                             $serviceAddons['numbers'][] = $num->toArray();
                         }
 
-                        foreach( $record->shortCodes->read([], 100) as $shortcode )
+                        foreach( $record->shortCodes->read(100, 100) as $shortcode )
                         {
                             $hasShortCodes = true;
                             $service_name = $shortcode->shortCode;

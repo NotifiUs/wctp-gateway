@@ -109,6 +109,8 @@ class PrimaryHandler extends Controller
                     "Failed inbound message",
                     get_class( $this ), 'error', json_encode("Unable to decrypt twilio auth token"), null
                 );
+
+                return false;
             }
 
             if( $validator->validate(
