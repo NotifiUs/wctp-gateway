@@ -19,11 +19,23 @@ class Inbound extends Controller
     {
         $wctp = new SimpleXMLElement( $request->getContent() );
 
-        $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0];
-        $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0];
-        $messageID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID')[0];
-        $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0];
-        $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0];
+        if( ! $wctp->valid() )
+        {
+            return $this->showError(301, 'Cannot Parse Input',
+               'Message body is not XML');
+        }
+
+        $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
+        $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0] ?? null;
+        $messageID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID')[0] ?? null;
+        $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0] ?? null;
+        $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0] ?? null;
+
+        if( is_null($recipient) || is_null($message) || is_null($messageID) || is_null($senderID) || is_null($securityCode) )
+        {
+            return $this->showError(302, 'XML Validation Error',
+                'recipientID, wctp-Alphanumeric, MessageID, senderID, and securityCode are required.');
+        }
 
         $reply_with = null;
         $reply_phrase = preg_match('/\bReply with \d+$/i', $message, $matches );
