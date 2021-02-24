@@ -7,6 +7,7 @@ use Throwable;
 use Exception;
 use App\Message;
 use Carbon\Carbon;
+use App\Mail\RetryJob;
 use App\Mail\FailedJob;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
@@ -43,7 +44,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 
         if( $this->attempts() === 2 )
         {
-            //Alert a second attempt has to be made
+            Mail::to( User::first()->email )->send(new RetryJob($this->message->toArray() ));
         }
 
         $host = EnterpriseHost::where( 'enabled', 1 )->where( 'id', $this->message->enterprise_host_id )->first();
