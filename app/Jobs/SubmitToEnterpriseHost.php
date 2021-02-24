@@ -164,7 +164,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
             {
                 LogEvent::dispatch(
                     "No wctp-Confirmation operation response",
-                    get_class( $this ), 'error', json_encode($e->getMessage() ), null
+                    get_class( $this ), 'error', json_encode('No successCode found: ' . $e->getMessage() ), null
                 );
                 $this->release(60 );
             }
