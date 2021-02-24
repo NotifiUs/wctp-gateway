@@ -6,6 +6,7 @@ use App\Jobs\SendThinqSMS;
 use App\Jobs\SendTwilioSMS;
 use App\Jobs\SubmitToEnterpriseHost;
 use App\EnterpriseHost;
+use Carbon\Carbon;
 use Exception;
 use App\Carrier;
 use App\Message;
@@ -58,6 +59,13 @@ class ProcessMessage extends Controller
         {
             // reprocess inbound message
             // we don't care about logging this as a message so we don't recreate a message
+            $message->delivered_at = null;
+            $message->failed_at = null;
+            $message->submitted_at = Carbon::now( Auth::user()->timezone );
+            $message->processed_at = null;
+            $message->status = 'pending';
+            $message->save();
+
             SubmitToEnterpriseHost::dispatch( $message );
         }
 
