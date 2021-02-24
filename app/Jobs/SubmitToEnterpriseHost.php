@@ -2,14 +2,18 @@
 
 namespace App\Jobs;
 
+use App\User;
+use Throwable;
 use Exception;
 use App\Message;
 use Carbon\Carbon;
+use App\Mail\FailedJob;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
 use NotifiUs\WCTP\XML\MessageReply;
 use NotifiUs\WCTP\XML\SubmitRequest;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -207,6 +211,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure updating status",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
+            return false;
         }
 
 
@@ -222,4 +227,23 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
     {
         return $this->message->id;
     }
+
+    public function failed(Throwable $e)
+    {
+        //move to system setting eventually.
+        Mail::to( User::first()->email )->send(new FailedJob($this->message->toArray() ));
+
+        try{
+            $this->message->status = 'failed';
+            $this->message->failed_at = Carbon::now();
+            $this->message->save();
+        }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Job status update failed",
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
+            );
+        }
+    }
+
 }
