@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Messages;
 
-use App\Jobs\SendThinqSMS;
-use App\Jobs\SendTwilioSMS;
-use App\Jobs\SubmitToEnterpriseHost;
-use App\EnterpriseHost;
-use Carbon\Carbon;
 use Exception;
 use App\Carrier;
 use App\Message;
+use Carbon\Carbon;
+use App\EnterpriseHost;
+use App\Jobs\SendThinqSMS;
+use App\Jobs\SendTwilioSMS;
 use Illuminate\Http\Request;
+use App\Jobs\SubmitToEnterpriseHost;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class ProcessMessage extends Controller
