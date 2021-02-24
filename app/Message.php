@@ -13,6 +13,10 @@ class Message extends Model
         'failed_at',
     ];
 
+    protected $hidden  = [
+        'message',
+    ];
+
     public function carrier()
     {
         return $this->belongsTo('App\Carrier');

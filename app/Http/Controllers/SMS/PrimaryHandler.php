@@ -114,9 +114,9 @@ class PrimaryHandler extends Controller
             }
 
             if( $validator->validate(
-                $request->header('x-twilio-signature' ),
-                $request->url(),
-                $request->all()
+                $request->header('X-Twilio-Signature'),
+                $request->fullUrl(),
+                $request->toArray()
             ))
             {
                 return true;
