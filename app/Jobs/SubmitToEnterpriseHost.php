@@ -212,7 +212,9 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
     {
         if( $exception instanceof MaxAttemptsExceededException )
         {
-            SubmitToEnterpriseHost::dispatch($this->message)->delay(now()->addSeconds(mt_rand(10,90)));
+            // instead of delaying the job instance, we just let it silently fail
+            // the scheduled job will pick it up when it runs next
+            //SubmitToEnterpriseHost::dispatch($this->message)->delay(now()->addSeconds(mt_rand(10,90)));
         }
         else
         {
