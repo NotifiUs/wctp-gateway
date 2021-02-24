@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         Queue::failing(function ( JobFailed $event ) {
+            //currently handled in individual job classes
+
             // $event->connectionName
             // $event->job
             // $event->exception

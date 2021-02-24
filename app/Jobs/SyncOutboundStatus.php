@@ -2,18 +2,22 @@
 
 namespace App\Jobs;
 
+use App\User;
+use Throwable;
 use Exception;
 use App\Carrier;
 use App\Message;
 use Carbon\Carbon;
+use App\Mail\FailedJob;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Twilio\Rest\Client as TwilioClient;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
 {
@@ -43,7 +47,8 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                 "Failure synchronizing message status",
                 get_class( $this ), 'error', json_encode("No enabled carrier for message"), null
             );
-            return $this->markSent();
+
+            $this->release(60);
         }
 
         if( $this->carrier->api == 'twilio' )
@@ -60,7 +65,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                return false;
+                $this->release(60);
             }
 
             try{
@@ -90,7 +95,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode([$e->getMessage(), $this->from]), null
                 );
-                return false;
+                $this->release(60);
             }
         }
         elseif( $this->carrier->api == 'thinq')
@@ -110,7 +115,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failed decrypting carrier api token",
                     get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
                 );
-                return $this->markSent();
+                $this->release(60);
             }
 
             try{
@@ -123,7 +128,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
 
-                return $this->markSent();
+                $this->release(60);
             }
 
             if( $result->getStatusCode() != 200 )
@@ -132,7 +137,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
                 );
-                return $this->markSent();
+                $this->release(60);
             }
             $body = $result->getBody();
             $json = $body->getContents();
@@ -143,7 +148,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode([$arr, $arr['delivery_notifications']]), null
                 );
-                return $this->markSent();
+                $this->release(60);
             }
 
             foreach( $arr['delivery_notifications'] as $dn )
@@ -178,38 +183,38 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure updating message status",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                return false;
+                $this->release(60);
             }
         }
         else
         {
             //unsupported carrier
-            return false;
+            $this->release(60);
         }
 
-        return true;
-    }
-
-    private function markSent()
-    {
-        try{
-            $this->message->status = 'delivered';
-            $this->message->failed_at = Carbon::now();
-            $this->message->save();
-        }
-        catch( Exception $e ){
-            LogEvent::dispatch(
-                "Failure updating message status",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
-            );
-            return false;
-        }
-
-        return true;
+       return;
     }
 
     public function uniqueId()
     {
         return $this->message->id;
+    }
+
+    public function failed(Throwable $exception ){
+
+        //move to system setting eventually.
+        Mail::to( User::first()->email )->send(new FailedJob($this->message->toArray() ));
+
+       try{
+            $this->message->status = 'failed';
+            $this->message->failed_at = Carbon::now();
+            $this->message->save();
+        }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Job status update failed",
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
+            );
+        }
     }
 }

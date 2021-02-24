@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\User;
+use Illuminate\Queue\MaxAttemptsExceededException;
 use Throwable;
 use Exception;
 use App\Message;
@@ -209,20 +210,28 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 
     public function failed(Throwable $exception )
     {
-        //move to system setting eventually.
-        Mail::to( User::first()->email )->send(new FailedJob($this->message->toArray() ));
+        if( $exception instanceof MaxAttemptsExceededException )
+        {
+            SubmitToEnterpriseHost::dispatch($this->message)->delay(now()->addSeconds(mt_rand(10,90)));
+        }
+        else
+        {
+            //move to system setting eventually.
+            Mail::to( User::first()->email )->send(new FailedJob($this->message->toArray() ));
 
-        try{
-            $this->message->status = 'failed';
-            $this->message->failed_at = Carbon::now();
-            $this->message->save();
+            try{
+                $this->message->status = 'failed';
+                $this->message->failed_at = Carbon::now();
+                $this->message->save();
+            }
+            catch( Exception $e ){
+                LogEvent::dispatch(
+                    "Job status update failed",
+                    get_class( $this ), 'error', json_encode($e->getMessage()), null
+                );
+            }
         }
-        catch( Exception $e ){
-            LogEvent::dispatch(
-                "Job status update failed",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
-            );
-        }
+
     }
 
 }
