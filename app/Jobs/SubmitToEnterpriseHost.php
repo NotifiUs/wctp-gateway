@@ -45,14 +45,6 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
         {
             //Alert a second attempt has to be made
         }
-        elseif( $this->attempts() === 10 )
-        {
-            $this->fail(new Exception('Maximum job retries reached: ' . $this->attempts()));
-        }
-        else
-        {
-            //continue...
-        }
 
         $host = EnterpriseHost::where( 'enabled', 1 )->where( 'id', $this->message->enterprise_host_id )->first();
 
@@ -63,7 +55,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 get_class( $this ), 'error', json_encode("No host found"), null
             );
 
-            throw new Exception('No host found' );
+            $this->release(60 );
         }
 
         $responding_to = null;
@@ -96,7 +88,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Failure creating MessageReply",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                throw $e;
+                $this->release(60 );
             }
         }
         else
@@ -116,7 +108,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Failure creating SubmitRequest",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                throw $e;
+                $this->release(60 );
             }
         }
 
@@ -140,7 +132,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode($e->getMessage() ), null
             );
-            throw $e;
+            $this->release(60 );
         }
 
         if( $result->getStatusCode() != 200 )
@@ -149,7 +141,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode([nl2br($result->getBody()->getContents()), $result->getReasonPhrase() ]), null
             );
-            throw new Exception("Failure submitting message");
+            $this->release(60 );
         }
 
         //verify wctpresponse
@@ -161,7 +153,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Response was not XML.",
                 get_class( $this ), 'error', json_encode( $body ), null
             );
-            throw new Exception("Response was not XML.");
+            $this->release(60 );
         }
         else
         {
@@ -174,7 +166,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "No wctp-Confirmation operation response",
                     get_class( $this ), 'error', json_encode($e->getMessage() ), null
                 );
-                throw $e;
+                $this->release(60 );
             }
 
             if(is_null($wctpConfirmation))
@@ -183,7 +175,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Missing successCode on wctpSuccess element",
                     get_class( $this ), 'error', json_encode($body ), null
                 );
-                throw new Exception("Missing successCode on wctpSuccess element");
+                $this->release(60 );
             }
         }
 
@@ -197,7 +189,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure updating status",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
-            throw $e;
+            $this->release(60 );
         }
 
 
