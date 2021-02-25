@@ -92,7 +92,6 @@ class PrimaryHandler extends Controller
             );
         }
 
-
         return $this->respond();
     }
 
@@ -116,7 +115,7 @@ class PrimaryHandler extends Controller
             if( $validator->validate(
                 $request->header('X-Twilio-Signature'),
                 $request->fullUrl(),
-                $request->toArray()
+                $_REQUEST
             ))
             {
                 return true;

@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\User;
-use Illuminate\Queue\MaxAttemptsExceededException;
 use Throwable;
 use Exception;
 use App\Message;
@@ -21,6 +20,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\MaxAttemptsExceededException;
 
 class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 {
@@ -82,7 +82,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     ->senderID( substr( $this->message->from, 2) )
                     ->recipientID( substr($this->message->to, 2) )
                     ->messageID( $this->message->id )
-                    ->payload( decrypt($this->message->message ) )
+                    ->payload( decrypt($this->message->message ) ?? '' )
                     ->xml();
             }
             catch( Exception $e ){
@@ -102,7 +102,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     ->senderID( substr( $this->message->from, 2) )
                     ->recipientID( substr($this->message->to, 2) )
                     ->messageID( $this->message->messageID ?? $this->message->id )
-                    ->payload( decrypt($this->message->message ) )
+                    ->payload( decrypt($this->message->message ) ?? '' )
                     ->xml();
             }
             catch( Exception $e ){

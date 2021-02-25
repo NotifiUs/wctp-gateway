@@ -96,7 +96,7 @@ class StatusHandler extends Controller
             if( $validator->validate(
                 $request->header('X-Twilio-Signature'),
                 $request->fullUrl(),
-                $request->toArray()
+                $_REQUEST
             ))
             {
                 return true;
