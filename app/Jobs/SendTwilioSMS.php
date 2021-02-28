@@ -51,12 +51,8 @@ class SendTwilioSMS implements ShouldQueue
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
             );
-            return false;
+            $this->release(60 );
         }
-        else{
-            //$this->queue = $this->from->e164;
-        }
-
     }
 
     public function handle()
@@ -72,7 +68,7 @@ class SendTwilioSMS implements ShouldQueue
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
-            return false;
+            $this->release(60 );
         }
 
         try{
@@ -82,7 +78,7 @@ class SendTwilioSMS implements ShouldQueue
                     "Failure submitting message",
                     get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
                 );
-                return false;
+                $this->release(60 );
             }
 
             if( $this->from->getType() == 'PN')
@@ -110,7 +106,7 @@ class SendTwilioSMS implements ShouldQueue
                 "Failure sending message",
                 get_class( $this ), 'error', json_encode([$e->getMessage(), $this->from]), null
             );
-            return false;
+            $this->release(60 );
         }
 
         SaveMessage::dispatch(
@@ -127,6 +123,6 @@ class SendTwilioSMS implements ShouldQueue
             'outbound'
         );
 
-        return true;
+        return;
     }
 }

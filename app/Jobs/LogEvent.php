@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use App\EventLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,6 +12,12 @@ use Illuminate\Queue\SerializesModels;
 
 class LogEvent implements ShouldQueue
 {
+
+    public $tries = 10;
+    public $timeout = 60;
+    public $uniqueFor = 3600;
+
+
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $event, $source, $severity, $details, $user_id;
@@ -34,7 +41,12 @@ class LogEvent implements ShouldQueue
         $event->details = $this->details;
         $event->user_id = $this->user_id;
 
-        $event->save();
+        try{
+            $event->save();
+        }
+        catch( Exception $e ){
+            $this->release(60 );
+        }
 
     }
 }

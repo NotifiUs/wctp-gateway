@@ -58,12 +58,14 @@ class SaveMessage implements ShouldQueue
             $message->save();
         }
         catch( Exception $e ){
-            return false;
+            $this->release(60 );
         }
 
         if( $message->direction == 'inbound' )
         {
             SubmitToEnterpriseHost::dispatch( $message );
         }
+
+        return;
     }
 }

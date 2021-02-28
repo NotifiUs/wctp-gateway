@@ -151,14 +151,27 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                 $this->release(60);
             }
 
+            $ts = null;
+            $latest_update = null;
+
             foreach( $arr['delivery_notifications'] as $dn )
             {
-                switch( $dn['send_status'] ) {
+                if( is_null($ts) || Carbon::parse( $dn['timestamp'] ) >= $ts )
+                {
+                    $ts = Carbon::parse( $dn['timestamp']);
+                    $latest_update = $dn;
+
+                }
+            }
+
+            if( ! is_null( $latest_update ) )
+            {
+                switch( $latest_update['send_status'] ) {
                     case "sent":
                     case "DELIVRD":
                     case "delivered":
-                        $this->message->status = $dn['send_status'];
-                        $this->message->delivered_at = Carbon::now();
+                        $this->message->status = $latest_update['send_status'];
+                        $this->message->delivered_at = Carbon::parse($latest_update['timestamp']);
                         break;
                     case "REJECTD":
                     case "EXPIRED":
@@ -167,8 +180,8 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     case "failed":
                     case "undelivered":
                     case "UNDELIV":
-                        $this->message->status = $dn['send_status'];
-                        $this->message->failed_at = Carbon::now();
+                        $this->message->status = $latest_update['send_status'];
+                        $this->message->failed_at = Carbon::parse($latest_update['timestamp']);
                         break;
                     default:
                         break;
