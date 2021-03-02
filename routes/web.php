@@ -89,6 +89,7 @@ Route::namespace('EnterpriseHosts')->group(function(){
 
 Route::namespace('WCTP')->group(function(){
     Route::post('/wctp', 'Inbound');
+    Route::get('/wctp','BadMethod');
 });
 
 Route::namespace('Messages')->group(function(){

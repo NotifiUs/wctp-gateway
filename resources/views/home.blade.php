@@ -25,11 +25,11 @@
                     @if( $queue == 1 )
                         <i class="fas fa-3x fa-check-circle text-success"></i>
                         <h5 class="text-muted mt-2 mb-0">{{ __('Message Queue') }}</h5>
-                        <a href="/queue" class="text-success">{{ __('Running') }}</a>
+                        <a href="/queue" target="_blank" class="text-success">{{ __('Running') }}</a>
                     @else
                         <i class="fas fa-3x fa-times text-danger"></i>
                         <h5 class="text-muted mt-2 mb-0">{{ __('Message Queue') }}</h5>
-                        <a href="/queue" class="text-danger">{{ __('Inactive') }}</a>
+                        <a href="/queue" target="_blank" class="text-danger">{{ __('Inactive') }}</a>
                     @endif
                 </div>
             </div>
