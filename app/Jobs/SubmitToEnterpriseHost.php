@@ -57,7 +57,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 get_class( $this ), 'error', json_encode("No host found"), null
             );
 
-            $this->release(60 );
+            return $this->release(60 );
         }
 
         $responding_to = null;
@@ -90,7 +90,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Failure creating MessageReply",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                $this->release(60 );
+                return $this->release(60 );
             }
         }
         else
@@ -110,7 +110,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Failure creating SubmitRequest",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                $this->release(60 );
+                return $this->release(60 );
             }
         }
 
@@ -134,7 +134,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode($e->getMessage() ), null
             );
-            $this->release(60 );
+            return $this->release(60 );
         }
 
         if( $result->getStatusCode() != 200 )
@@ -143,7 +143,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode([nl2br($result->getBody()->getContents()), $result->getReasonPhrase() ]), null
             );
-            $this->release(60 );
+            return $this->release(60 );
         }
 
         //verify wctpresponse
@@ -155,7 +155,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Response was not XML.",
                 get_class( $this ), 'error', json_encode( $body ), null
             );
-            $this->release(60 );
+            return $this->release(60 );
         }
         else
         {
@@ -168,7 +168,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "No wctp-Confirmation operation response",
                     get_class( $this ), 'error', json_encode('No successCode found: ' . $e->getMessage() ), null
                 );
-                $this->release(60 );
+                return$this->release(60 );
             }
 
             if(is_null($wctpConfirmation))
@@ -177,7 +177,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Missing successCode on wctpSuccess element",
                     get_class( $this ), 'error', json_encode($body ), null
                 );
-                $this->release(60 );
+                return$this->release(60 );
             }
         }
 
@@ -191,7 +191,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure updating status",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
-            $this->release(60 );
+            return$this->release(60 );
         }
 
 

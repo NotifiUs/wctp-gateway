@@ -48,7 +48,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                 get_class( $this ), 'error', json_encode("No enabled carrier for message"), null
             );
 
-            $this->release(60);
+            return $this->release(60);
         }
 
         if( $this->carrier->api == 'twilio' )
@@ -65,7 +65,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                $this->release(60);
+                return $this->release(60);
             }
 
             try{
@@ -95,7 +95,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode([$e->getMessage(), $this->from]), null
                 );
-                $this->release(60);
+                return $this->release(60);
             }
         }
         elseif( $this->carrier->api == 'thinq')
@@ -115,7 +115,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failed decrypting carrier api token",
                     get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
                 );
-                $this->release(60);
+                return $this->release(60);
             }
 
             try{
@@ -128,7 +128,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
 
-                $this->release(60);
+                return $this->release(60);
             }
 
             if( $result->getStatusCode() != 200 )
@@ -137,7 +137,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
                 );
-                $this->release(60);
+                return $this->release(60);
             }
             $body = $result->getBody();
             $json = $body->getContents();
@@ -148,7 +148,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure synchronizing message status",
                     get_class( $this ), 'error', json_encode([$arr, $arr['delivery_notifications']]), null
                 );
-                $this->release(60);
+                return $this->release(60);
             }
 
             $ts = null;
@@ -196,13 +196,13 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                     "Failure updating message status",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                $this->release(60);
+                return $this->release(60);
             }
         }
         else
         {
             //unsupported carrier
-            $this->release(60);
+            return $this->release(60);
         }
 
        return;

@@ -7,13 +7,13 @@ use App\Message;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use App\Jobs\SubmitToEnterpriseHost;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class SaveMessage implements ShouldQueue
+class SaveMessage implements ShouldQueue, ShouldBeUnique
 {
     public $tries = 10;
     public $timeout = 60;
@@ -58,7 +58,7 @@ class SaveMessage implements ShouldQueue
             $message->save();
         }
         catch( Exception $e ){
-            $this->release(60 );
+            return $this->release(60 );
         }
 
         if( $message->direction == 'inbound' )
@@ -66,6 +66,10 @@ class SaveMessage implements ShouldQueue
             SubmitToEnterpriseHost::dispatch( $message );
         }
 
-        return;
+    }
+
+    public function uniqueId()
+    {
+        return $this->messageID;
     }
 }

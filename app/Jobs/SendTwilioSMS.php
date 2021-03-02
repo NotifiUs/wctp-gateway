@@ -7,7 +7,6 @@ use App\Carrier;
 use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\App;
 use Illuminate\Queue\SerializesModels;
 use Twilio\Rest\Client as TwilioClient;
@@ -15,9 +14,10 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 
-class SendTwilioSMS implements ShouldQueue
+class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 {
 
     public $tries = 10;
@@ -51,7 +51,7 @@ class SendTwilioSMS implements ShouldQueue
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
             );
-            $this->release(60 );
+            return $this->release(60 );
         }
     }
 
@@ -68,7 +68,7 @@ class SendTwilioSMS implements ShouldQueue
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
-            $this->release(60 );
+            return $this->release(60 );
         }
 
         try{
@@ -78,7 +78,7 @@ class SendTwilioSMS implements ShouldQueue
                     "Failure submitting message",
                     get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
                 );
-                $this->release(60 );
+                return $this->release(60 );
             }
 
             if( $this->from->getType() == 'PN')
@@ -106,7 +106,7 @@ class SendTwilioSMS implements ShouldQueue
                 "Failure sending message",
                 get_class( $this ), 'error', json_encode([$e->getMessage(), $this->from]), null
             );
-            $this->release(60 );
+            return $this->release(60 );
         }
 
         SaveMessage::dispatch(
@@ -124,5 +124,11 @@ class SendTwilioSMS implements ShouldQueue
         );
 
         return;
+
+    }
+
+    public function uniqueId()
+    {
+        return $this->messageID;
     }
 }
