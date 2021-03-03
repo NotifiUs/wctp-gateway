@@ -33,6 +33,16 @@
                         </select>
                         <small class="form-text text-muted">Select the timezone to display throughout the application.</small>
                     </div>
+
+                    <label>Preferences</label>
+                    <div class="form-group bg-light border py-3 px-2 rounded shadow-sm">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="true" id="email_notifications" name="email_notifications">
+                            <label class="form-check-label font-weight-normal" for="email_notifications">
+                                Receive system email notifications (failures, etc.)
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

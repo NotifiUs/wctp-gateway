@@ -18,8 +18,5 @@ class BadMethod extends Controller
             'errorText' => $text,
             'errorDesc' => $desc,
         ], 200, ['content-type'=>'application/xml']);
-
-
     }
-
 }

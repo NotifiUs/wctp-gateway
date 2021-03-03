@@ -9,7 +9,7 @@
         </a>
     @else
         <a class="list-group-item list-group-item-action" href="#" data-toggle="modal" data-target="#editEmailModal">
-            <i class="fas fa-at text-primary"></i> {{ __('Update email address') }}
+            <i class="fas fa-at text-primary"></i> {{ __('Update email settings') }}
         </a>
     @endif
     <a class="list-group-item list-group-item-action" href="#" data-toggle="modal" data-target="#editTimezoneModal">

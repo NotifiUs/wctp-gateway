@@ -9,8 +9,8 @@
                         </th>
                         <th class="text-right">
                             <a href="#" data-toggle="modal" data-target="#createUserModal"
-                               class="text-small btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-plus"></i> Create User
+                               class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-user-plus"></i>
                             </a>
                         </th>
                     </tr>
@@ -18,7 +18,7 @@
                 <tbody>
                     @foreach( $users as $user )
                         <tr class="text-left">
-                            <td class="text-muted"
+                            <td class="text-muted text-truncate"
                                 title="{{$user->name}}">
                                 <a href="#" data-toggle="modal" data-target="#editUserModal{{ $user->id }}">
                                     {{ $user->email }}

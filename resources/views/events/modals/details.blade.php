@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+    use Illuminate\Support\Facades\Auth;
+@endphp
 <div class="modal fade" data-backdrop="static" id="detailsEventsModal{{ $event->id}}" tabindex="-1" role="dialog" aria-labelledby="detailsEventsModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm">
@@ -19,7 +23,15 @@
                             @else
                                 <th class="w-25 text-left">{{ $key }}</th>
                                 <td class="text-muted text-truncate w-75">
-                                    <span title="{{ $val }}" class="text-truncate">{{ $val }}</span>
+                                    @if(substr($key, -3, 3) === '_at')
+                                        @php
+                                            $dt = Carbon::parse($val)->timezone(Auth::user()->timezone)->format("m/d/Y g:i:s A T");
+                                        @endphp
+                                        <span title="{{ $dt }}" class="text-truncate">{{ $dt }}</span>
+                                    @else
+                                        <span title="{{ $val }}" class="text-truncate">{{ $val }}</span>
+                                    @endif
+
                                 </td>
                             @endif
                             </tr>
