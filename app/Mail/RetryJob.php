@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 class RetryJob extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    public $details;
+    public $details, $host;
     /**
      * Create a new message instance.
      *
@@ -19,6 +19,7 @@ class RetryJob extends Mailable implements ShouldQueue
     public function __construct( array $details = [] )
     {
         $this->details = $details;
+        $this->host = config('app.url');
     }
 
     /**

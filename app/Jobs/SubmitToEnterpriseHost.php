@@ -90,7 +90,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Failure creating MessageReply",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                return $this->release(60 );
+                return $this->fail($e);
             }
         }
         else
@@ -110,7 +110,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                     "Failure creating SubmitRequest",
                     get_class( $this ), 'error', json_encode($e->getMessage()), null
                 );
-                return $this->release(60 );
+                return $this->fail($e);
             }
         }
 
@@ -191,7 +191,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 "Failure updating status",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
-            return$this->release(60 );
+            return $this->release(60 );
         }
 
 

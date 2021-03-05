@@ -1,7 +1,9 @@
 @component('mail::message')
 # Retrying job
 
-The following job did not succeed on the first attempt. The job will fail and alert you after 10 attempts.
+The following job did not succeed on the first attempt.
+
+**Server**: {{ $host }}
 
 @component('mail::panel')
 

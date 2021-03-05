@@ -1,7 +1,9 @@
 @component('mail::message')
 # A job has failed!
 
-Please review the job failure below:
+Please review the job failure below.
+
+**Server**: {{ $host }}
 
 @component('mail::panel')
 
