@@ -21,12 +21,15 @@ class EditUser extends Controller
         $this->validate( $request, [
             'name' => 'required|string|min:3|max:255',
             'email' => "required|email|unique:users,email," . $user->id,
+            'email_notifications' => 'nullable',
             'timezone' => 'required|timezone'
         ]);
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->timezone = $request->input('timezone');
+        $user->email_notifications = $request->input('email_notifications') ?? 0;
+
         try {
             $user->save();
         }

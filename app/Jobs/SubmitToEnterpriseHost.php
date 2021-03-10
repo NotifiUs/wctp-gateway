@@ -45,7 +45,11 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 
         if( $this->attempts() === 2 )
         {
-            Mail::to( User::first()->email )->send(new RetryJob($this->message->toArray() ));
+            foreach( User::where('email_notifications', true)->get() as $u )
+            {
+                Mail::to( $u->email )->send(new RetryJob($this->message->toArray() ));
+            }
+
         }
 
         $host = EnterpriseHost::where( 'enabled', 1 )->where( 'id', $this->message->enterprise_host_id )->first();
@@ -218,8 +222,11 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
         }
         else
         {
-            //move to system setting eventually.
-            Mail::to( User::first()->email )->send(new FailedJob($this->message->toArray() ));
+
+            foreach( User::where('email_notifications', true)->get() as $u )
+            {
+                Mail::to( $u->email )->send(new FailedJob($this->message->toArray() ));
+            }
 
             try{
                 $this->message->status = 'failed';

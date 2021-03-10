@@ -215,8 +215,11 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
 
     public function failed(Throwable $exception ){
 
-        //move to system setting eventually.
-        Mail::to( User::first()->email )->send(new FailedJob($this->message->toArray() ));
+        foreach( User::where('email_notifications', true)->get() as $u )
+        {
+            Mail::to( $u->email )->send(new FailedJob($this->message->toArray() ));
+        }
+
 
        try{
             $this->message->status = 'failed';
