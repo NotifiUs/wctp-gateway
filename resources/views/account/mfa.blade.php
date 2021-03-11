@@ -21,13 +21,17 @@
                 <div class="card">
                     <div class="card-body text-center">
 
-                        @if( $user->mfa_secret )
-                            @include('account.mfa.active')
+                        @if(config('services.recaptcha_v3.site_key') === '' || config('services.recaptcha_v3.site_key') === '')
+                            <div class="alert alert-warning border-warning ">
+                                This feature has not been enabled by your system administrator.
+                            </div>
                         @else
-                           @include('account.mfa.inactive')
+                            @if( $user->mfa_secret )
+                                @include('account.mfa.active')
+                            @else
+                               @include('account.mfa.inactive')
+                            @endif
                         @endif
-
-
 
                     </div>
                 </div>
