@@ -19,7 +19,9 @@ class ChangeEmail extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => "required|email|unique:users,email," . Auth::user()->id,
+            'email_notifications' => 'nullable'
         ]);
+
         if( $validator->fails())
         {
             return redirect()->back()->withErrors( $validator->errors() );
@@ -33,6 +35,7 @@ class ChangeEmail extends Controller
         }
 
         $user->email = $request->input('email');
+        $user->email_notifications = $request->input('email_notifications') ?? 0;
 
         try{
             $user->save();
