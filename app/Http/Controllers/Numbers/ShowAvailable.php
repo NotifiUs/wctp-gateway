@@ -114,15 +114,15 @@ class ShowAvailable extends Controller
             }
             elseif( $carrier->api == 'thinq')
             {
-                $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page=1&rows=1000";
+                $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page=0&rows=1000";
                 $guzzle = new Guzzle(
                     ['base_uri' => 'https://api.thinq.com',]
                 );
                 try{
                     $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
                 }
-                catch( RequestException $e ) {}
-                catch( Exception $e ){}
+                catch( RequestException $e ) { dd($e);}
+                catch( Exception $e ){dd($e);}
 
                 $thinq_numbers = json_decode( (string)$res->getBody(), true );
 
