@@ -10,7 +10,7 @@
     @include('layouts.status')
 
     <h5 class="text-muted-light">
-        {{ __('Available Numbers') }}
+        {{ __('Available Numbers') }} ({{ count($available) }})
         <a href="/numbers" class="float-right text-muted text-small">In-Use Numbers</a>
     </h5>
 

@@ -114,7 +114,7 @@ class ShowAvailable extends Controller
             }
             elseif( $carrier->api == 'thinq')
             {
-                $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page=1&rows=1000";
+                $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page=1&rows=200";
                 $guzzle = new Guzzle(
                     ['base_uri' => 'https://api.thinq.com',]
                 );
