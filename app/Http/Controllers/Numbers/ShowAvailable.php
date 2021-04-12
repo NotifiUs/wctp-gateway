@@ -114,33 +114,8 @@ class ShowAvailable extends Controller
             }
             elseif( $carrier->api == 'thinq')
             {
-                $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page=0&rows=1000";
-                $guzzle = new Guzzle(
-                    ['base_uri' => 'https://api.thinq.com',]
-                );
-                try{
-                    $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
-                }
-                catch( RequestException $e ) { dd($e);}
-                catch( Exception $e ){dd($e);}
+                $available = array_merge($available, $this->getThinQNumbers($carrier) );
 
-                $thinq_numbers = json_decode( (string)$res->getBody(), true );
-
-                if( $thinq_numbers['total_rows'] > 0 )
-                {
-                    foreach( $thinq_numbers['rows'] as $thinq_number )
-                    {
-                        $available[] = [
-                            'id' => $thinq_number['id'],
-                            'api' => $carrier->api,
-                            'type' => 'Phone Number',
-                            'number' => "+{$thinq_number['id']}",
-                            'carrier' => $carrier,
-                            'details' => Arr::dot( $thinq_number ),
-                            'sms_enabled' => $thinq_number['provisioned']
-                        ];
-                    }
-                }
             }
         }
 
@@ -156,5 +131,45 @@ class ShowAvailable extends Controller
         }
 
         return view('numbers.available')->with('available', $available );
+    }
+
+    protected function getThinQNumbers( Carrier $carrier, $page = 1,  $available = [] )
+    {
+
+        $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page={$page}&rows=100";
+        $page+=1;
+        $guzzle = new Guzzle(
+            ['base_uri' => 'https://api.thinq.com',]
+        );
+        try{
+            $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
+        }
+        catch( RequestException $e ) {}
+        catch( Exception $e ){}
+
+        $thinq_numbers = json_decode( (string)$res->getBody(), true );
+
+        if( $thinq_numbers['total_rows'] > 0 )
+        {
+            foreach( $thinq_numbers['rows'] as $thinq_number )
+            {
+                $available[] = [
+                    'id' => $thinq_number['id'],
+                    'api' => $carrier->api,
+                    'type' => 'Phone Number',
+                    'number' => "+{$thinq_number['id']}",
+                    'carrier' => $carrier,
+                    'details' => Arr::dot( $thinq_number ),
+                    'sms_enabled' => $thinq_number['provisioned']
+                ];
+            }
+        }
+
+        if( $thinq_numbers['has_next_page'] === true  )
+        {
+            return $this->getThinQNumbers($carrier, $page, $available );
+        }
+
+        return $available;
     }
 }
