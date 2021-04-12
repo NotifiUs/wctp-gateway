@@ -18,7 +18,7 @@
         <div class="my-2">
             <small class="text-muted">Jump to page</small>:
             @for($i = 1; $i <= $pages; $i++ )
-                <a class="block @if($_REQUEST['page']==$i){{ 'font-weight-bold bg-muted' }}@endif" href="?page={{$i}}">{{ $i }}</a>
+                <a class="block @if($_REQUEST['page'] ?? 1 ==$i){{ 'font-weight-bold bg-muted' }}@endif" href="?page={{$i}}">{{ $i }}</a>
             @endfor
         </div>
     @endif
