@@ -15,12 +15,19 @@
     </h5>
 
     @if($pages > 1)
-        <div class="my-2">
-            <small class="text-muted">Jump to page</small>:
-            @for($i = 1; $i <= $pages; $i++ )
-                <a class="block @if($_REQUEST['page'] ?? 1 ==$i){{ 'font-weight-bold bg-muted' }}@endif" href="?page={{$i}}">{{ $i }}</a>
-            @endfor
-        </div>
+
+        <nav aria-label="Page navigation example" class="my-2">
+            <ul class="pagination pagination-sm">
+                <li class="page-item"><a class="page-link" href="?page={{($_REQUEST['page'] ?? 1 ) - 1}}">Previous</a></li>
+                @for($i = 1; $i <= $pages; $i++ )
+
+                    <li class="page-item @if( ($_REQUEST['page'] ?? 1 ) == $i ){{ 'active' }}@endif"><a class="page-link" href="?page={{$i}}">{{ $i }}</a></li>
+
+                @endfor
+                <li class="page-item"><a class="page-link" href="?page={{($_REQUEST['page'] ?? 1 ) + 1}}">Next</a></li>
+            </ul>
+        </nav>
+
     @endif
 
     @if( count( $available ) > 0 )
