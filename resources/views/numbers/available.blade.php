@@ -10,9 +10,18 @@
     @include('layouts.status')
 
     <h5 class="text-muted-light">
-        {{ __('Available Numbers') }} ({{ count($available) }})
+        {{ __('Available Numbers') }} <small class="font-weight-normal">( Page {{ $_REQUEST['page'] ?? 1  }} of {{ $pages }} )</small>
         <a href="/numbers" class="float-right text-muted text-small">In-Use Numbers</a>
     </h5>
+
+    @if($pages > 1)
+        <div class="my-2">
+            <small class="text-muted">Jump to page</small>:
+            @for($i = 1; $i <= $pages; $i++ )
+                <a class="block @if($_REQUEST['page']==$i){{ 'font-weight-bold bg-muted' }}@endif" href="?page={{$i}}">{{ $i }}</a>
+            @endfor
+        </div>
+    @endif
 
     @if( count( $available ) > 0 )
     <div class="card py-0 my-0">

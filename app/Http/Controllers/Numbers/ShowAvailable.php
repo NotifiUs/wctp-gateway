@@ -114,7 +114,9 @@ class ShowAvailable extends Controller
             }
             elseif( $carrier->api == 'thinq')
             {
-                $available = array_merge($available, $this->getThinQNumbers($carrier) );
+                $a = $this->getThinQNumbers($carrier, $_REQUEST['page'] ?? null );
+
+                $available = array_merge($available, $a['available'] ?? [] );
 
             }
         }
@@ -130,14 +132,14 @@ class ShowAvailable extends Controller
             }
         }
 
-        return view('numbers.available')->with('available', $available );
+        return view('numbers.available')->with('available', $available )->with('pages', $a['pages'] ?? 0);
     }
 
     protected function getThinQNumbers( Carrier $carrier, $page = 1,  $available = [] )
     {
 
         $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page={$page}&rows=100";
-        $page+=1;
+
         $guzzle = new Guzzle(
             ['base_uri' => 'https://api.thinq.com',]
         );
@@ -165,11 +167,16 @@ class ShowAvailable extends Controller
             }
         }
 
+        $pages = 0;
+
         if( $thinq_numbers['has_next_page'] === true  )
         {
-            return $this->getThinQNumbers($carrier, $page, $available );
+            $pages = (int)floor( $thinq_numbers['total_rows'] / $thinq_numbers['rows_per_page'] );
         }
 
-        return $available;
+        return [
+            'available' => $available,
+            'pages' => $pages
+        ];
     }
 }
