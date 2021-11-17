@@ -95,6 +95,7 @@ Route::namespace('WCTP')->group(function(){
 Route::namespace('Messages')->group(function(){
     Route::get('/messages/{direction?}', 'ShowMessages');
     Route::post('/messages/process/{message}', 'ProcessMessage');
+    Route::post('/messages/fail/{message}', 'FailMessage');
 
 });
 
