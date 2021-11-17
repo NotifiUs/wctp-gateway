@@ -1,4 +1,4 @@
-<div class="modal fade" data-backdrop="static" id="processMessageModal{{ $message->id}}" tabindex="-1" role="dialog" aria-labelledby="processMessageModal" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="failMessageModal{{ $message->id}}" tabindex="-1" role="dialog" aria-labelledby="failMessageModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content border-danger shadow-sm">
             <div class="modal-header border-bottom-0">
