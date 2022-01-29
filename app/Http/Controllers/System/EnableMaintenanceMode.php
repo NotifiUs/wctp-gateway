@@ -19,17 +19,16 @@ class EnableMaintenanceMode extends Controller
     public function __invoke(Request $request)
     {
         $this->validate( $request, [
-            'message' => 'nullable|string',
             'retry' => 'nullable|integer|min:1',
         ]);
 
-        $message = $request->input('message') ?? 'General Maintenance';
         $retry = $request->input('retry') ?? 15;
 
+        $maintenanceSecret = uniqid();
         $params = [
-            "--message" => $message,
+            "--render" =>"errors::503",
             "--retry" => $retry,
-            "--allow" => $request->getClientIp(),
+            "--secret" => $maintenanceSecret,
         ];
 
         try{
@@ -48,6 +47,6 @@ class EnableMaintenanceMode extends Controller
             get_class( $this ), 'alert', json_encode($params), Auth::user()->id ?? null
         );
 
-        return redirect()->back()->with('status', 'Maintenance Mode has been enabled');
+        return redirect()->to("/{$maintenanceSecret}")->with('status', 'Maintenance Mode has been enabled.');
     }
 }

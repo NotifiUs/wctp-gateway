@@ -22,7 +22,7 @@ class ShowSystem extends Controller
         {
             $maintenanceMode = json_decode( File::get( storage_path('framework/down')), true );
         }
-
+        //dd($maintenanceMode);
         $users = User::all();
 
         return view('system.show' )->with('clientIp', $request->getClientIp() )

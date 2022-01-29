@@ -16,14 +16,6 @@
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Reason</label>
-                                    <input type="text" name="message" placeholder="General Maintenance" class="form-control" value="{{ old('message') }}">
-                                    <small class="form-text text-muted">
-                                        Short description of maintenance
-                                    </small>
-                                </div>
-
-                                <div class="form-group">
                                     <label>Retry After</label>
                                     <input type="text" name="retry" placeholder="15" class="form-control" value="{{ old('retry') }}">
                                     <small class="form-text text-muted">

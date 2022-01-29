@@ -99,5 +99,3 @@ Route::namespace('Messages')->group(function(){
 
 });
 
-
-//Route::get('/sticky', 'UnderConstruction');
