@@ -67,11 +67,10 @@ You can also go *serverless*, and try out [Vapor](https://vapor.laravel.com/).
 
 ## Contributing
 
-Thank you for considering contributing to WCTP Gateway! The contribution guide is coming soon. In the meantime, please email [Patrick Labbett](mailto:patrick.labbett@notifi.us)
+Thank you for considering contributing to WCTP Gateway! Please email [Patrick Labbett](mailto:patrick.labbett@notifi.us) or submit a PR!
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within WCTP Gateway, please send an e-mail to [patrick.labbett@notifi.us](mailto:patrick.labbett@notifi.us). All security vulnerabilities will be promptly addressed.
 
 ## License
 
