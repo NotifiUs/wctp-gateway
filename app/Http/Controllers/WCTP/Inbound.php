@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
 
 namespace App\Http\Controllers\WCTP;
 
@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Validator;
 
 class Inbound extends Controller
 {
+    public $wctpMethodType = 'SubmitRequest';
+
     public function __invoke(Request $request)
     {
         $xmlCheck = $request->getContent() ?? '';
@@ -36,7 +38,7 @@ class Inbound extends Controller
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
-
+        /*
         try{
             $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
             $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0] ?? null;
@@ -55,6 +57,83 @@ class Inbound extends Controller
             return $this->showError(302, 'XML Validation Error',
                 'recipientID, wctp-Alphanumeric, MessageID, senderID, and securityCode are required.');
         }
+        */
+
+        $recipientXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID';
+        $messageXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric';
+        $messageIDXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID';
+        $senderIDXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID';
+        $securityCodeXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode';
+
+        $wctpTransientMethodOperation = $wctp->xpath('/wctp-Operation/wctp-SubmitClientMessage')[0] ?? null;
+
+        if(!is_null($wctpTransientMethodOperation) && $wctpTransientMethodOperation->count() > 0)
+        {
+            $this->wctpMethodType = 'SubmitClientMessage';
+
+            $recipientXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-Recipient/@recipientID';
+            $messageXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-Payload/wctp-Alphanumeric';
+            $senderIDXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-ClientOriginator/@senderID';
+            $securityCodeXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-ClientOriginator/@miscInfo';
+        }
+
+        try{
+            $recipient = (string)$wctp->xpath($recipientXPath)[0] ?? null;
+            $senderID = (string)$wctp->xpath($senderIDXPath)[0] ?? null;
+            $securityCode = (string)$wctp->xpath($securityCodeXPath)[0] ?? null;
+            if($this->wctpMethodType === 'SubmitMessage' )
+            {
+                $messageID = (string)$wctp->xpath($messageIDXPath)[0] ?? null;
+            }
+            else
+            {
+                $messageID = null;
+            }
+        }
+        catch(Exception $e )
+        {
+            return $this->showError(302, 'XML Validation Error',
+                'recipientID, wctp-Alphanumeric, senderID, and securityCode (or miscInfo) are required.');
+        }
+
+        try{
+            $message = (string)$wctp->xpath($messageXPath)[0] ?? null;
+        }
+        catch(Exception $e)
+        {
+            $message = null;
+        }
+
+        if(is_null($message))
+        {
+            try{
+                $message = (string)$wctp->xpath("/wctp-Operation/wctp-{$this->wctpMethodType}/wctp-Payload/wctp-TransparentData")[0] ?? null;
+            }
+            catch(Exception $e)
+            {
+                $message = null;
+            }
+
+            if(!is_null($message))
+            {
+                $message = base64_decode($message);
+            }
+        }
+
+        if($this->wctpMethodType === 'SubmitMessage' )
+        {
+            if( is_null($messageID) )
+            {
+                return $this->showError(302, 'XML Validation Error',
+                    'mnessageID is required.');
+            }
+        }
+
+        if( is_null($recipient) || is_null($message) || is_null($senderID) || is_null($securityCode) )
+        {
+            return $this->showError(302, 'XML Validation Error',
+                'recipientID, wctp-Alphanumeric, senderID, and securityCode (or miscInfo) are required.');
+        }
 
         $reply_with = null;
         $reply_phrase = preg_match('/\bReply with \d+$/i', $message, $matches );
@@ -64,7 +143,6 @@ class Inbound extends Controller
 
         if( $reply_phrase && isset($matches[0]) )
         {
-
             $parts = explode(" ", $matches[0] );
             if( isset( $parts[2] ) )
             {
@@ -142,10 +220,20 @@ class Inbound extends Controller
             get_class( $this ), 'info', json_encode([$code, $text, $desc]), null
         );
 
-        return view('WCTP.wctp-Failure')
-            ->with('errorCode', $code )
-            ->with('errorText', $text )
-            ->with('errorDesc', $desc );
+        if( $this->wctpMethodType === 'SubmitClientMessage')
+        {
+            return view('WCTP.wctp-SubmitClientResponseFailure')
+                ->with('errorCode', $code )
+                ->with('errorText', $text )
+                ->with('errorDesc', $desc );
+        }
+        else
+        {
+            return view('WCTP.wctp-Failure')
+                ->with('errorCode', $code )
+                ->with('errorText', $text )
+                ->with('errorDesc', $desc );
+        }
     }
 
     private function checkParams( array $data )
@@ -214,20 +302,22 @@ class Inbound extends Controller
             ];
         }
 
-        $validator = Validator::make([
-            'messageID' => $data['messageID'],
-        ],[
-            'messageID' => 'required|string|max:32',
-        ]);
-
-        if( $validator->fails() )
+        if($this->wctpMethodType === 'SubmitMessage' )
         {
-            return [
-                'success' => false,
-                'errorCode' => 400,
-                'errorText' => 'Function not supported',
-                'errorDesc' => 'The messageID is invalid',
-            ];
+            $validator = Validator::make([
+                'messageID' => $data['messageID'],
+            ], [
+                'messageID' => 'required|string|max:32',
+            ]);
+
+            if ($validator->fails()) {
+                return [
+                    'success' => false,
+                    'errorCode' => 400,
+                    'errorText' => 'Function not supported',
+                    'errorDesc' => 'The messageID is invalid',
+                ];
+            }
         }
 
         $validator = Validator::make([
@@ -241,7 +331,7 @@ class Inbound extends Controller
             return [
                 'success' => false,
                 'errorCode' => 403,
-                'errorText' => 'Invalid reply number from Amtelco',
+                'errorText' => 'Invalid reply number included',
                 'errorDesc' => 'The reply number was included but is not an integer',
             ];
         }

@@ -6,6 +6,7 @@ use Exception;
 use App\Carrier;
 use Carbon\Carbon;
 use App\EnterpriseHost;
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Queue\SerializesModels;
@@ -96,8 +97,28 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
                 ];
             }
 
+           if(Str::startsWith($this->recipient, '+'))
+           {
+               //the + symbol is the exit code, so we assume the remaining is country code + number
+               $number = $this->recipient;
+           }
+           elseif(Str::length($this->recipient) === 11 && Str::startsWith($this->recipient, '1')){
+               //11 digit number with no + and 1 as the country code
+               //i.e. NANP area codes
+               $number = "+{$this->recipient}";
+           }
+           elseif(Str::length($this->recipient) === 10)
+           {
+               //assume 10 digits are NANP
+               $number = "+1{$this->recipient}";
+           }
+           else
+           {
+               $number = "+{$this->recipient}";
+           }
+
             $msg = $client->messages->create(
-                "+1{$this->recipient}",
+                $number,
                 $params
             );
         }
@@ -113,7 +134,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
             $this->carrier->id,
             $this->from->id,
             $this->host->id,
-            "+1{$this->recipient}",
+            $number,
             $this->from->e164,
             encrypt( $this->message ),
             $this->messageID,

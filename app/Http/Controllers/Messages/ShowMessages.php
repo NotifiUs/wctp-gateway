@@ -17,20 +17,39 @@ class ShowMessages extends Controller
     {
         $filter = $direction;
 
-        $distinctStatusList = Message::distinct('status')->get('status');
-        $statusFilter = $request->get('status');
+        $statusList = collect(Message::distinct('status')->get('status')->toArray() ?? [])->flatten();
+        $statusFilter = $request->get('status') ?? null;
 
         if( ! is_null( $direction ) && $direction == 'inbound' ){
-            $messages = Message::where( 'direction', 'inbound' )->orderBy('created_at', 'desc')->paginate(25);
+            if($statusFilter) {
+                $messages = Message::where( 'direction', 'inbound' )->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
+            }
+            else {
+                $messages = Message::where( 'direction', 'inbound' )->orderBy('created_at', 'desc')->paginate(25);
+            }
+
         }
         elseif( ! is_null( $direction ) && $direction == 'outbound' ){
-            $messages = Message::where( 'direction', 'outbound' )->orderBy('created_at', 'desc')->paginate(25);
+            if($statusFilter) {
+                $messages = Message::where( 'direction', 'outbound' )->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
+            }
+            else {
+                $messages = Message::where( 'direction', 'outbound' )->orderBy('created_at', 'desc')->paginate(25);
+            }
+
         }
         else{
+
             $filter = null;
-            $messages = Message::orderBy('created_at', 'desc')->paginate(25);
+
+            if($statusFilter) {
+                $messages = Message::orderBy('created_at', 'desc')->where('status', $statusFilter)->paginate(25);
+            }
+            else {
+                $messages = Message::orderBy('created_at', 'desc')->paginate(25);
+            }
         }
 
-        return view('messages.show')->with('messages', $messages )->with('filter', $filter );
+        return view('messages.show')->with('messages', $messages )->with('filter', $filter )->with('statusFilter', $statusFilter )->with('statusList', $statusList);
     }
 }

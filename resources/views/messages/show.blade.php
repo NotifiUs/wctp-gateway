@@ -14,6 +14,36 @@
         @if( request('page') )
             &middot; Page {{ request('page') }}
         @endif
+        @if(isset($statusFilter))
+            <span  class="font-weight-normal inline mx-2 pull-right badge badge-secondary">
+                {{ ucwords($statusFilter) }}
+            </span>
+        @endif
+    </h5>
+
+    <h5 class="pull-right text-sm inline">
+        @if(isset($statusList))
+            <form method="get">
+                <div class="input-group input-group-sm mb-2 w-25">
+                    <select class="form-control form-control-sm" name="status">
+                        <option value="">Any Status</option>
+                        @foreach($statusList as $status)
+                            @if(isset($statusFilter) && $statusFilter === $status)
+                                <option selected="selected" value="{{ $status }}">{{ucwords($status)}}</option>
+                            @else
+                                <option value="{{ $status }}">{{ucwords($status)}}</option>
+                            @endif
+
+                        @endforeach
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-secondary" type="submit">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        @endif
     </h5>
 
     <div class="card py-0 my-0 mx-0">
@@ -72,9 +102,9 @@
 
                                     {{ ucwords( $message->status ) }}
                                     </span>
-                                    <a href="#" class="ml-2" data-toggle="modal" data-target="#detailsMessageModal{{ $message->id}}" ><i class="fas fa-search text-muted-light"></i></a>
-                                    <a href="#" class="ml-2" data-toggle="modal" data-target="#processMessageModal{{ $message->id}}" ><i class="fas fa-recycle text-muted-light"></i></a>
-                                    <a href="#" class="ml-2" data-toggle="modal" data-target="#failMessageModal{{ $message->id}}" ><i class="fas fa-trash text-muted-light"></i></a>
+                                    <a href="#" title="View message details" class="ml-2" data-toggle="modal" data-target="#detailsMessageModal{{ $message->id}}" ><i class="fas fa-search text-muted-light"></i></a>
+                                    <a href="#" title="Re-process message" class="ml-2" data-toggle="modal" data-target="#processMessageModal{{ $message->id}}" ><i class="fas fa-recycle text-muted-light"></i></a>
+                                    <a href="#" title="Mark message failed" class="ml-2" data-toggle="modal" data-target="#failMessageModal{{ $message->id}}" ><i class="fas fa-ban text-muted-light"></i></a>
                                 </td>
 
                             </tr>
