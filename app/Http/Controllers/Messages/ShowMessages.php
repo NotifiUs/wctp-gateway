@@ -17,6 +17,9 @@ class ShowMessages extends Controller
     {
         $filter = $direction;
 
+        $distinctStatusList = Message::distinct('status')->get('status');
+        $statusFilter = $request->get('status');
+
         if( ! is_null( $direction ) && $direction == 'inbound' ){
             $messages = Message::where( 'direction', 'inbound' )->orderBy('created_at', 'desc')->paginate(25);
         }

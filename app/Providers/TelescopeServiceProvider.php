@@ -9,8 +9,6 @@ use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
 class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 {
-    protected $log_in_production = true;
-
     /**
      * Register any application services.
      *
@@ -18,20 +16,13 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     public function register()
     {
-        //Telescope::night();
+        Telescope::night();
 
         $this->hideSensitiveRequestDetails();
 
         Telescope::filter(function (IncomingEntry $entry) {
-            if ($this->app->isLocal() || $this->log_in_production ) {
-                return true;
-            }
-
-            return $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag();
+            //log all default/enabled telescope collectors
+           return true;
         });
     }
 
@@ -68,6 +59,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewTelescope', function ($user) {
+            //all logged in $user can access, must be logged in (per laravel docs)
             return true;
         });
     }
