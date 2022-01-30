@@ -2,9 +2,6 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header border-bottom-0">
-                <!--
-                <h5 class="modal-title" id="usePhoneNumberModalLabel{{ $number['id'] }}">{{ __('Use Phone Number') }}</h5>
-                -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,10 +12,10 @@
                     <input type="hidden" name="e164" value="{{ $number['number'] }}">
                     <input type="hidden" name="identifier" value="{{ $number['id'] }}">
                     <input type="hidden" name="carrier_id" value="{{ $number['carrier']->id }}">
-                    <h3>Are you sure you want to use this number?</h3>
+                    <h3>Do you want to use this number?</h3>
                     <h4><strong class="text-danger">{{ $number['number'] }}</strong></h4>
                     <p class="text-muted">
-                        Any existing SMS settings for this number will be removed completely.
+                        Remove existing SMS settings for this number.
                     </p>
                     <div class="form-group row col-md-6">
                         <label class="">Enterprise Host</label>
@@ -30,7 +27,9 @@
                     </div>
                     <div class="form-group row col">
                         <p class="form-text text-small text-muted">
-                            Select the Enterprise Host to associate with this number. Inbound messages to this number will be routed to this Enterprise Host. Outbound messages from the Enterprise Host will use this number (along with any other currently assigned.)
+                            Select the Enterprise Host to associate with this number.
+                            Inbound messages to this number route to this Enterprise Host.
+                            Outbound messages from the Enterprise Host will use this number (along with any other assigned numbers.)
                         </p>
                     </div>
                     <a class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#collapse{{$number['id']}}" role="button" aria-expanded="false" aria-controls="collapse{{$number['id']}}">

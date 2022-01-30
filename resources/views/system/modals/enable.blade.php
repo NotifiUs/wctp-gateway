@@ -10,7 +10,7 @@
             <form method="POST" action="/system/maintenance/enable" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3 class="mb-4">Are you sure you want to <strong class="text-danger">enable</strong> maintenance mode?</h3>
+                    <h3 class="mb-4"><strong class="text-danger">Enable</strong> maintenance mode?</h3>
 
                     <div class="container-fluid mx-0 px-0">
                         <div class="row justify-content-center">
@@ -19,15 +19,15 @@
                                     <label>Retry After</label>
                                     <input type="text" name="retry" placeholder="15" class="form-control" value="{{ old('retry') }}">
                                     <small class="form-text text-muted">
-                                        Number of minutes maintenance is expected to last.
+                                        Number of minutes for maintenance to last.
                                         Used for including the <code class="text-indigo font-weight-bold text-uppercase">HTTP Retry-After</code> header in the response.
                                     </small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted">
-                                    While maintenance mode is active, the system will be <strong class="text-danger">unavailable for all users</strong> except you.
-                                    WCTP endpoints and carrier API webhooks will continue to work, but no queue jobs or messages will be processed until maintenance mode is disabled.
+                                    While active, the portal returns <strong class="text-danger">unavailable for all users</strong> except you.
+                                    WCTP endpoints and carrier API webhooks will continue to work, but no queue jobs or messages process until you disable maintenance mode.
                                 </p>
                                 <p class="text-muted">
                                     <i class="fas fa-info-circle text-muted-light"></i> If you get locked out, you can disable maintenance mode from the server console as described in the <a href="https://laravel.com/docs/configuration#maintenance-mode">Laravel documentation</a>.

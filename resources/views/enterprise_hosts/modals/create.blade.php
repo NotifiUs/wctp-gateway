@@ -19,7 +19,7 @@
                         <label>Url</label>
                         <input type="text" required name="url" class="form-control" value="{{ old('url') }}">
                         <small class="form-text text-muted">
-                            The WCTP endpoint for this host. Must be SSL/TLS protected.<br>
+                            The WCTP endpoint for this host. Must use SSL/TLS (https://).<br>
                             e.g. <i>https://example.com/wctp</i>
                         </small>
                     </div>

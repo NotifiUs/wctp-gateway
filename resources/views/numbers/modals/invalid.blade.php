@@ -7,20 +7,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h3>Why is my number listed as <strong>Invalid</strong>?</h3>
+                <h3>My number listed as <strong>Invalid</strong></h3>
                 <p class="text-muted">
-                    Numbers are marked as invalid for any of the following reasons:
+                   Please make sure to meet the following conditions:
                 </p>
                 <h5>ThinQ</h5>
                 <ul>
-                    <li>A ThinQ number is not marked as <strong>provisioned</strong></li>
+                    <li>A ThinQ number not marked as <strong>provisioned</strong></li>
                 </ul>
 
                 <h5>Twilio</h5>
                 <ul>
-                    <li>The number is part of a Twilio <a href="https://www.twilio.com/docs/sms/services">Messaging Service</a></li>
-                    <li>A <a href="https://www.twilio.com/docs/sms/services">Twilio Messaging Service</a> does not have phone numbers</li>
-                    <li>A Twilio number is not SMS enabled <span class="text-muted">(rare)</span></li>
+                    <li>The number belongs to a Twilio <a href="https://www.twilio.com/docs/sms/services">Messaging Service</a></li>
+                    <li>A <a href="https://www.twilio.com/docs/sms/services">Twilio Messaging Service</a> lacks a phone numbers</li>
+                    <li>No SMS enabled on Twilio number <span class="text-muted">(rare)</span></li>
                 </ul>
 
 

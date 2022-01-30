@@ -23,7 +23,7 @@
 
                         @if(config('services.recaptcha_v3.site_key') === '' || config('services.recaptcha_v3.site_key') === '')
                             <div class="alert alert-warning border-warning ">
-                                This feature has not been enabled by your system administrator.
+                                Feature not enabled.
                             </div>
                         @else
                             @if( $user->mfa_secret )

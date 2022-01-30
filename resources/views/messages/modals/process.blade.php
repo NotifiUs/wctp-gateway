@@ -2,15 +2,13 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content border-orange shadow-sm">
             <div class="modal-header border-bottom-0">
-
-                <!--<h5 class="modal-title" id="processMessageModal{{ $message->id }}">{{ __('Message Information') }}</h5>-->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form action="/messages/process/{{ $message->id }}" method="POST">
             <div class="modal-body">
-                <h3>Are you sure you want to process this message again?</h3>
+                <h3>Do you want to process this message again?</h3>
                 {{ csrf_field() }}
             </div>
             <div class="modal-footer border-top-0">

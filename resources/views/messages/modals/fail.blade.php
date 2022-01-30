@@ -8,7 +8,7 @@
             </div>
             <form action="/messages/fail/{{ $message->id }}" method="POST">
             <div class="modal-body">
-                <h3>Are you sure you want to fail this message? The message will not be retried.</h3>
+                <h3>Fail this message?</h3>
                 {{ csrf_field() }}
             </div>
             <div class="modal-footer border-top-0">

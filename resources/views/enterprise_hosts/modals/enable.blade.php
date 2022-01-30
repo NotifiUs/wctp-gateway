@@ -10,7 +10,7 @@
             <form method="POST" action="/hosts/{{ $host->id }}/enable" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-success">enable</strong> this Enterprise Host?</h3>
+                    <h3><strong class="text-success">Enable</strong> this Enterprise Host?</h3>
                     <p class="text-muted">
                         This will enable processing of inbound and outbound messages for this host.
                     </p>

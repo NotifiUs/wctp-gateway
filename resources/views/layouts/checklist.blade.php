@@ -5,9 +5,6 @@
 </h5>
 <div class="card mb-2 h-75">
     <div class="card-body bg-striped text-left px-4 my-0">
-        <!--<div class="mt-4 text-center">
-            <i class="fas fa-3x fa-exclamation-circle text-orange mx-auto"></i>
-        </div>-->
         <div class="my-4 mx-auto">
         @foreach( $checklist as $item )
             <p class="my-1 text-muted">

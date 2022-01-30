@@ -2,9 +2,6 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header">
-                <!--
-                <h5 class="modal-title" id="deleteCarrierModalLabel{{ $carrier->id }}">{{ __('Delete Carrier') }}</h5>
-                -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,9 +9,9 @@
             <form method="POST" action="/carriers/{{ $carrier->id }}/delete" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-danger">delete</strong> this Carrier?</h3>
+                    <h3><strong class="text-danger">Delete</strong> this carrier?</h3>
                     <p class="text-muted">
-                        The carrier will be permanently deleted and you won't be able to retrieve any of the settings.
+                        Permanently delete the carrier - you can't retrieve any of the settings.
                     </p>
                 </div>
                 <div class="modal-footer">

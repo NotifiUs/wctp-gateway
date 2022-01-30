@@ -102,16 +102,6 @@
                             <strong>443</strong> &frasl; <span class="text-muted-light">TCP</span>
                         </dd>
 
-                        <!-- Need to support more than 1 endpoint -->
-                        <!--
-                        <dt class="col-sm-12 col-md-4">
-                            {{ __('Enterprise Host Endpoint') }}
-                        </dt>
-                        <dd class="col-sm-12 col-md-8 text-muted">
-                            https://<span class="font-weight-bold">enterprise.test/wctp</span>
-                        </dd>
-                        -->
-
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Security Information') }}
                         </dt>

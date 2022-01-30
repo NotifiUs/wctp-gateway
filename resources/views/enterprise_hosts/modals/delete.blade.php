@@ -10,9 +10,9 @@
             <form method="POST" action="/hosts/{{ $host->id }}/delete" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-danger">delete</strong> this Enterprise Host?</h3>
+                    <h3><strong class="text-danger">Delete</strong> this Enterprise Host?</h3>
                     <p class="text-muted">
-                        The host will be permanently deleted and you won't be able to retrieve any of the settings!
+                        Permanently delete the host - you can't retrieve any of the settings!
                     </p>
                 </div>
                 <div class="modal-footer">

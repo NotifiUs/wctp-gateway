@@ -2,9 +2,9 @@
     <li class="list-group-item">
 
     @if( $maintenanceMode )
-        <i class="fas fa-exclamation-circle text-orange"></i> Maintenance is active
+        <i class="fas fa-exclamation-circle text-orange"></i> Maintenance active
     @else
-        <i class="fas fa-check-circle text-success"></i> Application is active
+        <i class="fas fa-check-circle text-success"></i> Application active
     @endif
 
     </li>

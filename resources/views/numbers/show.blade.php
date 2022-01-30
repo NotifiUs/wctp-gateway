@@ -25,7 +25,6 @@
                         <th class="font-weight-bold text-muted-light">{{ __('Carrier Info') }}</th>
                         <th class="font-weight-bold text-muted-light">{{ __('Enterprise Host') }}</th>
                         <th class="font-weight-bold text-muted-light">{{ __('Status') }}</th>
-                        <!--<th class="font-weight-bold text-muted-light"></th>-->
                         <th style="max-width:20%;"></th>
                     </tr>
                     </thead>

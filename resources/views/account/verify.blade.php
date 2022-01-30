@@ -21,7 +21,7 @@
                         <h3 class="text-dark mt-2 mb-4">
                             {{ __('Thank you') }}<br>
                             <small class="text-muted">
-                                {{ __("Your email is verified!") }}
+                                {{ __("Email verified!") }}
                             </small>
                         </h3>
 

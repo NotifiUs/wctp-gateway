@@ -12,6 +12,7 @@
         "edwindayot/faker-provider-animals": "^1.0",
         "endroid/qr-code": "^3.7",
         "fideloper/proxy": "^4.0",
+        "guzzlehttp/guzzle": "^7.2",
         "jzonta/faker-restaurant": "^1.1",
         "laravel/framework": "^8.0",
         "laravel/helpers": "^1.2",
@@ -23,10 +24,10 @@
         "notifius/php-wctp": "^0.0.4",
         "predis/predis": "^1.1",
         "robthree/twofactorauth": "^1.7",
-        "twilio/sdk": "^6.17.0",
-        "guzzlehttp/guzzle": "^7.2"
+        "twilio/sdk": "^6.17.0"
     },
     "require-dev": {
+        "beyondcode/laravel-prose-linter": "^2.0",
         "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.9.1",
         "laravel/homestead": "^10.4",

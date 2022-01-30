@@ -13,19 +13,19 @@
     <div class="row justify-content-start mb-2">
         @if( $account['sid'] == $account['ownerAccountSid'] )
             <div class="alert alert-warning w-100" role="alert">
-                <i class="fas fa-exclamation-triangle"></i> This is a <strong>Master Account</strong>. We recommend using a <strong>SubAccount</strong> whenever possible.
+                <i class="fas fa-exclamation-triangle"></i> <strong>Master Account</strong> detected. We recommend using a <strong>SubAccount</strong> whenever possible.
             </div>
         @endif
 
         @if( $account['type'] !== 'Full' )
             <div class="alert alert-info w-100" role="alert">
-                <i class="fas fa-exclamation-circle"></i> This is a <strong>Trial Account</strong>. Please upgrade your Twilio account before going into production.
+                <i class="fas fa-exclamation-circle"></i> <strong>Trial Account</strong> detected. Please upgrade your Twilio account before going into production.
             </div>
         @endif
 
         @if( $account['status'] !== 'active' )
             <div class="alert alert-danger w-100" role="alert">
-                <i class="fas fa-exclamation"></i> This account is not <strong>active</strong>. You must restore the account to active before continuing.
+                <i class="fas fa-exclamation"></i>  Account <strong>inactive</strong>. You must restore the account to active before continuing.
             </div>
         @else
         <div class="card w-100 py-0">
@@ -52,7 +52,7 @@
 
                                     <small class="form-text text-muted">
                                         The general system priority for this carrier.
-                                        Like DNS MX records, lower values are higher priority. (10, 20, 30, etc.)
+                                        Like DNS MX records, lower values mean higher priority. (10, 20, 30, etc.)
                                     </small>
                                 </div>
                                 <div class="form-group">

@@ -20,7 +20,7 @@
                         <input type="text" required name="priority" class="form-control" value="{{ $carrier->priority }}">
                         <small class="form-text text-muted">
                             The general system priority for this carrier.
-                            Like DNS MX records, lower values are higher priority. (10, 20, 30, etc.)
+                            Like DNS MX records, lower values mean higher priority. (10, 20, 30, etc.)
                         </small>
                     </div>
                 </div>

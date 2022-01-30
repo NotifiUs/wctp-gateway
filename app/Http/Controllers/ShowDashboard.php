@@ -8,7 +8,6 @@ use App\Checklist;
 use Carbon\Carbon;
 use App\ServerStats;
 use App\QueueStatus;
-use Illuminate\Http\Request;
 
 class ShowDashboard extends Controller
 {
@@ -17,7 +16,7 @@ class ShowDashboard extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $queue = QueueStatus::get();
         $server = ServerStats::get();

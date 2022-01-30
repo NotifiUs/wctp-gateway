@@ -9,9 +9,9 @@
             <form method="POST" action="/system/user/delete/{{ $user->id }}" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-danger">delete</strong> this user?</h3>
+                    <h3><strong class="text-danger">Delete</strong> this user?</h3>
                     <p class="text-muted">
-                        The user will be permanently deleted and you won't be able to retrieve any of the settings.
+                        You can't retrieve any of the settings.
                     </p>
                 </div>
                 <div class="modal-footer">

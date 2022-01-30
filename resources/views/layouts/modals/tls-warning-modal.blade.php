@@ -18,10 +18,10 @@
                         <i class="fas fa-exclamation-triangle"></i> Configuration not recommended or considered compliant for most regulations (HIPAA, PCI, SOX, etc.)
                     </div>
                       <p>
-                          These options can only be enabled or disabled by accessing this servers environment configuration file from the console of the server (or remote access such as <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">SSH with public keys</a>) and adding or editing the value below.
+                          Enabled or disable by accessing this server's environment configuration file from the console of the server (or remote access such as <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">SSH with public keys</a>) and adding or editing the value below.
                       </p>
                           <blockquote>
-                              By default <b>your Enterprise Host (your IS web server)</b> must support at least TLS version(s) 1.2+ with a <a href="https://letsencrypt.org/">valid SSL/TLS certificate</a>
+                              By default <b>your Enterprise Host (your Intelligent Series web server)</b> must support at least TLS version(s) 1.2+ with a <a href="https://letsencrypt.org/">valid SSL/TLS certificate</a>
                           </blockquote>
 
                         <div class="card">
@@ -40,7 +40,7 @@
                                 TLS_VERIFY_CERTIFICATES=true<br>
                                 TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_3<br>
                                 <br>
-                            <span class="text-dark"># This is the default configuration<br>
+                            <span class="text-dark"># Default configuration<br>
                             # Defaults: TLS_VERIFY_CERTIFICATES=true<br>
                             # Defaults: TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_2<br>
                             # (omitted)<br>
@@ -51,8 +51,8 @@
                     </div>
                     <div class="card-body py-2- my-0 text-muted">
                         <h5>Inbound TLS Configuration</h5>
-                        To disable or enable inbound support for specific TLS versions or cyphers, you must configure this server's web application server.
-                        This setting cannot be controlled directly from this application &mdash; please review your web server's documentation.
+                        To disable or enable inbound support for specific TLS versions/cyphers, you must configure this server's web application server.
+                        Please review your web server's documentation.
                     </div>
                 </div>
             </div>

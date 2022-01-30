@@ -10,7 +10,7 @@
             <form method="POST" action="/hosts/{{ $host->id }}/disable" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-danger">disable</strong> this Enterprise Host?</h3>
+                    <h3><strong class="text-danger">Disable</strong> this Enterprise Host?</h3>
                     <p class="text-muted">
                         This will disable processing of inbound and outbound messages for this host until re-enabled.
                     </p>

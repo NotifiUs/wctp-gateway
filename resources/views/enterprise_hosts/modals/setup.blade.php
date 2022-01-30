@@ -32,8 +32,8 @@
                 </dl>
                 <p class="text-muted mb-2">
                     <sup class="text-primary font-weight-bolder">*</sup> <small>
-                        <i>ArbitraryProviderName</i> is matched in the WCTP Web web.config file to map incoming SMS messages to the correct provider.
-                    Multiple instances of WCTP Web are required to support multiple providers - contact Amtelco for licensing information.
+                        <i>ArbitraryProviderName</i> must match the WCTPWeb web.config file to map incoming SMS messages to the correct provider.
+                        Each provider requires a dedicated WCTPWeb instance. Contact Amtelco for licensing information.
                     </small>
                 </p>
 

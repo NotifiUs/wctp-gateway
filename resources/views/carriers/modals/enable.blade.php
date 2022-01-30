@@ -2,9 +2,6 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-success">
             <div class="modal-header">
-                <!--
-                <h5 class="modal-title" id="enableCarrierModalLabel{{ $carrier->id }}">{{ __('Enable Carrier') }}</h5>
-                -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,7 +9,7 @@
             <form method="POST" action="/carriers/{{ $carrier->id }}/enable" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-success">enable</strong> this Carrier?</h3>
+                    <h3><strong class="text-success">Enable</strong> this carrier?</h3>
                     <p class="text-muted">
                         This will enable processing of inbound and outbound messages for this carrier.
                     </p>

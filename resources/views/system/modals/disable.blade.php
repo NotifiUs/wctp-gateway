@@ -9,7 +9,7 @@
             <form method="POST" action="/system/maintenance/disable" role="form">
                 <div class="modal-body">
                     {{ csrf_field() }}
-                    <h3>Are you sure you want to <strong class="text-orange">disable</strong> maintenance mode?</h3>
+                    <h3><strong class="text-orange">Disable</strong> maintenance mode?</h3>
                     <p class="text-muted">
                         This will take the system out of maintenance mode and back into normal operations.
                     </p>

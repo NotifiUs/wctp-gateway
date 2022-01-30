@@ -20,7 +20,7 @@
             <h3 class="text-dark mt-2 mb-4">
                 {{ __('Under Construction') }}<br>
                 <small class="text-muted">
-                    {{ __("We're still working here...check back soon!") }}
+                    {{ __("Still working here...check back soon!") }}
                 </small>
             </h3>
 

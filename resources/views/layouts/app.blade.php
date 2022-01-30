@@ -27,7 +27,6 @@
         <main class="py-4">
             <div class="container">
                 <div class="row justify-content-center">
-                    <!-- this needs cleaned up some, better use of templates, split out account side menu? -->
                     @if( Auth::check() )
                         @if( ! Str::startsWith( request()->path(), 'account' )
                             && ! Str::startsWith( request()->path(), 'mfa' )
@@ -59,8 +58,6 @@
 
     @stack('modals')
 
-
-    <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ mix('js/font-awesome.js') }}"></script>
     @stack('scripts')
