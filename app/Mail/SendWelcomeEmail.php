@@ -13,7 +13,7 @@ class SendWelcomeEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $password, $email;
+    public $password, $email, $host;
 
     /**
      * Create a new message instance.
@@ -24,6 +24,7 @@ class SendWelcomeEmail extends Mailable implements ShouldQueue
     {
         $this->email = $email;
         $this->password = $password;
+        $this->host = config('app.url');
     }
 
     /**

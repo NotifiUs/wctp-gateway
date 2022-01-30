@@ -13,6 +13,8 @@ class FailedLoginEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public $host;
+
     /**
      * Create a new message instance.
      *
@@ -20,6 +22,7 @@ class FailedLoginEmail extends Mailable implements ShouldQueue
      */
     public function __construct( )
     {
+        $this->host = config('app.url');
     }
 
     /**

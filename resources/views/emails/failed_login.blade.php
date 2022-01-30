@@ -14,4 +14,6 @@ If this wasn't you, please change your password immediately.
 
 Thanks,<br>
 {{ config('app.name') }}
+
+**Server**: {{ $host }}
 @endcomponent

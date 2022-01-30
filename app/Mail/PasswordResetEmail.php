@@ -13,6 +13,8 @@ class PasswordResetEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public $host;
+
     /**
      * Create a new message instance.
      *
@@ -20,6 +22,7 @@ class PasswordResetEmail extends Mailable implements ShouldQueue
      */
     public function __construct()
     {
+        $this->host = config('app.url');
     }
 
     /**
@@ -29,11 +32,6 @@ class PasswordResetEmail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        /*LogEvent::dispatch(
-            "Welcome email sent",
-            get_class( $this ), 'info',json_encode( ['recipient' => $this->email]) , Auth::user()->id ?? null
-        );*/
-
         return $this->subject('Password reset at ' . config('app.name') )
             ->markdown('emails.password_reset');
     }

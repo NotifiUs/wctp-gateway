@@ -3,8 +3,6 @@
 
 The following job did not succeed on the first attempt.
 
-**Server**: {{ $host }}
-
 @component('mail::panel')
 
 | Detail | Value |
@@ -20,4 +18,6 @@ View Messages
 
 Thanks,<br>
 {{ config('app.name') }}
+
+**Server**: {{ $host }}
 @endcomponent

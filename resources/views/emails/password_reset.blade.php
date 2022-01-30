@@ -13,4 +13,6 @@ Reset Password
 
 Thanks,<br>
 {{ config('app.name') }}
+
+**Server**: {{ $host }}
 @endcomponent

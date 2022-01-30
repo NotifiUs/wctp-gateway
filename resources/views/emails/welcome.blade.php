@@ -16,4 +16,6 @@ Login Now
 
 Thanks,<br>
 {{ config('app.name') }}
+
+**Server**: {{ $host }}
 @endcomponent
