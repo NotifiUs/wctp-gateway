@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Account;
 
 use Exception;
-use Illuminate\Http\Request;
 use RobThree\Auth\TwoFactorAuth;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -15,7 +14,7 @@ class ShowMFA extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $secret = null;
         $image = null;

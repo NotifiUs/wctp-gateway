@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Carriers;
 
 use App\Carrier;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ShowCarriers extends Controller
@@ -13,7 +12,7 @@ class ShowCarriers extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $carriers = Carrier::all()->sortBy('priority')->sortBy('enabled', null, true);
 

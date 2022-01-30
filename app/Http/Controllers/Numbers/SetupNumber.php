@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use App\Jobs\LogEvent;
-use Exception;
-use App\Carrier;
 use App\Number;
-use Illuminate\Http\Request;
+use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Twilio\Rest\Client;
+
 
 class SetupNumber extends Controller
 {
@@ -18,7 +15,7 @@ class SetupNumber extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, \App\Number $number )
+    public function __invoke( Number $number )
     {
 
         if( $number->provision() !== true )

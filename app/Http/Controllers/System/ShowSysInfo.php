@@ -5,7 +5,6 @@ namespace App\Http\Controllers\System;
 use App\Checklist;
 use App\ServerStats;
 use App\QueueStatus;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ShowSysInfo extends Controller
@@ -14,7 +13,7 @@ class ShowSysInfo extends Controller
     {
         $this->middleware('auth');
     }
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $server = ServerStats::get();
         $queue = QueueStatus::get();

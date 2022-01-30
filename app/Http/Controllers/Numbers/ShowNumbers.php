@@ -2,15 +2,8 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use Exception;
 use App\Number;
-use App\Carrier;
-use Twilio\Rest\Client;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use GuzzleHttp\Client as Guzzle;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\RequestException;
 
 class ShowNumbers extends Controller
 {
@@ -19,7 +12,7 @@ class ShowNumbers extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request, $available = null )
+    public function __invoke($available = null )
     {
         $active = Number::all()->toArray();
 

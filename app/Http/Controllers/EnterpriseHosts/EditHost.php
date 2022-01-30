@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
-use App\Jobs\LogEvent;
 use Exception;
+use App\Jobs\LogEvent;
 use App\EnterpriseHost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

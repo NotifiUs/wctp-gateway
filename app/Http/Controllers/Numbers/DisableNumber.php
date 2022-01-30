@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use App\Jobs\LogEvent;
 use Exception;
-use Illuminate\Http\Request;
+use App\Number;
+use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +15,7 @@ class DisableNumber extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, \App\Number $number )
+    public function __invoke( Number $number )
     {
 
 

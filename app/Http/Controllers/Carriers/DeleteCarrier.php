@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Carriers;
 use Exception;
 use App\Carrier;
 use App\Jobs\LogEvent;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,7 @@ class DeleteCarrier extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, Carrier $carrier )
+    public function __invoke( Carrier $carrier )
     {
         LogEvent::dispatch(
             "{$carrier->name} ({$carrier->api}) deleted",

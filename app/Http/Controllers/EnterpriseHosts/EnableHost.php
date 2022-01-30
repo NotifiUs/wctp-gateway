@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
-use App\Jobs\LogEvent;
 use Exception;
+use App\Jobs\LogEvent;
 use App\EnterpriseHost;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,7 @@ class EnableHost extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, EnterpriseHost $host )
+    public function __invoke( EnterpriseHost $host )
     {
 
         $host->enabled = 1;

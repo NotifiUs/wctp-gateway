@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
-use App\Jobs\LogEvent;
 use Faker;
 use Exception;
+use App\Jobs\LogEvent;
 use App\EnterpriseHost;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use FakerProviderAnimals\Animals;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CreateHost extends Controller

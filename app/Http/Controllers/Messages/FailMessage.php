@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Messages;
 
 use App\Message;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +14,7 @@ class FailMessage extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request, Message $message )
+    public function __invoke(Message $message )
     {
 
             // fail the message

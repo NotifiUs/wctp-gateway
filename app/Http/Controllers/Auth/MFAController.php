@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use Exception;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use RobThree\Auth\TwoFactorAuth;
 use App\Http\Controllers\Controller;
@@ -31,7 +29,7 @@ class MFAController extends Controller
 
     }
 
-    public function show( Request $request )
+    public function show()
     {
         $user = Auth::user();
         Session::forget('mfa_valid');

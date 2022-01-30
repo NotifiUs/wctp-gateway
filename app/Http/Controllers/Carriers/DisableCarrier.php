@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Carriers;
 use Exception;
 use App\Carrier;
 use App\Jobs\LogEvent;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,9 +15,8 @@ class DisableCarrier extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, Carrier $carrier )
+    public function __invoke(  Carrier $carrier )
     {
-
         $carrier->enabled = 0;
 
         try{ $carrier->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to disable carrier')]); }

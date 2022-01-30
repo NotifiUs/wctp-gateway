@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Carriers;
 
-use App\Jobs\LogEvent;
 use Exception;
 use App\Carrier;
-use Illuminate\Http\Request;
+use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,7 @@ class EnableCarrier extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, Carrier $carrier )
+    public function __invoke( Carrier $carrier )
     {
 
         if( $carrier->numbers()->count() == 0 )

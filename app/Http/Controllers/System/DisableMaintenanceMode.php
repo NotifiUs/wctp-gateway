@@ -4,7 +4,6 @@ namespace App\Http\Controllers\System;
 
 use Exception;
 use App\Jobs\LogEvent;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +15,7 @@ class DisableMaintenanceMode extends Controller
     {
         $this->middleware('auth');
     }
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         try{
             Artisan::call('up');

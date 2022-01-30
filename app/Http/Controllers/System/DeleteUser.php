@@ -6,7 +6,6 @@ use App\User;
 use Exception;
 use App\EventLog;
 use App\Jobs\LogEvent;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +16,7 @@ class DeleteUser extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request, User $user)
+    public function __invoke( User $user)
     {
         if( $user->id === Auth::user()->id )
         {

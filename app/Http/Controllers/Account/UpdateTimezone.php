@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Account;
 
-use Illuminate\Support\Facades\Auth;
 use Exception;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateTimezone extends Controller

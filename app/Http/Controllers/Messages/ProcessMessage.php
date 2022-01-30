@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use App\EnterpriseHost;
 use App\Jobs\SendThinqSMS;
 use App\Jobs\SendTwilioSMS;
-use Illuminate\Http\Request;
 use App\Jobs\SubmitToEnterpriseHost;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -21,7 +20,7 @@ class ProcessMessage extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request, Message $message )
+    public function __invoke(Message $message )
     {
         $carrier = Carrier::find( $message->carrier_id );
         if( is_null( $carrier ) ){ return redirect()->back()->withErrors(['No carrier found']);}

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class VerifyEmail extends Controller
 {
@@ -13,7 +12,7 @@ class VerifyEmail extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         return view('account.verify' );
     }

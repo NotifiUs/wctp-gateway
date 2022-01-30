@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Account;
 
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
@@ -15,7 +14,7 @@ class DisableMFA extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         Session::forget('mfa_valid');
         $user = Auth::user();

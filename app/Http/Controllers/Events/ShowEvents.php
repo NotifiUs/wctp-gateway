@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Events;
 
 use App\EventLog;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ShowEvents extends Controller
@@ -13,7 +12,7 @@ class ShowEvents extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $events = EventLog::orderBy('created_at', 'desc')->paginate(10);
 
