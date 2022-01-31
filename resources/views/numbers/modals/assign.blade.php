@@ -1,8 +1,10 @@
-<div class="modal fade" data-backdrop="static" id="hostAssignmentModal{{ $number['identifier'] }}" tabindex="-1" role="dialog" aria-labelledby="hostAssignmentModalLabel{{ $number['id'] }}" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="hostAssignmentModal{{ $number['identifier'] }}" tabindex="-1"
+     role="dialog" aria-labelledby="hostAssignmentModalLabel{{ $number['id'] }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-info">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="hostAssignmentModalLabel{{ $number['identifier'] }}">{{ __('Change Host Assignment') }}</h5>
+                <h5 class="modal-title"
+                    id="hostAssignmentModalLabel{{ $number['identifier'] }}">{{ __('Change Host Assignment') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

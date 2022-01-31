@@ -1,4 +1,5 @@
-<div class="modal fade" data-backdrop="static" id="enableMaintenanceModeModal" tabindex="-1" role="dialog" aria-labelledby="enableMaintenanceModeModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="enableMaintenanceModeModal" tabindex="-1" role="dialog"
+     aria-labelledby="enableMaintenanceModeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header border-bottom-0">
@@ -17,20 +18,28 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Retry After</label>
-                                    <input type="text" name="retry" placeholder="15" class="form-control" value="{{ old('retry') }}">
+                                    <input type="text" name="retry" placeholder="15" class="form-control"
+                                           value="{{ old('retry') }}">
                                     <small class="form-text text-muted">
                                         Number of minutes for maintenance to last.
-                                        Used for including the <code class="text-indigo font-weight-bold text-uppercase">HTTP Retry-After</code> header in the response.
+                                        Used for including the <code
+                                            class="text-indigo font-weight-bold text-uppercase">HTTP Retry-After</code>
+                                        header in the response.
                                     </small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted">
-                                    While active, the portal returns <strong class="text-danger">unavailable for all users</strong> except you.
-                                    WCTP endpoints and carrier API webhooks will continue to work, but no queue jobs or messages process until you disable maintenance mode.
+                                    While active, the portal returns <strong class="text-danger">unavailable for all
+                                        users</strong> except you.
+                                    WCTP endpoints and carrier API webhooks will continue to work, but no queue jobs or
+                                    messages process until you disable maintenance mode.
                                 </p>
                                 <p class="text-muted">
-                                    <i class="fas fa-info-circle text-muted-light"></i> If you get locked out, you can disable maintenance mode from the server console as described in the <a href="https://laravel.com/docs/configuration#maintenance-mode">Laravel documentation</a>.
+                                    <i class="fas fa-info-circle text-muted-light"></i> If you get locked out, you can
+                                    disable maintenance mode from the server console as described in the <a
+                                        href="https://laravel.com/docs/configuration#maintenance-mode">Laravel
+                                        documentation</a>.
                                 </p>
                             </div>
                         </div>

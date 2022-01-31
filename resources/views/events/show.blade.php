@@ -12,7 +12,7 @@
     <h5 class="text-muted-light mt-2 mt-md-0">
         {{ __('Event Log') }}
         @if( request('page') )
-            &middot; Page {{ request('page') }}
+        &middot; Page {{ request('page') }}
         @endif
     </h5>
 
@@ -47,7 +47,8 @@
                                     <span class="text-small text-muted-light">{{ $event->source }}</span>
                                 </td>
                                 <td class="text-truncate text-muted text-small">
-                                    <a href="#" data-toggle="modal" data-target="#detailsEventsModal{{ $event->id}}" ><i class="fas fa-search text-muted-light"></i></a>
+                                    <a href="#" data-toggle="modal" data-target="#detailsEventsModal{{ $event->id}}"><i
+                                            class="fas fa-search text-muted-light"></i></a>
                                     {{ $event->event }}
                                 </td>
 

@@ -1,4 +1,5 @@
-<div class="modal fade" data-backdrop="static" id="usePhoneNumberModal{{ $number['id'] }}" tabindex="-1" role="dialog" aria-labelledby="usePhoneNumberModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="usePhoneNumberModal{{ $number['id'] }}" tabindex="-1" role="dialog"
+     aria-labelledby="usePhoneNumberModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header border-bottom-0">
@@ -29,15 +30,18 @@
                         <p class="form-text text-small text-muted">
                             Select the Enterprise Host to associate with this number.
                             Inbound messages to this number route to this Enterprise Host.
-                            Outbound messages from the Enterprise Host will use this number (along with any other assigned numbers.)
+                            Outbound messages from the Enterprise Host will use this number (along with any other
+                            assigned numbers.)
                         </p>
                     </div>
-                    <a class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#collapse{{$number['id']}}" role="button" aria-expanded="false" aria-controls="collapse{{$number['id']}}">
+                    <a class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#collapse{{$number['id']}}"
+                       role="button" aria-expanded="false" aria-controls="collapse{{$number['id']}}">
                         <i class="fas fa-info-circle"></i> Toggle Details
                     </a>
                     <div class="collapse" id="collapse{{$number['id']}}">
-                       <div class="container-fluid px-0 mx-0 my-2">
-                            <table class="table  rounded table-striped bg-white table-sm table-bordered text-truncate p-0 table-fixed">
+                        <div class="container-fluid px-0 mx-0 my-2">
+                            <table
+                                class="table  rounded table-striped bg-white table-sm table-bordered text-truncate p-0 table-fixed">
                                 <tbody>
                                 @foreach( $number['details'] as $key => $val )
                                     @if( ! is_array( $val ) && ! is_object( $val ) )
@@ -52,7 +56,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                       </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-top-0">

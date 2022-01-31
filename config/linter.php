@@ -3,10 +3,14 @@
 /*
  * Customize the Vale styles used by the linter.
  */
+
+use Beyondcode\LaravelProseLinter\Styles\Vale;
+use Beyondcode\LaravelProseLinter\Styles\WriteGood;
+
 return [
     'styles' => [
-        \Beyondcode\LaravelProseLinter\Styles\WriteGood::class,
-        \Beyondcode\LaravelProseLinter\Styles\Vale::class,
+        WriteGood::class,
+        Vale::class,
     ],
 
 ];

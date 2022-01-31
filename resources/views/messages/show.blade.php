@@ -12,10 +12,10 @@
     <h5 class="text-muted-light mt-2 mt-md-0">
         @if( $filter ) {{ ucwords($filter) }} @endif {{ __('Messages') }}
         @if( request('page') )
-            &middot; Page {{ request('page') }}
+        &middot; Page {{ request('page') }}
         @endif
         @if(isset($statusFilter))
-            <span  class="font-weight-normal inline mx-2 pull-right badge badge-secondary">
+            <span class="font-weight-normal inline mx-2 pull-right badge badge-secondary">
                 {{ ucwords($statusFilter) }}
             </span>
         @endif
@@ -75,7 +75,7 @@
                                     @endif
                                 </td>
                                 <td class=" text-truncate text-center">
-                                   {{ $message->from }}
+                                    {{ $message->from }}
                                 </td>
                                 <td class=" align-text-bottom">
                                     {{ $message->to }}
@@ -85,26 +85,32 @@
                                         @case("sent")
                                         @case("DELIVRD")
                                         @case("delivered")
-                                            <span class="badge badge-light border border-success shadow-sm px-2 py-1">
+                                        <span class="badge badge-light border border-success shadow-sm px-2 py-1">
                                             @break
-                                        @case("UNDELIV")
-                                        @case("undelivered")
-                                        @case("failed")
-                                        @case("UNKNOWN")
-                                        @case("DELETED")
-                                        @case("EXPIRED")
-                                        @case("REJECTD")
+                                            @case("UNDELIV")
+                                            @case("undelivered")
+                                            @case("failed")
+                                            @case("UNKNOWN")
+                                            @case("DELETED")
+                                            @case("EXPIRED")
+                                            @case("REJECTD")
                                             <span class="badge badge-danger px-2 py-1">
                                             @break
-                                        @default
+                                                @default
                                             <span class="badge badge-light border border-secondary shadow-sm px-2 py-1">
                                     @endswitch
 
-                                    {{ ucwords( $message->status ) }}
+                                                {{ ucwords( $message->status ) }}
                                     </span>
-                                    <a href="#" title="View message details" class="ml-2" data-toggle="modal" data-target="#detailsMessageModal{{ $message->id}}" ><i class="fas fa-search text-muted-light"></i></a>
-                                    <a href="#" title="Re-process message" class="ml-2" data-toggle="modal" data-target="#processMessageModal{{ $message->id}}" ><i class="fas fa-recycle text-muted-light"></i></a>
-                                    <a href="#" title="Mark message failed" class="ml-2" data-toggle="modal" data-target="#failMessageModal{{ $message->id}}" ><i class="fas fa-ban text-muted-light"></i></a>
+                                    <a href="#" title="View message details" class="ml-2" data-toggle="modal"
+                                       data-target="#detailsMessageModal{{ $message->id}}"><i
+                                            class="fas fa-search text-muted-light"></i></a>
+                                    <a href="#" title="Re-process message" class="ml-2" data-toggle="modal"
+                                       data-target="#processMessageModal{{ $message->id}}"><i
+                                            class="fas fa-recycle text-muted-light"></i></a>
+                                    <a href="#" title="Mark message failed" class="ml-2" data-toggle="modal"
+                                       data-target="#failMessageModal{{ $message->id}}"><i
+                                            class="fas fa-ban text-muted-light"></i></a>
                                 </td>
 
                             </tr>

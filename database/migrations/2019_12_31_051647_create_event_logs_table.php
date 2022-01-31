@@ -16,7 +16,7 @@ class CreateEventLogsTable extends Migration
         Schema::create('event_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('event');
-            $table->string('source' );
+            $table->string('source');
             $table->string('severity');
             $table->text('details')->nullable();
             $table->bigInteger('user_id')->nullable();

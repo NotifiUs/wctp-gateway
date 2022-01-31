@@ -1,8 +1,10 @@
-<div class="modal fade" data-backdrop="static" id="deleteEnterpriseHostModal{{ $host->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteEnterpriseHostModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="deleteEnterpriseHostModal{{ $host->id }}" tabindex="-1" role="dialog"
+     aria-labelledby="deleteEnterpriseHostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteEnterpriseHostModalLabel{{ $host->id }}">{{ __('Delete Enterprise Host') }}</h5>
+                <h5 class="modal-title"
+                    id="deleteEnterpriseHostModalLabel{{ $host->id }}">{{ __('Delete Enterprise Host') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

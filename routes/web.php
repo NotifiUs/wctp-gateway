@@ -12,15 +12,15 @@
 */
 
 // No registration allowed, user must verify email.
-Auth::routes(['register' => false, 'verify' => true ]);
+Auth::routes(['register' => false, 'verify' => true]);
 
 Route::get('/', 'RedirectToDashboard');
 
 Route::get('/home', 'ShowDashboard')->name('home');
 
 Route::namespace('Auth')->group(function () {
-    Route::get('/mfa', 'MFAController@show' );
-    Route::post('/mfa', 'MFAController@checkCode' );
+    Route::get('/mfa', 'MFAController@show');
+    Route::post('/mfa', 'MFAController@checkCode');
 });
 
 
@@ -61,13 +61,13 @@ Route::namespace('Carriers')->group(function () {
     Route::post('/carriers/verify', 'VerifyCarrier');
 });
 
-Route::namespace('SMS')->group(function(){
-    Route::post('/sms/inbound/{identifier}/primary', 'PrimaryHandler' );
-    Route::post('/sms/inbound/{identifier}/fallback', 'PrimaryHandler' );
-    Route::post('/sms/callback/{identifier}/status', 'StatusHandler' );
+Route::namespace('SMS')->group(function () {
+    Route::post('/sms/inbound/{identifier}/primary', 'PrimaryHandler');
+    Route::post('/sms/inbound/{identifier}/fallback', 'PrimaryHandler');
+    Route::post('/sms/callback/{identifier}/status', 'StatusHandler');
 });
 
-Route::namespace('Numbers')->group(function(){
+Route::namespace('Numbers')->group(function () {
     Route::get('/numbers', 'ShowNumbers');
     Route::get('/numbers/available', 'ShowAvailable');
     Route::post('/numbers', 'CreateNumber');
@@ -78,7 +78,7 @@ Route::namespace('Numbers')->group(function(){
     Route::post('/numbers/{number}/assign', 'AssignHost');
 });
 
-Route::namespace('EnterpriseHosts')->group(function(){
+Route::namespace('EnterpriseHosts')->group(function () {
     Route::get('/hosts', 'ShowHosts');
     Route::post('/hosts', 'CreateHost');
     Route::post('/hosts/{host}/edit', 'EditHost');
@@ -87,12 +87,12 @@ Route::namespace('EnterpriseHosts')->group(function(){
     Route::post('/hosts/{host}/delete', 'DeleteHost');
 });
 
-Route::namespace('WCTP')->group(function(){
+Route::namespace('WCTP')->group(function () {
     Route::post('/wctp', 'Inbound');
-    Route::get('/wctp','BadMethod');
+    Route::get('/wctp', 'BadMethod');
 });
 
-Route::namespace('Messages')->group(function(){
+Route::namespace('Messages')->group(function () {
     Route::get('/messages/{direction?}', 'ShowMessages');
     Route::post('/messages/process/{message}', 'ProcessMessage');
     Route::post('/messages/fail/{message}', 'FailMessage');

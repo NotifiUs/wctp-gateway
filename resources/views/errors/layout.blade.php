@@ -11,8 +11,8 @@
     <link href="{{ mix('css/tailwind.css') }}" rel="stylesheet">
     @stack('css')
 
-    <link rel="apple-touch-icon" sizes="180x180"  href="/images/favicon.png">
-    <link rel="icon" type="image/png" sizes="32x32"  href="/images/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
 
 </head>
@@ -21,9 +21,9 @@
     <main class="py-4">
         <div class="container mx-auto text-center">
             <h3 class="text-3xl uppercase my-4 font-black text-gray-700">@yield('message')</h3>
-            <a class="inline-block"  alt="@yield('title')" title="@yield('link')" href="@yield('link')">
+            <a class="inline-block" alt="@yield('title')" title="@yield('link')" href="@yield('link')">
                 <img class="max-w-lg mx-auto my-4" src="@yield('image')" title="@yield('title')" alt="@yield('title')">
-           </a>
+            </a>
         </div>
 
     </main>

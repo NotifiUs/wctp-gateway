@@ -1,4 +1,5 @@
-<div class="modal fade" data-backdrop="static" id="enablePhoneNumberModal{{ $number['identifier'] }}" tabindex="-1" role="dialog" aria-labelledby="enablePhoneNumberModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="enablePhoneNumberModal{{ $number['identifier'] }}" tabindex="-1"
+     role="dialog" aria-labelledby="enablePhoneNumberModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-success">
             <div class="modal-header border-bottom-0">

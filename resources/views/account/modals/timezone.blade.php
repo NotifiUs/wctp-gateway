@@ -1,4 +1,5 @@
-<div class="modal fade" data-backdrop="static" id="editTimezoneModal" tabindex="-1" role="dialog" aria-labelledby="editTimezoneModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="editTimezoneModal" tabindex="-1" role="dialog"
+     aria-labelledby="editTimezoneModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-info">
             <div class="modal-header">
@@ -21,7 +22,8 @@
                                 @endif
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Select your timezone to display throughout the application.</small>
+                        <small class="form-text text-muted">Select your timezone to display throughout the
+                            application.</small>
                     </div>
                 </div>
                 <div class="modal-footer">

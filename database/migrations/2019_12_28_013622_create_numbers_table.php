@@ -19,7 +19,7 @@ class CreateNumbersTable extends Migration
             $table->bigInteger('carrier_id');
             $table->bigInteger('enterprise_host_id');
             $table->string('identifier');
-            $table->boolean('enabled')->default(false );
+            $table->boolean('enabled')->default(false);
             $table->timestamps();
         });
     }

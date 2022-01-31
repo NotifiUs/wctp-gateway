@@ -17,7 +17,8 @@
         <label for="mfa_code" class="col-md-4 col-form-label text-md-right">{{ __('MFA Code') }}</label>
 
         <div class="col-md-4">
-            <input id="mfa_code" type="text" class="form-control @error('mfa_code') is-invalid @enderror" name="mfa_code" value="{{ old('mfa_code') }}" required autofocus>
+            <input id="mfa_code" type="text" class="form-control @error('mfa_code') is-invalid @enderror"
+                   name="mfa_code" value="{{ old('mfa_code') }}" required autofocus>
 
             @error('mfa_code')
             <span class="invalid-feedback" role="alert">

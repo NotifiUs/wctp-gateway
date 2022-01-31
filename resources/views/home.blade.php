@@ -12,7 +12,8 @@
     <h5 class="text-muted-light mt-2 mt-md-0">
         {{ __('Quick Glance') }}
         <small class="text-small float-right text-muted">
-            <a href="/home" title="{{ $activityPeriod->timezone(Auth::user()->timezone)->format("m/d/Y g:i:sA T") }} &mdash; {{ $activityPeriod->copy()->addHours(24)->format("m/d/Y g:i:sA T") }}">
+            <a href="/home"
+               title="{{ $activityPeriod->timezone(Auth::user()->timezone)->format("m/d/Y g:i:sA T") }} &mdash; {{ $activityPeriod->copy()->addHours(24)->format("m/d/Y g:i:sA T") }}">
                 <i class="fas fa-sync text-small"></i> Refresh
             </a>
         </small>
@@ -34,25 +35,25 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-4">
-                <div class="card mb-2">
-                    <div class="card-body text-center my-0">
-                        <i class="fas fa-3x fa-chevron-circle-up text-primary"></i>
-                        <h5 class="text-muted mt-2 mb-0">{{ $outboundCount }}</h5>
-                        <a href="/messages/outbound" class="text-primary">Outbound Messages</a>
-                    </div>
+        <div class="col-md-4">
+            <div class="card mb-2">
+                <div class="card-body text-center my-0">
+                    <i class="fas fa-3x fa-chevron-circle-up text-primary"></i>
+                    <h5 class="text-muted mt-2 mb-0">{{ $outboundCount }}</h5>
+                    <a href="/messages/outbound" class="text-primary">Outbound Messages</a>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-4">
-                <div class="card mb-2">
-                    <div class="card-body text-center my-0">
-                        <i class="fas fa-3x fa-chevron-circle-down text-primary"></i>
-                        <h5 class="text-muted mt-2 mb-0">{{ $inboundCount }}</h5>
-                        <a href="/messages/inbound" class="text-primary">Inbound Messages</a>
-                    </div>
+        <div class="col-md-4">
+            <div class="card mb-2">
+                <div class="card-body text-center my-0">
+                    <i class="fas fa-3x fa-chevron-circle-down text-primary"></i>
+                    <h5 class="text-muted mt-2 mb-0">{{ $inboundCount }}</h5>
+                    <a href="/messages/inbound" class="text-primary">Inbound Messages</a>
                 </div>
             </div>
+        </div>
 
         @if(count($checklist) !== 0 )
 
@@ -93,7 +94,8 @@
                             {{ __('Carrier Gateway Endpoint') }}
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
-                            https://<span class="font-weight-bold">{{ str_replace('https://', '', secure_url('/wctp')) }}</span>
+                            https://<span
+                                class="font-weight-bold">{{ str_replace('https://', '', secure_url('/wctp')) }}</span>
                         </dd>
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Network Ports') }}
@@ -106,14 +108,17 @@
                             {{ __('Security Information') }}
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
-                            <span class="text-success"><i class="fas fa-lock"></i> <code class="text-success font-weight-bold">{{ __('SSL/TLS') }}</code> {{__( 'required')}}</span>
+                            <span class="text-success"><i class="fas fa-lock"></i> <code
+                                    class="text-success font-weight-bold">{{ __('SSL/TLS') }}</code> {{__( 'required')}}</span>
                             <br>
-                            <span class="text-primary"><i class="fas fa-shield-alt"></i> <code class="text-primary font-weight-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
+                            <span class="text-primary"><i class="fas fa-shield-alt"></i> <code
+                                    class="text-primary font-weight-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
                         </dd>
                     </dl>
 
                     <small class="text-muted">
-                        <i class="fas fa-question-circle"></i> {{ __('Learn how to') }} <a href="#" data-toggle="modal" data-target="#setupInstructionsModal">{{ __('configure')}}</a> {{ __('your WCTP integration') }}
+                        <i class="fas fa-question-circle"></i> {{ __('Learn how to') }} <a href="#" data-toggle="modal"
+                                                                                           data-target="#setupInstructionsModal">{{ __('configure')}}</a> {{ __('your WCTP integration') }}
                     </small>
                 </div>
             </div>
@@ -131,13 +136,13 @@
             <div class="table-responsive text-left">
                 <table class="table table-striped table-hover m-0 table-fixed">
                     <thead>
-                        <tr class="text-center">
-                            <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
-                            <th class="font-weight-bold text-muted-light w-25">{{ __('User') }}</th>
-                            <th class="font-weight-bold text-muted-light w-25">{{ __('Source') }}</th>
-                            <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
+                    <tr class="text-center">
+                        <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
+                        <th class="font-weight-bold text-muted-light w-25">{{ __('User') }}</th>
+                        <th class="font-weight-bold text-muted-light w-25">{{ __('Source') }}</th>
+                        <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
 
-                        </tr>
+                    </tr>
                     </thead>
                     <tbody>
                     @if( $events->count() )
@@ -148,9 +153,9 @@
                                 </td>
                                 <td class="text-muted-light text-truncate text-center">
                                     @if( $event->user )
-                                        {{ $event->user->name }}
+                                    {{ $event->user->name }}
                                     @else
-                                        &mdash;
+                                    &mdash;
                                     @endif
                                 </td>
                                 <td class=" align-text-bottom">

@@ -147,7 +147,7 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'default',
-                    'enterprise-host' ,
+                    'enterprise-host',
                     'messages',
                     'outbound',
                     'outbound-throttled'
@@ -164,7 +164,7 @@ return [
                 'connection' => 'redis',
                 'queue' => [
                     'default',
-                    'enterprise-host' ,
+                    'enterprise-host',
                     'messages',
                     'outbound',
                     'outbound-throttled'

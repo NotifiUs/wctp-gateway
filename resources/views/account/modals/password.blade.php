@@ -1,4 +1,5 @@
-<div class="modal fade" data-backdrop="static" id="editPasswordModal" tabindex="-1" role="dialog" aria-labelledby="editPasswordModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="editPasswordModal" tabindex="-1" role="dialog"
+     aria-labelledby="editPasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-info">
             <div class="modal-header">
@@ -18,7 +19,8 @@
                     <div class="form-group">
                         <label>New Password</label>
                         <input type="password" required name="password" class="form-control" value="">
-                        <small class="form-text text-muted">Enter a new password. Please use a <a href="https://bitwarden.com/">password manager</a>.</small>
+                        <small class="form-text text-muted">Enter a new password. Please use a <a
+                                href="https://bitwarden.com/">password manager</a>.</small>
                     </div>
                     <div class="form-group">
                         <label>Confirm Password</label>

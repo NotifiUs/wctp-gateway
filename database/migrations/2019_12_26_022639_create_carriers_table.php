@@ -21,7 +21,7 @@ class CreateCarriersTable extends Migration
             $table->string('thinq_account_id')->nullable();
             $table->string('thinq_api_username')->nullable();
             $table->text('thinq_api_token')->nullable();
-            $table->integer('priority')->default(10 );
+            $table->integer('priority')->default(10);
             $table->string('api'); //twilio|thinq
             $table->boolean('enabled')->default(false);
             $table->boolean('beta')->default(false);

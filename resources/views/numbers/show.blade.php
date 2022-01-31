@@ -15,75 +15,87 @@
     </h5>
 
     @if( count( $active ) )
-    <div class="card py-0 my-0">
-        <div class="card-body p-0 m-0">
-            <div class="table-responsive text-left">
-                <table class="table table-striped table-hover m-0">
-                    <thead>
-                    <tr>
-                        <th class="font-weight-bold text-muted-light">{{ __('Phone Number') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('Carrier Info') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('Enterprise Host') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('Status') }}</th>
-                        <th style="max-width:20%;"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach( $active as $number )
-                        @php
-                            $c = \App\Carrier::find( $number['carrier_id'] );
-                            $type = \App\Number::find( $number['id'] )->getFriendlyType();
-                            $eh = \App\EnterpriseHost::find( $number['enterprise_host_id']);
-                        @endphp
+        <div class="card py-0 my-0">
+            <div class="card-body p-0 m-0">
+                <div class="table-responsive text-left">
+                    <table class="table table-striped table-hover m-0">
+                        <thead>
                         <tr>
-                            <td title="{{ $type }}" class="text-muted">{{ $number['e164'] }}</td>
-                            <td class="text-small"><strong>{{ ucwords( $c->api ) }}</strong> &middot; {{ $c->name  }}</td>
-                            <td class="text-small">{{ $eh->name }} </td>
-                            <td>
-
-                                @if( $number['enabled'])
-                                    <small class="font-weight-bold text-uppercase text-success">
-                                        <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
-                                    </small>
-                                @else
-                                    <small class="font-weight-bold text-uppercase text-danger">
-                                        <i class="fas fa-times-circle"></i> {{ __('Disabled') }}
-                                    </small>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <div class="dropdown">
-                                    <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-cog"></i>
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light" aria-labelledby="dropdownMenuLink">
-
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#infoPhoneNumberModal{{ $number['identifier']}}">{{ __('Number Information') }}</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#hostAssignmentModal{{ $number['identifier']}}">{{ __('Host Assignment') }}</a>
-
-                                        <div class="dropdown-divider"></div>
-                                        @if( $number['enabled'] )
-                                            <a class="dropdown-item" style="color:#fd7e14;" href="#" data-toggle="modal" data-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
-                                        @else
-                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#enablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Enable Number') }}</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item text-danger" href="#" data-toggle="modal"  data-target="#deletePhoneNumberModal{{ $number['identifier'] }}">{{ __('Release Number') }}</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </td>
+                            <th class="font-weight-bold text-muted-light">{{ __('Phone Number') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Carrier Info') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Enterprise Host') }}</th>
+                            <th class="font-weight-bold text-muted-light">{{ __('Status') }}</th>
+                            <th style="max-width:20%;"></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @foreach( $active as $number )
+                            @php
+                                use App\Carrier;use App\EnterpriseHost;use App\Number;$c = Carrier::find( $number['carrier_id'] );
+                                $type = Number::find( $number['id'] )->getFriendlyType();
+                                $eh = EnterpriseHost::find( $number['enterprise_host_id'])
+                            @endphp
+                            <tr>
+                                <td title="{{ $type }}" class="text-muted">{{ $number['e164'] }}</td>
+                                <td class="text-small"><strong>{{ ucwords( $c->api ) }}</strong>
+                                    &middot; {{ $c->name  }}</td>
+                                <td class="text-small">{{ $eh->name }} </td>
+                                <td>
+
+                                    @if( $number['enabled'])
+                                        <small class="font-weight-bold text-uppercase text-success">
+                                            <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
+                                        </small>
+                                    @else
+                                        <small class="font-weight-bold text-uppercase text-danger">
+                                            <i class="fas fa-times-circle"></i> {{ __('Disabled') }}
+                                        </small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button"
+                                           id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                           aria-expanded="false">
+                                            <i class="fas fa-cog"></i>
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light"
+                                             aria-labelledby="dropdownMenuLink">
+
+                                            <a class="dropdown-item" href="#" data-toggle="modal"
+                                               data-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
+                                            <a class="dropdown-item" href="#" data-toggle="modal"
+                                               data-target="#infoPhoneNumberModal{{ $number['identifier']}}">{{ __('Number Information') }}</a>
+                                            <a class="dropdown-item" href="#" data-toggle="modal"
+                                               data-target="#hostAssignmentModal{{ $number['identifier']}}">{{ __('Host Assignment') }}</a>
+
+                                            <div class="dropdown-divider"></div>
+                                            @if( $number['enabled'] )
+                                                <a class="dropdown-item" style="color:#fd7e14;" href="#"
+                                                   data-toggle="modal"
+                                                   data-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
+                                            @else
+                                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                                   data-target="#enablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Enable Number') }}</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-danger" href="#" data-toggle="modal"
+                                                   data-target="#deletePhoneNumberModal{{ $number['identifier'] }}">{{ __('Release Number') }}</a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     @else
         <div class="alert alert-primary py-4" role="alert">
-            <i class="fas fa-exclamation-circle"></i> Please add numbers from the <a href="/numbers/available">available list</a>.
+            <i class="fas fa-exclamation-circle"></i> Please add numbers from the <a href="/numbers/available">available
+                list</a>.
         </div>
     @endif
 

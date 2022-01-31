@@ -29,7 +29,7 @@
                             @if( $user->mfa_secret )
                                 @include('account.mfa.active')
                             @else
-                               @include('account.mfa.inactive')
+                                @include('account.mfa.inactive')
                             @endif
                         @endif
 

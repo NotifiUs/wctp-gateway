@@ -13,53 +13,53 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @stack('css')
 
-    <link rel="apple-touch-icon" sizes="180x180"  href="/images/favicon.png">
-    <link rel="icon" type="image/png" sizes="32x32"  href="/images/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
 
 </head>
 <body>
-    <div id="app">
-        @include('layouts.nav')
-        @if( Auth::check() && ( constant( config('tls.protocol_support') ) < CURL_SSLVERSION_TLSv1_2 || config('tls.verify_certificates') === false )  )
-            @include('layouts.tls-warning')
-        @endif
-        <main class="py-4">
-            <div class="container">
-                <div class="row justify-content-center">
-                    @if( Auth::check() )
-                        @if( ! Str::startsWith( request()->path(), 'account' )
-                            && ! Str::startsWith( request()->path(), 'mfa' )
-                            && ! Str::startsWith( request()->path(), 'password')
-                            )
-                            <div class="col-md-4">
-                                @include('layouts.side')
-                            </div>
-                            <div class="col-md-8">
-                                @yield('content')
-                            </div>
-                        @else
-                            <div class="col">
-                                @yield('content')
-                            </div>
-                        @endif
+<div id="app">
+    @include('layouts.nav')
+    @if( Auth::check() && ( constant( config('tls.protocol_support') ) < CURL_SSLVERSION_TLSv1_2 || config('tls.verify_certificates') === false )  )
+        @include('layouts.tls-warning')
+    @endif
+    <main class="py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                @if( Auth::check() )
+                    @if( ! Str::startsWith( request()->path(), 'account' )
+                        && ! Str::startsWith( request()->path(), 'mfa' )
+                        && ! Str::startsWith( request()->path(), 'password')
+                        )
+                        <div class="col-md-4">
+                            @include('layouts.side')
+                        </div>
+                        <div class="col-md-8">
+                            @yield('content')
+                        </div>
                     @else
                         <div class="col">
                             @yield('content')
                         </div>
                     @endif
+                @else
+                    <div class="col">
+                        @yield('content')
+                    </div>
+                @endif
 
-                </div>
             </div>
+        </div>
 
-        </main>
-        @include('layouts.footer')
-    </div>
+    </main>
+    @include('layouts.footer')
+</div>
 
-    @stack('modals')
+@stack('modals')
 
-    <script src="{{ mix('js/app.js') }}"></script>
-    <script src="{{ mix('js/font-awesome.js') }}"></script>
-    @stack('scripts')
+<script src="{{ mix('js/app.js') }}"></script>
+<script src="{{ mix('js/font-awesome.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

@@ -1,4 +1,5 @@
-<div class="modal fade" data-backdrop="static" id="disableCarrierModal{{ $carrier->id }}" tabindex="-1" role="dialog" aria-labelledby="disableCarrierModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="disableCarrierModal{{ $carrier->id }}" tabindex="-1" role="dialog"
+     aria-labelledby="disableCarrierModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-orange">
             <div class="modal-header">

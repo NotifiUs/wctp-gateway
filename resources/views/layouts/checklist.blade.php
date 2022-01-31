@@ -1,19 +1,20 @@
-
 @if( count( $checklist ) )
-<h5 class="text-muted-light mb-2">
-    {{ __('System Warnings') }}
-</h5>
-<div class="card mb-2 h-75">
-    <div class="card-body bg-striped text-left px-4 my-0">
-        <div class="my-4 mx-auto">
-        @foreach( $checklist as $item )
-            <p class="my-1 text-muted">
-                <i class="fas fa-times-circle text-orange"></i> <span>{!!  $item['description']  !!} <small class="font-weight-bold"><a class="text-uppercase text-orange" href="{{ $item['link'] }}">Fix</a></small></span>
-            </p>
-        @endforeach
+    <h5 class="text-muted-light mb-2">
+        {{ __('System Warnings') }}
+    </h5>
+    <div class="card mb-2 h-75">
+        <div class="card-body bg-striped text-left px-4 my-0">
+            <div class="my-4 mx-auto">
+                @foreach( $checklist as $item )
+                    <p class="my-1 text-muted">
+                        <i class="fas fa-times-circle text-orange"></i> <span>{!!  $item['description']  !!} <small
+                                class="font-weight-bold"><a class="text-uppercase text-orange"
+                                                            href="{{ $item['link'] }}">Fix</a></small></span>
+                    </p>
+                @endforeach
+            </div>
         </div>
     </div>
-</div>
 @else
     <h5 class="text-muted-light mb-2">
         {{ __('System Warnings') }}

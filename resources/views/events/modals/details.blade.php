@@ -1,8 +1,9 @@
 @php
     use Carbon\Carbon;
-    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Auth
 @endphp
-<div class="modal fade" data-backdrop="static" id="detailsEventsModal{{ $event->id}}" tabindex="-1" role="dialog" aria-labelledby="detailsEventsModal" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" id="detailsEventsModal{{ $event->id}}" tabindex="-1" role="dialog"
+     aria-labelledby="detailsEventsModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm">
             <div class="modal-header border-bottom-0">
@@ -13,35 +14,37 @@
                 </button>
             </div>
             <div class="modal-body">
-               <div class="container-fluid px-0 mx-0 my-2">
-                    <table class="table  rounded table-striped bg-white table-sm table-bordered text-truncate p-0 table-fixed">
+                <div class="container-fluid px-0 mx-0 my-2">
+                    <table
+                        class="table  rounded table-striped bg-white table-sm table-bordered text-truncate p-0 table-fixed">
                         <tbody>
                         @foreach( Arr::dot( $event->toArray() ) as $key => $val )
                             <tr>
 
-                            @if( $key == 'details' )
-                            @else
-                                <th class="w-25 text-left">{{ $key }}</th>
-                                <td class="text-muted text-truncate w-75">
-                                    @if(substr($key, -3, 3) === '_at')
-                                        @php
-                                            $dt = Carbon::parse($val)->timezone(Auth::user()->timezone)->format("m/d/Y g:i:s A T");
-                                        @endphp
-                                        <span title="{{ $dt }}" class="text-truncate">{{ $dt }}</span>
-                                    @else
-                                        <span title="{{ $val }}" class="text-truncate">{{ $val }}</span>
-                                    @endif
+                                @if( $key == 'details' )
+                                @else
+                                    <th class="w-25 text-left">{{ $key }}</th>
+                                    <td class="text-muted text-truncate w-75">
+                                        @if(substr($key, -3, 3) === '_at')
+                                            @php
+                                                $dt = Carbon::parse($val)->timezone(Auth::user()->timezone)->format("m/d/Y g:i:s A T")
+                                            @endphp
+                                            <span title="{{ $dt }}" class="text-truncate">{{ $dt }}</span>
+                                        @else
+                                            <span title="{{ $val }}" class="text-truncate">{{ $val }}</span>
+                                        @endif
 
-                                </td>
-                            @endif
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                   <div class="alert alert-light border-light text-muted-light bg-striped">
-                       <pre class="text-muted">{{ json_encode( json_decode($event->toArray()['details'], true ), JSON_PRETTY_PRINT) }}</pre>
-                   </div>
-               </div>
+                    <div class="alert alert-light border-light text-muted-light bg-striped">
+                        <pre
+                            class="text-muted">{{ json_encode( json_decode($event->toArray()['details'], true ), JSON_PRETTY_PRINT) }}</pre>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

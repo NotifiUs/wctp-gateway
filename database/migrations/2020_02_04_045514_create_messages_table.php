@@ -17,7 +17,7 @@ class CreateMessagesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('carrier_id');
             $table->bigInteger('number_id');
-            $table->bigInteger( 'enterprise_host_id');
+            $table->bigInteger('enterprise_host_id');
             $table->string('to');
             $table->string('from');
             $table->text('message');
