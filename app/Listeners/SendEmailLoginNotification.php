@@ -3,12 +3,12 @@
 namespace App\Listeners;
 
 use App\User;
-use App\Mail\FailedLoginEmail;
-use Illuminate\Auth\Events\Failed;
+use App\Mail\LoginEmail;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendEmailFailedLoginNotification implements ShouldQueue
+class SendEmailLoginNotification implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -23,15 +23,15 @@ class SendEmailFailedLoginNotification implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  Failed  $event
+     * @param  Login  $event
      * @return void
      */
-    public function handle(Failed $event)
+    public function handle(Login $event)
     {
-        Mail::to( $event->credentials['email'] )->send(new FailedLoginEmail());
+        Mail::to( $event->credentials['email'] )->send(new LoginEmail());
     }
 
-    public function shouldQueue( Failed $event )
+    public function shouldQueue( Login $event )
     {
         $user = User::where('email', $event->credentials['email'] )->first();
 

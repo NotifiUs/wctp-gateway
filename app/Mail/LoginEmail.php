@@ -7,19 +7,19 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class FailedJob extends Mailable implements ShouldQueue
+class LoginEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $details, $host;
+    public $host;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct( array $details = [] )
+    public function __construct( )
     {
-        $this->details = $details;
         $this->host = config('app.url');
     }
 
@@ -30,6 +30,7 @@ class FailedJob extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('emails.failed_job')->subject('Failed WCTP job at ' . config('app.name') );
+        return $this->subject('User login at ' . config('app.name') )
+            ->markdown('emails.user_login');
     }
 }

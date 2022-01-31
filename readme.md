@@ -18,12 +18,16 @@ The modern WCTP engine brings the following features and more:
 - Create and manage Enterprise Host credentials
 - Bring your own Twilio or ThinQ accounts
 - Support for using Twilio Messaging Services or Phone Numbers
-- Carrier priority and automatic fail-over
+- Carrier priority
 - TLS/SSL required by default
+- Email login notifications
+- Work's out of the box with Twilio's WhatsApp integration
 
 **Coming Soon**
-- Sticky sending by recipient to favor specific carriers
-- IP Whitelisting, MFA, and login notifications
+- Improved fail-over between carriers
+- Two additional telecom API providers
+- A generic webhook API provider
+- MergeComm scripting integration for Amtelco ecosystems
 
 ## Status
 
@@ -37,11 +41,11 @@ We're actively testing with customers! Version 1.0.0 coming soon!
 We use application, language, and OS features that require the following tools and technologies:
 
 - **Ubuntu** linux
-- **PHP 7.3+** for web application scripting
-- **nginx with php-fpm** for web server
-- **redis-server** for caching/queue
-- **mysql** for storage
-- **supervisord** to watch queue processes
+- **`php` 8.0+** for web application scripting
+- **nginx with `php-fpm`** for web server
+- **`redis-server`** for caching/queue
+- **`mysql`** for storage
+- **`supervisord`** to watch queue processes
 
 We utilize linux specific methods of obtaining data about the hardware/server (such as memory, disk space, CPU, etc.)
 Because of this, we require the use of a linux host. We generally recommend Ubuntu for most users. 
@@ -71,6 +75,7 @@ Thank you for considering contributing to WCTP Gateway! Please email [Patrick La
 
 ## Security Vulnerabilities
 
+Please see [SECURITY.md](SECURITY.md)
 
 ## License
 

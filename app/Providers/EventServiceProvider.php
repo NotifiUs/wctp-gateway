@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Failed;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\PasswordReset;
+use App\Listeners\SendEmailLoginNotification;
 use App\Listeners\SendEmailFailedLoginNotification;
 use App\Listeners\SendEmailPasswordResetNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -19,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        Login::class => [
+            SendEmailLoginNotification::class,
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],

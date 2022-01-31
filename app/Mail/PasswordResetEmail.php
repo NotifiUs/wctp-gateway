@@ -2,10 +2,8 @@
 
 namespace App\Mail;
 
-use App\Jobs\LogEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
