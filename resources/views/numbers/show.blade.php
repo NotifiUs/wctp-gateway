@@ -1,3 +1,8 @@
+@php
+    use App\Number;
+    use App\Carrier;
+    use App\EnterpriseHost;
+@endphp
 @extends('layouts.app')
 @section('title', __('Phone Numbers'))
 @push('css')
@@ -31,7 +36,7 @@
                         <tbody>
                         @foreach( $active as $number )
                             @php
-                                use App\Carrier;use App\EnterpriseHost;use App\Number;$c = Carrier::find( $number['carrier_id'] );
+                                $c = Carrier::find( $number['carrier_id'] );
                                 $type = Number::find( $number['id'] )->getFriendlyType();
                                 $eh = EnterpriseHost::find( $number['enterprise_host_id'])
                             @endphp
