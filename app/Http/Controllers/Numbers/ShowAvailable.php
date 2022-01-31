@@ -7,6 +7,7 @@ use App\Number;
 use App\Carrier;
 use Twilio\Rest\Client;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use GuzzleHttp\Client as Guzzle;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\RequestException;
@@ -18,7 +19,7 @@ class ShowAvailable extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke($available = null )
+    public function __invoke(Request $request, $available = null )
     {
         $carriers = Carrier::all();
         $available = [];
@@ -113,7 +114,7 @@ class ShowAvailable extends Controller
             }
             elseif( $carrier->api == 'thinq')
             {
-                $a = $this->getThinQNumbers($carrier, $_REQUEST['page'] ?? null );
+                $a = $this->getThinQNumbers($carrier, $request->get('page') ?? null );
 
                 $available = array_merge($available, $a['available'] ?? [] );
 

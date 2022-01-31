@@ -14,15 +14,15 @@ class ShowPHPInfo extends Controller
     }
     public function __invoke()
     {
-        ob_start();
-        phpinfo();
-        $phpinfo = ob_get_contents();
-        ob_end_clean();
-
         LogEvent::dispatch(
             "Viewed phpinfo()",
             get_class( $this ), 'notice', json_encode([]), Auth::user()->id ?? null
         );
+
+        ob_start();
+        phpinfo();
+        $phpinfo = ob_get_contents();
+        ob_end_clean();
 
         return response( $phpinfo );
     }
