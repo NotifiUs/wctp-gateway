@@ -16,26 +16,30 @@ Ardently crafted for the Amtelco and [NAEO](https://www.naeo.org) community, you
 
 The modern WCTP engine brings the following features and more:
 
-- Create and manage Enterprise Host credentials
-- Bring your own Twilio or ThinQ accounts
-- Support for using Twilio Messaging Services or Phone Numbers
-- Carrier priority
-- TLS/SSL required by default
-- Email login notifications
-- Work's out of the box with Twilio's WhatsApp integration
+-  Create and manage Enterprise Host credentials
+-  Bring your own Twilio or ThinQ accounts
+-  Support for using Twilio Messaging Services or Phone Numbers
+-  Carrier priority
+-  TLS/SSL required by default
+-  Email login notifications
+-  Work's out of the box with Twilio's WhatsApp integration
 
 **Coming Soon**
-- Improved fail-over between carriers
-- Two additional telecom API providers
-- A generic webhook API provider
-- MergeComm scripting integration for Amtelco ecosystems
+-  Improved fail-over between carriers
+-  Two additional telecom API providers
+-  A generic webhook API provider
+-  MergeComm scripting integration for Amtelco ecosystems
 
 ## Status
 
-We're actively testing with customers! Version 1.0.0 coming soon!
+The WCTP Gateway is operational for interacting with WCTP Enterprise Hosts and Transient Clients of all ecosystems.
+
+The latest tagged version is: 
 
 [![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
 
+
+> Commercial installation and support is available through [NotifiUs, LLC](http://notifi.us)
 
 ## Requirements
 
@@ -81,3 +85,10 @@ Please see [SECURITY.md](SECURITY.md)
 ## License
 
 WCTP Gateway is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Tested compatability list
+
+-  Amtelco WCTP 2-Way Messaging API
+-  InfoRad Messaging Gateway
+-  NotePage PageGate / PageGate Platinum
