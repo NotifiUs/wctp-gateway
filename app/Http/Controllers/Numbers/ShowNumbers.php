@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use App\Number;
 use App\Http\Controllers\Controller;
+use App\Number;
 
 class ShowNumbers extends Controller
 {
@@ -12,10 +12,10 @@ class ShowNumbers extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke($available = null )
+    public function __invoke()
     {
         $active = Number::all()->toArray();
 
-        return view('numbers.show')->with('active', $active );
+        return view('numbers.show')->with('active', $active);
     }
 }

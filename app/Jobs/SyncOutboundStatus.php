@@ -2,22 +2,22 @@
 
 namespace App\Jobs;
 
-use App\User;
-use Throwable;
-use Exception;
 use App\Carrier;
-use App\Message;
-use Carbon\Carbon;
 use App\Mail\FailedJob;
-use Illuminate\Bus\Queueable;
+use App\Message;
+use App\User;
+use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client as Guzzle;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\SerializesModels;
-use Twilio\Rest\Client as TwilioClient;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
+use Twilio\Rest\Client as TwilioClient;
 
 class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
 {
@@ -213,23 +213,26 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
         return $this->message->id;
     }
 
-    public function failed(Throwable $exception ){
+    public function failed(Throwable $exception )
+    {
 
-        foreach( User::where('email_notifications', true)->get() as $u )
-        {
-            Mail::to( $u->email )->send(new FailedJob($this->message->toArray() ));
+        foreach (User::where('email_notifications', true)->get() as $u) {
+            Mail::to($u->email)->send(new FailedJob($this->message->toArray()));
         }
 
+        LogEvent::dispatch(
+            "SyncOutboundStatus Job failed",
+            get_class($this), 'error', json_encode($exception->getMessage()), null
+        );
 
-       try{
+        try {
             $this->message->status = 'failed';
             $this->message->failed_at = Carbon::now();
             $this->message->save();
-        }
-        catch( Exception $e ){
+        } catch (Exception $e) {
             LogEvent::dispatch(
                 "Job status update failed",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
+                get_class($this), 'error', json_encode($e->getMessage()), null
             );
         }
     }

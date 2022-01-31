@@ -49,13 +49,11 @@ label {
     border-bottom: 0;
 }
 
-//.modal-header h5 { color: $gray-300; text-transform: uppercase; text-shadow: none !important; }
-
 .list-group-item.active, .page-item.active .page-link {
     z-index: 2;
     color: #343a40;
-    background-color: #EDF2F7; //rgba(0,0,0,.005);
-    border-color: rgba(0, 0, 0, 0.075); //border-color: rgba(0,0,0,.005);
+    background-color: #EDF2F7;
+    border-color: rgba(0, 0, 0, 0.075);
     font-weight: bold;
 }
 

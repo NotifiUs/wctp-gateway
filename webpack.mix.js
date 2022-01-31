@@ -1,8 +1,8 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 const crypto = require("crypto");
 const crypto_orig_createHash = crypto.createHash;
-crypto.createHash = algorithm => crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
+crypto.createHash = (algorithm) => crypto_orig_createHash(algorithm == "md4" ? "sha256" : algorithm);
 
 /*
  |--------------------------------------------------------------------------
@@ -15,8 +15,8 @@ crypto.createHash = algorithm => crypto_orig_createHash(algorithm == "md4" ? "sh
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/font-awesome.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
-    .postCss('resources/css/tailwind.css', 'public/css', [ require('tailwindcss') ])
+mix.js("resources/js/app.js", "public/js")
+    .js("resources/js/font-awesome.js", "public/js")
+    .sass("resources/sass/app.scss", "public/css")
+    .postCss("resources/css/tailwind.css", "public/css", [require("tailwindcss")])
     .version();

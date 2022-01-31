@@ -65,12 +65,13 @@ class ServerStats
 
         foreach ($services as $service => $details) {
             $output = '';
-            $return_value = '';
+            $return_value = null;
             $status = exec("service {$service} status 2>&1", $output, $return_value);
             $services[$service]['desc'] = implode("\n", $output);
             if ($return_value === 0 && $status) {
                 $services[$service]['status'] = true;
             }
+            $details = null;
         }
 
         return $services;

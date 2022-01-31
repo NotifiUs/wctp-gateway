@@ -3,14 +3,14 @@
 namespace App;
 
 use Exception;
-use Twilio\Rest\Client;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 use GuzzleHttp\Client as Guzzle;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Twilio\Rest\Client;
 
 class Number extends Model
 {
@@ -50,7 +50,7 @@ class Number extends Model
 
                 if( $this->getType() == 'MG' )
                 {
-                    $service = $twilio->messaging->v1->services($this->identifier )
+                    $twilio->messaging->v1->services($this->identifier)
                         ->update([
                             'inboundRequestUrl' => secure_url("/sms/inbound/{$this->identifier}/primary" ),
                             'inboundMethod' => 'POST',
@@ -62,7 +62,7 @@ class Number extends Model
                 }
                 else
                 {
-                    $number = $twilio
+                    $twilio
                         ->incomingPhoneNumbers( $this->identifier )
                         ->update(array(
                                 'smsApplicationSid' => '',
