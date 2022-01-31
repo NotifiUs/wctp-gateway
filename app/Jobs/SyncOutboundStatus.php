@@ -41,7 +41,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
     {
         $this->carrier = Carrier::where( 'enabled', 1 )->where( 'id', $this->message->carrier_id )->first();
 
-        if( is_null( $this->carrier ) )
+        if( $this->carrier === null )
         {
             LogEvent::dispatch(
                 "Failure synchronizing message status",
@@ -156,7 +156,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
 
             foreach( $arr['delivery_notifications'] as $dn )
             {
-                if( is_null($ts) || Carbon::parse( $dn['timestamp'] ) >= $ts )
+                if( $ts === null || Carbon::parse( $dn['timestamp'] ) >= $ts )
                 {
                     $ts = Carbon::parse( $dn['timestamp']);
                     $latest_update = $dn;
@@ -164,7 +164,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                 }
             }
 
-            if( ! is_null( $latest_update ) )
+            if(  $latest_update !== null )
             {
                 switch( $latest_update['send_status'] ) {
                     case "sent":

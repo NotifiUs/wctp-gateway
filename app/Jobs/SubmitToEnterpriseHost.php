@@ -54,7 +54,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 
         $host = EnterpriseHost::where( 'enabled', 1 )->where( 'id', $this->message->enterprise_host_id )->first();
 
-        if( is_null( $host ) )
+        if( $host === null )
         {
             LogEvent::dispatch(
                 "Failure submitting reply",
@@ -76,7 +76,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 ->first();
         }
 
-        if( ! is_null($responding_to))
+        if( $responding_to !== null )
         {
             $messageReply = new MessageReply();
             try{
@@ -175,7 +175,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 return$this->release(60 );
             }
 
-            if(is_null($wctpConfirmation))
+            if($wctpConfirmation === null)
             {
                 LogEvent::dispatch(
                     "Missing successCode on wctpSuccess element",

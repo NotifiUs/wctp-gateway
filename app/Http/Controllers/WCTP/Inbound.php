@@ -38,26 +38,6 @@ class Inbound extends Controller
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
-        /*
-        try{
-            $recipient = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID')[0] ?? null;
-            $message = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric')[0] ?? null;
-            $messageID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-MessageControl/@messageID')[0] ?? null;
-            $senderID = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@senderID')[0] ?? null;
-            $securityCode = (string)$wctp->xpath('/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Originator/@securityCode')[0] ?? null;
-        }
-        catch(Exception $e )
-        {
-            return $this->showError(302, 'XML Validation Error',
-                'recipientID, wctp-Alphanumeric, MessageID, senderID, and securityCode are required.');
-        }
-
-        if( is_null($recipient) || is_null($message) || is_null($messageID) || is_null($senderID) || is_null($securityCode) )
-        {
-            return $this->showError(302, 'XML Validation Error',
-                'recipientID, wctp-Alphanumeric, MessageID, senderID, and securityCode are required.');
-        }
-        */
 
         $recipientXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-SubmitHeader/wctp-Recipient/@recipientID';
         $messageXPath = '/wctp-Operation/wctp-SubmitRequest/wctp-Payload/wctp-Alphanumeric';
@@ -67,7 +47,7 @@ class Inbound extends Controller
 
         $wctpTransientMethodOperation = $wctp->xpath('/wctp-Operation/wctp-SubmitClientMessage')[0] ?? null;
 
-        if(!is_null($wctpTransientMethodOperation) && $wctpTransientMethodOperation->count() > 0)
+        if($wctpTransientMethodOperation !== null && $wctpTransientMethodOperation->count() > 0)
         {
             $this->wctpMethodType = 'SubmitClientMessage';
 
@@ -104,7 +84,7 @@ class Inbound extends Controller
             $message = null;
         }
 
-        if(is_null($message))
+        if($message === null)
         {
             try{
                 $message = (string)$wctp->xpath("/wctp-Operation/wctp-{$this->wctpMethodType}/wctp-Payload/wctp-TransparentData")[0] ?? null;
@@ -114,7 +94,7 @@ class Inbound extends Controller
                 $message = null;
             }
 
-            if(!is_null($message))
+            if($message !== null )
             {
                 $message = base64_decode($message);
             }
@@ -122,14 +102,14 @@ class Inbound extends Controller
 
         if($this->wctpMethodType === 'SubmitMessage' )
         {
-            if( is_null($messageID) )
+            if($messageID === null )
             {
                 return $this->showError(302, 'XML Validation Error',
                     'mnessageID is required.');
             }
         }
 
-        if( is_null($recipient) || is_null($message) || is_null($senderID) || is_null($securityCode) )
+        if( $recipient === null || $message === null || $senderID === null || $securityCode === null )
         {
             return $this->showError(302, 'XML Validation Error',
                 'recipientID, wctp-Alphanumeric, senderID, and securityCode (or miscInfo) are required.');
@@ -168,7 +148,7 @@ class Inbound extends Controller
         //we're assuming sender ids are unique here
         $host = EnterpriseHost::where('senderID', $senderID )->where('enabled', 1)->first();
 
-        if( is_null( $host ) )
+        if( $host === null )
         {
             return $this->showError( 401, 'Invalid senderID',
                 'senderID does not live on this system');
@@ -188,7 +168,7 @@ class Inbound extends Controller
 
         $carrier = Carrier::where('enabled', 1)->orderBy('priority')->first();
 
-        if( is_null($carrier)){
+        if( $carrier === null ){
             return $this->showError( 606, 'Service Unavailable',
                 'No upstream carriers are enabled');
         }

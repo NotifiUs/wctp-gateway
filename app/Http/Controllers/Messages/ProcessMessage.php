@@ -23,10 +23,10 @@ class ProcessMessage extends Controller
     public function __invoke(Message $message )
     {
         $carrier = Carrier::find( $message->carrier_id );
-        if( is_null( $carrier ) ){ return redirect()->back()->withErrors(['No carrier found']);}
+        if(  $carrier === null ){ return redirect()->back()->withErrors(['No carrier found']);}
 
         $host = EnterpriseHost::find( $message->enterprise_host_id );
-        if( is_null( $host ) ){ return redirect()->back()->withErrors(['No enterprise host found']);}
+        if( $host === null ){ return redirect()->back()->withErrors(['No enterprise host found']);}
 
         if( $message->direction == 'outbound' )
         {

@@ -36,7 +36,7 @@ class SendEmailFailedLoginNotification implements ShouldQueue
     {
         $user = User::where('email', $event->credentials['email'] )->first();
 
-        if( is_null( $user ) )
+        if( $user === null )
         {
             return false;
         }

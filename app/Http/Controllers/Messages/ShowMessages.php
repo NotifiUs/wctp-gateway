@@ -20,7 +20,7 @@ class ShowMessages extends Controller
         $statusList = collect(Message::distinct('status')->get('status')->toArray() ?? [])->flatten();
         $statusFilter = $request->get('status') ?? null;
 
-        if( ! is_null( $direction ) && $direction == 'inbound' ){
+        if(  $direction !== null && $direction == 'inbound' ){
             if($statusFilter) {
                 $messages = Message::where( 'direction', 'inbound' )->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
             }
@@ -29,7 +29,7 @@ class ShowMessages extends Controller
             }
 
         }
-        elseif( ! is_null( $direction ) && $direction == 'outbound' ){
+        elseif(  $direction !== null && $direction == 'outbound' ){
             if($statusFilter) {
                 $messages = Message::where( 'direction', 'outbound' )->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
             }

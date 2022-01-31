@@ -14,7 +14,7 @@ class ServerStats
     public static function advanced()
     {
         $advanced = Redis::get('advanced_stats');
-        if( is_null( $advanced) )
+        if( $advanced === null )
         {
             $advanced['load'] =     self::getLoad();
             $advanced['uptime'] =   self::getUptime();
@@ -36,7 +36,7 @@ class ServerStats
     {
         $server = Redis::get('server_stats');
 
-        if( is_null( $server ) )
+        if($server === null )
         {
             $server['hostname'] =   self::getHostname();
             $server['ip'] =         self::getIpAddress();

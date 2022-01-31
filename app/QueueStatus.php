@@ -11,7 +11,7 @@ class QueueStatus
     {
         $queue = Redis::get('queue_status');
 
-        if( is_null( $queue ) )
+        if(  $queue === null )
         {
             $queue = 0;
             $artisan = base_path('artisan') ;

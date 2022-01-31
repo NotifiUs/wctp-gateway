@@ -23,19 +23,19 @@ class PrimaryHandler extends Controller
     {
         $this->number = Number::where('enabled', 1)->where('identifier', $identifier)->first();
 
-        if( is_null( $this->number ) ){
+        if( $this->number === null ){
             return $this->respond();
         }
 
         $this->host = EnterpriseHost::where('enabled', 1)->where('id', $this->number->enterprise_host_id )->first();
-        if( is_null( $this->host ) )
+        if( $this->host === null )
         {
             return $this->respond();
         }
 
         $this->carrier = Carrier::where('enabled',1)->where('id', $this->number->carrier_id )->first();
 
-        if( is_null( $this->carrier ) ){
+        if(  $this->carrier === null ){
             return $this->respond();
         }
 

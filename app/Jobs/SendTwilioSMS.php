@@ -46,7 +46,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
         $this->messageID = $messageID;
         $this->reply_with = $reply_with;
         $this->from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
-        if( is_null( $this->from ) )
+        if( $this->from === null )
         {
             LogEvent::dispatch(
                 "Failure submitting message",
@@ -73,7 +73,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
         }
 
         try{
-            if( is_null( $this->from ) )
+            if(  $this->from === null )
             {
                 LogEvent::dispatch(
                     "Failure submitting message",

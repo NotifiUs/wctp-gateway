@@ -21,13 +21,13 @@ class StatusHandler extends Controller
     {
         $this->number = Number::where('enabled', 1 )->where('identifier', $identifier)->first();
 
-        if( is_null( $this->number ) ){
+        if( $this->number === null ){
             return $this->respond();
         }
 
         $this->carrier = Carrier::where('enabled',1)->where('id', $this->number->carrier_id )->first();
 
-        if( is_null( $this->carrier ) ){
+        if(  $this->carrier === null ){
             return $this->respond();
         }
 
@@ -49,7 +49,7 @@ class StatusHandler extends Controller
         }
 
         $message = Message::where('carrier_message_uid', $carrier_uid )->first();
-        if( is_null( $message) )
+        if(  $message === null )
         {
             return $this->respond();
         }
