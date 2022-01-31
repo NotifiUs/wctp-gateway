@@ -8,7 +8,6 @@ use App\Jobs\LogEvent;
 use App\EnterpriseHost;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use FakerProviderAnimals\Animals;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -28,8 +27,7 @@ class CreateHost extends Controller
         ]);
 
         $faker = Faker\Factory::create();
-        $faker->addProvider(new Animals($faker));
-        $senderID = Str::slug( "{$faker->safeColorName} {$faker->animal()}" );
+        $senderID = Str::slug( "{$faker->safeColorName} {$faker->word()}" );
         $host_type = 'amtelco';
         $enabled = 0;
         try{

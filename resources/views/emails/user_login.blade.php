@@ -1,19 +1,20 @@
 @component('mail::message')
-    # User login
+# User login
 
-    Your account was logged in at {{ config('app.name') }}.
-    If this was you, please ignore this email.
+Your account was logged in at {{ config('app.name') }}.
+If this was you, please ignore this email.
 
-    @component('mail::panel')
-        If this wasn't you, please change your password immediately.
-    @endcomponent
+@component('mail::panel')
+If this wasn't you, please change your password immediately.
+@endcomponent
 
-    @component('mail::button', ['url' => secure_url('/password/reset')])
-        Reset Password
-    @endcomponent
+@component('mail::button', ['url' => secure_url('/password/reset')])
+Reset Password
+@endcomponent
 
-    Thanks,<br>
-    {{ config('app.name') }}
+Thanks,
 
-    **Server**: {{ $host }}
+{{ config('app.name') }}
+
+**Server**: {{ $host }}
 @endcomponent

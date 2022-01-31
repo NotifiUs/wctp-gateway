@@ -28,12 +28,12 @@ class SendEmailLoginNotification implements ShouldQueue
      */
     public function handle(Login $event)
     {
-        Mail::to( $event->credentials['email'] )->send(new LoginEmail());
+        Mail::to( $event->user['email'] )->send(new LoginEmail());
     }
 
     public function shouldQueue( Login $event )
     {
-        $user = User::where('email', $event->credentials['email'] )->first();
+        $user = User::where('email', $event->user['email'] )->first();
 
         if( $user === null )
         {
