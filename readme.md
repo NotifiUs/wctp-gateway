@@ -16,19 +16,29 @@ Ardently crafted for the Amtelco and [NAEO](https://www.naeo.org) community, you
 
 The modern WCTP engine brings the following features and more:
 
--  Create and manage Enterprise Host credentials
--  Bring your own Twilio or ThinQ accounts
--  Support for using Twilio Messaging Services or Phone Numbers
--  Carrier priority
--  TLS/SSL required by default
--  Email login notifications
--  Work's out of the box with Twilio's WhatsApp integration
+- Create and manage Enterprise Host credentials
+
+- Bring your own Twilio or ThinQ accounts
+
+- Support for using Twilio Messaging Services or Phone Numbers
+
+- Carrier priority
+
+- TLS/SSL required by default
+
+- Email login notifications
+
+- Work's out of the box with Twilio's WhatsApp integration
 
 **Coming Soon**
--  Improved fail-over between carriers
--  Two additional telecom API providers
--  A generic webhook API provider
--  MergeComm scripting integration for Amtelco ecosystems
+
+- Improved fail-over between carrier
+
+- Two additional telecom API providers
+
+- A generic webhook API provider
+
+- MergeComm scripting integration for Amtelco ecosystems
 
 ## Status
 
@@ -45,12 +55,17 @@ The latest tagged version is:
 
 We use application, language, and OS features that require the following tools and technologies:
 
--  **Ubuntu** linux
--  **`php` 8.0+** for web application scripting
--  **nginx with `php-fpm`** for web server
--  **`redis-server`** for caching/queue
--  **`mysql`** for storage
--  **`supervisord`** to watch queue processes
+- **Ubuntu** linux
+
+- **`php` 8.0+** for web application scripting
+
+- **nginx with `php-fpm`** for web server
+
+- **`redis-server`** for caching/queue
+
+- **`mysql`** for storage
+
+- **`supervisord`** to watch queue processes
 
 We utilize linux specific methods of obtaining data about the hardware/server (such as memory, disk space, CPU, etc.)
 Because of this, we require the use of a linux host. We generally recommend Ubuntu for most users. 
@@ -61,12 +76,14 @@ WCTP Gateway is a [Laravel](https://laravel.com) web-application that implements
 This system cannot send SMS messages without a supported carrier (Telecom API provider) like Twilio or ThinQ. 
 
 ### Front End
+
 The web portal UI is built on [Bootstrap](https://getbootstrap.com) with some [TailwindCSS](https://tailwindcss.com) sprinkled in.
 We use [Font Awesome](https://fontawesome.com/) free for icons throughout the application. 
 For various splash pages (errors, etc), we use open source illustrations from [UnDraw](https://undraw.co/illustrations).
 
 
 ### Laravel Application
+
 You can setup and run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, and just about any modern PHP web environment. 
 Start from a single-server appliance setup and grow into a full blown load balancing and clustering setup.
 
@@ -86,9 +103,10 @@ Please see [SECURITY.md](SECURITY.md)
 
 WCTP Gateway is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-
 ## Tested compatability list
 
 -  Amtelco WCTP 2-Way Messaging API
+
 -  InfoRad Messaging Gateway
+
 -  NotePage PageGate / PageGate Platinum
