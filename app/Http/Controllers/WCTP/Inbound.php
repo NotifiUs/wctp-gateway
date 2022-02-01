@@ -62,14 +62,7 @@ class Inbound extends Controller
             $recipient = (string)$wctp->xpath($recipientXPath)[0] ?? null;
             $senderID = (string)$wctp->xpath($senderIDXPath)[0] ?? null;
             $securityCode = (string)$wctp->xpath($securityCodeXPath)[0] ?? null;
-            if($this->wctpMethodType === 'SubmitMessage' )
-            {
-                $messageID = (string)$wctp->xpath($messageIDXPath)[0] ?? null;
-            }
-            else
-            {
-                $messageID = null;
-            }
+            $messageID = (string)$wctp->xpath($messageIDXPath)[0] ?? null;
         }
         catch(Exception $e )
         {
