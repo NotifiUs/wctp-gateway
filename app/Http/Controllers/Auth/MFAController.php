@@ -23,10 +23,10 @@ class MFAController extends Controller
         $this->middleware('auth');
 
         try{
-            $this->tfa = new TwoFactorAuth( config('app.name') );
+            $parsed = parse_url( config('app.url'), PHP_URL_HOST );
+            $this->tfa = new TwoFactorAuth( $parsed ?? config('app.name') );
         }
         catch( Exception $e ){ abort(500); }
-
     }
 
     public function show()
