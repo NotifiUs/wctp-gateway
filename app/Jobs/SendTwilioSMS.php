@@ -36,7 +36,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 
     protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
-    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int $messageID, $reply_with  )
+    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int|null $messageID, $reply_with  )
     {
         $this->queue = 'outbound';
         $this->host = $host;
