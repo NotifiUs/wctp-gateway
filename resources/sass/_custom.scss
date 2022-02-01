@@ -3,8 +3,13 @@ body {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.06);
 }
 
-.card, .list-group, .table, .alert, .btn, .pagination {
-    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+.card,
+.list-group,
+.table,
+.alert,
+.btn,
+.pagination {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075) !important;
 }
 
 .card-body {
@@ -25,7 +30,7 @@ body {
 }
 
 .navbar {
-    border-bottom: 1px solid rgba(0, 0, 0, .18);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .alert {
@@ -49,7 +54,8 @@ label {
     border-bottom: 0;
 }
 
-.list-group-item.active, .page-item.active .page-link {
+.list-group-item.active,
+.page-item.active .page-link {
     z-index: 2;
     color: #343a40;
     background-color: #EDF2F7;
@@ -99,10 +105,9 @@ a.text-indigo:hover {
 }
 
 a.text-orange:hover {
-    color: #ca6410
+    color: #ca6410;
 }
 
-;
 .btn-orange {
     background-color: #fd7e14;
     color: #fff;

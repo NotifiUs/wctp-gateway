@@ -82,17 +82,15 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
                 return $this->release(60 );
             }
 
+            $params = [
+                'messagingServiceSid' => $this->from->identifier,
+                'body' => $this->message
+            ];
+
             if( $this->from->getType() == 'PN')
             {
                 $params = [
                     'from' => $this->from->e164,
-                    'body' => $this->message
-                ];
-            }
-            else
-            {
-                $params = [
-                    'messagingServiceSid' => $this->from->identifier,
                     'body' => $this->message
                 ];
             }

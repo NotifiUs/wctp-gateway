@@ -43,6 +43,7 @@ class PrimaryHandler extends Controller
             return $this->respond();
         }
 
+        $reply_with = null;
 
         if( $this->carrier->api == 'twilio' )
         {
@@ -51,7 +52,6 @@ class PrimaryHandler extends Controller
             {
                 $reply_with = str_replace(['ok','okay'], '', $matches[0]);
             }
-            else{ $reply_with = null; }
 
             SaveMessage::dispatch(
                 $this->carrier->id,
@@ -75,7 +75,6 @@ class PrimaryHandler extends Controller
             {
                 $reply_with = trim( str_replace(['ok','okay'], '', $matches[0]));
             }
-            else{ $reply_with = null; }
 
             SaveMessage::dispatch(
                 $this->carrier->id,
