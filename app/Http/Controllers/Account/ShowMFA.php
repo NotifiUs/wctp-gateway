@@ -23,7 +23,8 @@ class ShowMFA extends Controller
         if( ! $user->mfa_secret )
         {
             try{
-                $tfa = new TwoFactorAuth( config('app.name') );
+                $parsed = parse_url( config('app.url'), PHP_URL_HOST );
+                $tfa = new TwoFactorAuth( $parsed ?? config('app.name') );
                 $secret = $tfa->createSecret();
                 $image = $tfa->getQRCodeImageAsDataUri( $user->email , $secret);
             }
