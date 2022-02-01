@@ -45,12 +45,12 @@ The latest tagged version is:
 
 We use application, language, and OS features that require the following tools and technologies:
 
-- **Ubuntu** linux
-- **`php` 8.0+** for web application scripting
-- **nginx with `php-fpm`** for web server
-- **`redis-server`** for caching/queue
-- **`mysql`** for storage
-- **`supervisord`** to watch queue processes
+-  **Ubuntu** linux
+-  **`php` 8.0+** for web application scripting
+-  **nginx with `php-fpm`** for web server
+-  **`redis-server`** for caching/queue
+-  **`mysql`** for storage
+-  **`supervisord`** to watch queue processes
 
 We utilize linux specific methods of obtaining data about the hardware/server (such as memory, disk space, CPU, etc.)
 Because of this, we require the use of a linux host. We generally recommend Ubuntu for most users. 
