@@ -39,7 +39,6 @@ class MarkPendingAsFailed extends Command
      */
     public function handle()
     {
-        //foreach( Message::where('status', 'pending')->where()->get() as $msg )
 
         foreach( Message::where('status', 'pending')->where('direction', 'inbound')->get() as $msg )
         {
@@ -64,7 +63,6 @@ class MarkPendingAsFailed extends Command
         $this->info('Complete...!');
 
         return 0;
-
 
     }
 }

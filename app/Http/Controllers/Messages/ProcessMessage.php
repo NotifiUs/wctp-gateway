@@ -50,24 +50,20 @@ class ProcessMessage extends Controller
                     return redirect()->back()->withErrors([$e->getMessage()]);
                 }
             }
-            else
-            {
-                return redirect()->back()->withErrors(['Carrier api not supported']);
-            }
-        }
-        else
-        {
-            // reprocess inbound message
-            // we don't care about logging this as a message so we don't recreate a message
-            $message->delivered_at = null;
-            $message->failed_at = null;
-            $message->submitted_at = Carbon::now( Auth::user()->timezone );
-            $message->processed_at = null;
-            $message->status = 'pending';
-            $message->save();
 
-            SubmitToEnterpriseHost::dispatch( $message );
+            return redirect()->back()->withErrors(['Carrier api not supported']);
         }
+
+        // reprocess inbound message
+        // we don't care about logging this as a message so we don't recreate a message
+        $message->delivered_at = null;
+        $message->failed_at = null;
+        $message->submitted_at = Carbon::now( Auth::user()->timezone );
+        $message->processed_at = null;
+        $message->status = 'pending';
+        $message->save();
+
+        SubmitToEnterpriseHost::dispatch( $message );
 
         return redirect()->back()->withStatus('Message has been re-processed!');
     }

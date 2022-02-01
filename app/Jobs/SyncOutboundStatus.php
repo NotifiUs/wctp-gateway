@@ -199,13 +199,8 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
                 return $this->release(60);
             }
         }
-        else
-        {
-            //unsupported carrier
-            return $this->release(60);
-        }
 
-       return;
+        return $this->release(60);
     }
 
     public function uniqueId()
