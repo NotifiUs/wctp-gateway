@@ -25,7 +25,7 @@
         @include('layouts.tls-warning')
     @endif
     <main class="py-4">
-        <div class="container">
+        <div class="container-fluid max-width-dashboard">
             <div class="row justify-content-center">
                 @if( Auth::check() )
                     @if( ! Str::startsWith( request()->path(), 'account' )

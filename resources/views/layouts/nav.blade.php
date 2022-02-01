@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm  navbar-light bg-white shadow-sm">
-    <div class="container">
+    <div class="container-fluid max-width-dashboard">
         @include('layouts.brand')
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
