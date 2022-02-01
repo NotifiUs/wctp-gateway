@@ -39,7 +39,6 @@ The latest tagged version is:
 
 [![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
 
-
 > Commercial installation and support is available through [NotifiUs, LLC](http://notifi.us)
 
 ## Requirements
@@ -66,7 +65,6 @@ This system cannot send SMS messages without a supported carrier (Telecom API pr
 The web portal UI is built on [Bootstrap](https://getbootstrap.com) with some [TailwindCSS](https://tailwindcss.com) sprinkled in.
 We use [Font Awesome](https://fontawesome.com/) free for icons throughout the application. 
 For various splash pages (errors, etc), we use open source illustrations from [UnDraw](https://undraw.co/illustrations).
-
 
 ### Laravel Application
 
