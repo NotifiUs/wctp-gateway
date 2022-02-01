@@ -55,6 +55,7 @@ class Inbound extends Controller
             $messageXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-Payload/wctp-Alphanumeric';
             $senderIDXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-ClientOriginator/@senderID';
             $securityCodeXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-ClientOriginator/@miscInfo';
+            $messageIDXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-ClientMessageControl/@messageID';
         }
 
         try{
