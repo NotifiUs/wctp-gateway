@@ -219,7 +219,7 @@ class Inbound extends Controller
         $validator = Validator::make([
             'recipient' => $data['recipient'],
         ],[
-            'recipient' => 'required|string|size:10',
+            'recipient' => 'required|string',
         ]);
 
         if( $validator->fails() )
