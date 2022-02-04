@@ -27,8 +27,8 @@ class CreateHost extends Controller
         ]);
 
         $faker = Faker\Factory::create();
-        $senderID = Str::slug( "{$faker->safeColorName} {$faker->word()}" );
-        $host_type = 'amtelco';
+        $senderID = Str::slug( "{$faker->safeColorName} {$faker->citySuffix()}" );
+        $host_type = 'wctp';
         $enabled = 0;
         try{
             $securityCode = bin2hex( random_bytes( 8 ) );
