@@ -62,13 +62,17 @@ class Inbound extends Controller
             $recipient = (string)$wctp->xpath($recipientXPath)[0] ?? null;
             $senderID = (string)$wctp->xpath($senderIDXPath)[0] ?? null;
             $securityCode = (string)$wctp->xpath($securityCodeXPath)[0] ?? null;
-            $messageID = (string)$wctp->xpath($messageIDXPath)[0] ?? null;
         }
         catch(Exception $e )
         {
             return $this->showError(302, 'XML Validation Error',
                 'recipientID, wctp-Alphanumeric, senderID, and securityCode (or miscInfo) are required.');
         }
+
+        try{
+            $messageID = (string)$wctp->xpath($messageIDXPath)[0] ?? null;
+        }
+        catch(Exception $e){ $messageID = null; }
 
         try{
             $message = (string)$wctp->xpath($messageXPath)[0] ?? null;
@@ -99,7 +103,7 @@ class Inbound extends Controller
             if($messageID === null )
             {
                 return $this->showError(302, 'XML Validation Error',
-                    'mnessageID is required.');
+                    'messageID is required.');
             }
         }
 
