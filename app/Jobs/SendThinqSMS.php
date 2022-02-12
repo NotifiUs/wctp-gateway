@@ -43,7 +43,7 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
             );
-            return $this->release(60 );
+            $this->release(60 );
         }
     }
 
@@ -70,17 +70,27 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
                     "Failed decrypting carrier api token",
                     get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
                 );
-                return $this->release(60 );
+                $this->release(60 );
             }
 
-            $result = $thinq->post("account/{$this->carrier->thinq_account_id}/product/origination/sms/send");
+            try{
+                $result = $thinq->post("account/{$this->carrier->thinq_account_id}/product/origination/sms/send");
+            }
+            catch( Exception $e ){
+                LogEvent::dispatch(
+                    "No message GUID returned from carrier",
+                    get_class( $this ), 'error', json_encode($e->getMessage()), null
+                );
+                $this->release(60 );
+            }
+
             if( $result->getStatusCode() != 200 )
             {
                 LogEvent::dispatch(
                     "Failure submitting message",
                     get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
                 );
-                return $this->release(60 );
+                $this->release(60 );
             }
             $body = $result->getBody();
             $json = $body->getContents();
@@ -91,7 +101,7 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
                     "No message GUID returned from carrier",
                     get_class( $this ), 'error', json_encode($arr), null
                 );
-                return $this->release(60 );
+                $this->release(60 );
             }
 
             SaveMessage::dispatch(
@@ -111,7 +121,7 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
 
         }, function () {
             // Could not obtain lock...try again after 1 second (1msg per second rate limit)
-            return $this->release(1 );
+            $this->release(1 );
         });
 
     }
