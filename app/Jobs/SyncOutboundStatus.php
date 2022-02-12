@@ -146,7 +146,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
             if( ! isset( $arr['delivery_notifications']))
             {
                 LogEvent::dispatch(
-                    "Failure synchronizing message status",
+                    "Failure getting delivery notifications",
                     get_class( $this ), 'error', json_encode([$arr, $arr['delivery_notifications']]), null
                 );
                 $this->release(60);
@@ -154,6 +154,11 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
 
             $ts = null;
             $latest_update = null;
+
+            LogEvent::dispatch(
+                "Delivery Notifications",
+                get_class( $this ), 'info', json_encode([$arr['delivery_notifications']]), null
+            );
 
             foreach( $arr['delivery_notifications'] as $dn )
             {
