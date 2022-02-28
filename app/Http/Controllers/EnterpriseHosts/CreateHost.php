@@ -42,7 +42,7 @@ class CreateHost extends Controller
         ], [
             'senderID' => 'required|string|alpha_dash|unique:enterprise_hosts,senderID|max:128',
             'securityCode' => 'required|string|max:16',
-            'type' => 'required|string|in:amtelco',
+            'type' => 'required|string|in:amtelco,wctp',
             'enabled'=> 'required|boolean|in:0',
         ]);
 
