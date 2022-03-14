@@ -117,7 +117,7 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
                 $arr['guid'],
                 'outbound'
             );
-            return;
+            return 0;
 
         }, function () {
             // Could not obtain lock...try again after 1 second (1msg per second rate limit)

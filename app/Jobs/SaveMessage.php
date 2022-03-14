@@ -6,7 +6,6 @@ use Exception;
 use App\Message;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use App\Jobs\SubmitToEnterpriseHost;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

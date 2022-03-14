@@ -8,6 +8,7 @@ use App\Checklist;
 use Carbon\Carbon;
 use App\ServerStats;
 use App\QueueStatus;
+use Illuminate\View\View;
 
 class ShowDashboard extends Controller
 {
@@ -16,7 +17,7 @@ class ShowDashboard extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke()
+    public function __invoke(): View
     {
         $queue = QueueStatus::get();
         $server = ServerStats::get();
@@ -28,12 +29,12 @@ class ShowDashboard extends Controller
         $outboundCount = Message::where('direction', 'outbound')->where('created_at', '>=', $activityPeriod )->count();
 
         return view('home')
-            ->with('server', $server )
             ->with('queue', $queue )
+            ->with('events', $events )
+            ->with('server', $server )
             ->with('checklist', $checklist )
             ->with('inboundCount', $inboundCount )
             ->with('outboundCount', $outboundCount )
-            ->with('activityPeriod', $activityPeriod )
-            ->with('events', $events );
+            ->with('activityPeriod', $activityPeriod );
     }
 }

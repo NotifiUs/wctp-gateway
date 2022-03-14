@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\WCTP;
 
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
 class BadMethod extends Controller
 {
-    public function __invoke()
+    public function __invoke(): Response
     {
         $code = 300;
         $text = 'Operation not supported';

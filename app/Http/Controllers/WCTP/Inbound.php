@@ -4,21 +4,40 @@ namespace App\Http\Controllers\WCTP;
 
 use Exception;
 use App\Carrier;
-use SimpleXMLElement;
 use App\Jobs\LogEvent;
 use App\EnterpriseHost;
-use App\Jobs\SendThinqSMS;
-use App\Jobs\SendTwilioSMS;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Drivers\DriverFactory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class Inbound extends Controller
 {
-    public $wctpMethodType = 'SubmitRequest';
+    public string $wctpMethodType = 'SubmitRequest';
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): View
     {
+        $carrier = Carrier::where('enabled', 1)->orderBy('priority')->first();
+
+        if( $carrier === null ){
+            return $this->showError( 606, 'Service Unavailable',
+                'No upstream carriers are enabled');
+        }
+
+        try{
+            //Note to refactor?
+            // I tried returning TwilioDriver from construct but it didn't work
+            // Moved to its own method which returns the driver fine.
+            $driverFactory = new DriverFactory( $carrier->api );
+            $driver = $driverFactory->loadDriver();
+        }
+        catch( Exception $e )
+        {
+            return $this->showError( 604, 'Internal Server Error',
+                'This carrier API is not yet implemented');
+        }
+
         $xmlCheck = $request->getContent() ?? '';
 
         libxml_use_internal_errors(true);
@@ -34,7 +53,6 @@ class Inbound extends Controller
         libxml_clear_errors();
 
         if( $wctp === false || $xmlError !== false ) {
-
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
@@ -128,7 +146,7 @@ class Inbound extends Controller
             }
         }
 
-        $paramCheck = $this->checkParams([
+        $paramCheck = $this->checkParams($driver, [
             'recipient' => $recipient,
             'message' => $message,
             'senderID' => $senderID,
@@ -164,26 +182,12 @@ class Inbound extends Controller
                 'Unable to decrypt securityCode');
         }
 
-        $carrier = Carrier::where('enabled', 1)->orderBy('priority')->first();
-
-        if( $carrier === null ){
-            return $this->showError( 606, 'Service Unavailable',
-                'No upstream carriers are enabled');
+        try{
+            $driver->queueOutbound( $host, $carrier, $recipient, $message, $messageID, $reply_with  );
         }
-
-        if( $carrier->api == 'twilio' )
-        {
-            SendTwilioSMS::dispatch( $host, $carrier, $recipient, $message, $messageID, $reply_with );
-
-        }
-        elseif( $carrier->api == 'thinq' )
-        {
-            SendThinqSMS::dispatch( $host, $carrier, $recipient, $message, $messageID, $reply_with );
-        }
-        else
-        {
+        catch(Exception $e){
             return $this->showError( 604, 'Internal Server Error',
-                'This carrier API is not yet implemented');
+                'Unable to queue message for ' . $carrier->api );
         }
 
         return view('WCTP.wctp-Confirmation')
@@ -191,7 +195,7 @@ class Inbound extends Controller
             ->with('successText', 'Message queued for delivery' );
     }
 
-    private function showError( $code, $text, $desc )
+    private function showError( $code, $text, $desc ): View
     {
         LogEvent::dispatch(
             "Failed WCTP connection",
@@ -214,7 +218,7 @@ class Inbound extends Controller
         }
     }
 
-    private function checkParams( array $data )
+    private function checkParams( $driver, array $data ): array
     {
         $validator = Validator::make([
             'recipient' => $data['recipient'],
@@ -235,7 +239,7 @@ class Inbound extends Controller
         $validator = Validator::make([
             'message' => $data['message'],
         ],[
-            'message' => 'required|string|max:1600', //thinq is 910, twilio is 1600
+            'message' => 'required|string|max:' . $driver->getMaxMessageLength(),
         ]);
 
         if( $validator->fails() )
@@ -244,7 +248,7 @@ class Inbound extends Controller
                 'success' => false,
                 'errorCode' => 411,
                 'errorText' => 'Message exceeds allowable length',
-                'errorDesc' => 'Message exceeds allowable message length of 1600',
+                'errorDesc' => 'Message exceeds allowable message length of ' . $driver->getMaxMessageLength(),
             ];
         }
 

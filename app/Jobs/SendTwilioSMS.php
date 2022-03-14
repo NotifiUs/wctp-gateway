@@ -8,10 +8,8 @@ use Carbon\Carbon;
 use App\EnterpriseHost;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\App;
 use Illuminate\Queue\SerializesModels;
 use Twilio\Rest\Client as TwilioClient;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,7 +18,6 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 {
-
     public $tries = 10;
     public $timeout = 60;
     public $uniqueFor = 3600;
@@ -142,8 +139,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
             'outbound'
         );
 
-        return;
-
+        return 0;
     }
 
     public function uniqueId()
