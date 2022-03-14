@@ -2,6 +2,7 @@
 
 namespace App\Drivers;
 
+use App\Message;
 use Exception;
 use App\Carrier;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use App\Jobs\SendTwilioSMS;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Twilio\Security\RequestValidator;
+use Twilio\Rest\Client as TwilioClient;
 
 class TwilioDriver implements Driver
 {
@@ -96,6 +98,58 @@ class TwilioDriver implements Driver
             $request->input('MessageSid'),
             'inbound'
         );
+    }
+
+    public function updateMessageStatus(Carrier $carrier, Message $message ): bool
+    {
+        //use twilio api to check status of message->carrier_uniquie_id
+        try{
+            $client = new TwilioClient(
+                $carrier->twilio_account_sid,
+                decrypt( $carrier->twilio_auth_token )
+            );
+        }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Failure synchronizing message status",
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
+            );
+            return false;
+        }
+
+        try{
+            $carrier_message = $client->messages( $message->carrier_message_uid )->fetch();
+            $message->status = $carrier_message->status;
+
+            switch (strtolower($carrier_message->status)) {
+                case "sent":
+                case "delivrd":
+                case "delivered":
+                    $message->delivered_at = Carbon::now();
+                    break;
+                case "rejectd":
+                case "expired":
+                case "deleted":
+                case "unknown":
+                case "failed":
+                case "undelivered":
+                case "undeliv":
+                default:
+                    $message->failed_at = Carbon::now();
+                    break;
+            }
+
+            $message->save();
+        }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Failure synchronizing message status",
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
+            );
+            return false;
+        }
+
+        return true;
     }
 
 }
