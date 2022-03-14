@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Exception;
 use App\Drivers\DriverFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,15 +9,10 @@ class Number extends Model
 {
     private $driver;
 
-    public function __construct()
+    private function setupDriver()
     {
-        parent::__construct();
-
-        try{
-            $driverFactory = new DriverFactory( $this->carrier->api );
-            $this->driver = $driverFactory->loadDriver();
-        }
-        catch( Exception $e ) {}
+        $driverFactory = new DriverFactory( $this->carrier->api );
+        $this->driver = $driverFactory->loadDriver();
     }
 
     public function carrier()
@@ -28,21 +22,25 @@ class Number extends Model
 
     public function getType(): string
     {
+        $this->setupDriver();
         return $this->driver->getType( $this->identifier );
     }
 
     public function getFriendlyType(): string
     {
+        $this->setupDriver();
         return $this->driver->getFriendlyType( $this->identifier );
     }
 
     public function provision(): bool
     {
+        $this->setupDriver();
         return $this->driver->provisionNumber($this->carrier, $this->identifier);
     }
 
     public function getCarrierDetails(): array
     {
+        $this->setupDriver();
         return $this->driver->getCarrierDetails( $this->carrier, $this->identifier );
     }
 }
