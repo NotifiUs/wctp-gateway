@@ -154,11 +154,6 @@ class ThinQDriver implements Driver
         $ts = null;
         $latest_update = null;
 
-        LogEvent::dispatch(
-            "Delivery Notifications",
-            get_class( $this ), 'info', json_encode([$arr['delivery_notifications']]), null
-        );
-
         foreach( $arr['delivery_notifications'] as $dn )
         {
             if( $ts === null || Carbon::parse( $dn['timestamp'] ) >= $ts )
@@ -170,6 +165,15 @@ class ThinQDriver implements Driver
 
         if(  $latest_update !== null )
         {
+            if($message->status !== $latest_update['send_status'])
+            {
+                // Only send notifications when there is a new update
+                LogEvent::dispatch(
+                    "Delivery Notifications Update",
+                    get_class( $this ), 'info', json_encode([$message->toArray(), $arr['delivery_notifications']]), null
+                );
+            }
+
             switch( strtolower($latest_update['send_status']) ) {
                 case "sent":
                 case "delivrd":

@@ -20,18 +20,15 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
 {
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $driver;
     public int $tries = 10;
     public int $timeout = 60;
     public int $uniqueFor = 3600;
-
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public bool $deleteWhenMissingModels = true;
-
     public Message|null $message;
     public Carrier|null $carrier;
+    public bool $deleteWhenMissingModels = true;
 
     public function __construct( Message $message )
     {

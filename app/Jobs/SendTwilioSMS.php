@@ -15,22 +15,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-
 class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 {
-    public $tries = 10;
-    public $timeout = 60;
-    public $uniqueFor = 3600;
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Delete the job if its models no longer exist.
-     *
-     * @var bool
-     */
-    public $deleteWhenMissingModels = true;
-
+    public int $tries = 10;
+    public int $timeout = 60;
+    public int $uniqueFor = 3600;
+    public bool $deleteWhenMissingModels = true;
     protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
     public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int|null $messageID, $reply_with  )
@@ -49,7 +41,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
             );
-            return $this->release(60 );
+            $this->release(60 );
         }
     }
 
@@ -66,7 +58,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode($e->getMessage()), null
             );
-            return $this->release(60 );
+            $this->release(60 );
         }
 
         try{
@@ -76,7 +68,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
                     "Failure submitting message",
                     get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
                 );
-                return $this->release(60 );
+                $this->release(60 );
             }
 
             $params = [
@@ -122,7 +114,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
                 "Failure sending message",
                 get_class( $this ), 'error', json_encode([$e->getMessage(), $this->from]), null
             );
-            return $this->release(60 );
+            $this->release(60 );
         }
 
         SaveMessage::dispatch(

@@ -14,7 +14,7 @@ class CheckPendingOutbound extends Command
     /**
      * The number of hours to check for pending messages
      */
-    public $hours = 24;
+    public int $hours = 24;
 
     /**
      * The name and signature of the console command.
@@ -29,7 +29,6 @@ class CheckPendingOutbound extends Command
      * @var string
      */
     protected $description = 'Attempts to check and update any pending outbound messages against carrier status';
-
 
     /**
      * Execute the console command.

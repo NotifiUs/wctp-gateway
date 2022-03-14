@@ -21,7 +21,7 @@ class MarkMessagesSent extends Command
      *
      * @var string
      */
-    protected $description = 'Marks outbhound messages that are pending as sent. This should only be used for troubleshooting outbound message status sync.';
+    protected $description = 'Marks outbound messages that are pending as sent. This should only be used for troubleshooting outbound message status sync.';
 
     /**
      * Create a new command instance.

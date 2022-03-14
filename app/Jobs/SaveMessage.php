@@ -14,12 +14,11 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SaveMessage implements ShouldQueue, ShouldBeUnique
 {
-    public $tries = 10;
-    public $timeout = 60;
-    public $uniqueFor = 3600;
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $tries = 10;
+    public int $timeout = 60;
+    public int $uniqueFor = 3600;
     protected $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction;
 
     public function __construct( $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction )
@@ -57,14 +56,13 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
             $message->save();
         }
         catch( Exception $e ){
-            return $this->release(60 );
+            $this->release(60 );
         }
 
         if( $message->direction == 'inbound' )
         {
             SubmitToEnterpriseHost::dispatch( $message );
         }
-
     }
 
     public function uniqueId()

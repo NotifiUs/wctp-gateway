@@ -17,14 +17,12 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SendThinqSMS implements ShouldQueue, ShouldBeUnique
 {
-    public $tries = 10;
-    public $timeout = 60;
-    public $uniqueFor = 3600;
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $deleteWhenMissingModels = true;
-
+    public int $tries = 10;
+    public int $timeout = 60;
+    public int $uniqueFor = 3600;
+    public bool $deleteWhenMissingModels = true;
     protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
     public function  __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int $messageID, $reply_with  )
@@ -37,6 +35,7 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
         $this->messageID = $messageID;
         $this->reply_with = $reply_with;
         $this->from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
+
         if( $this->from === null )
         {
             LogEvent::dispatch(
@@ -123,7 +122,6 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
             // Could not obtain lock...try again after 1 second (1msg per second rate limit)
             $this->release(1 );
         });
-
     }
 
     public function uniqueId()

@@ -23,6 +23,11 @@ class MarkPendingAsFailed extends Command
     protected $description = 'Marks all pending messages as failed so they will not continue to retry.';
 
     /**
+     * How long until we give-up and fail a pending message
+     */
+    private int $failMessageTimeInHours = 5;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -47,7 +52,7 @@ class MarkPendingAsFailed extends Command
             $this->info( Carbon::now() );
             $this->info(  'Difference: ' . Carbon::now()->diffInMinutes( Carbon::parse($msg->created_at))  );
 
-            if( Carbon::now()->diffInMinutes( Carbon::parse($msg->created_at)) > 5 )
+            if( Carbon::now()->diffInMinutes( Carbon::parse($msg->created_at)) > $this->failMessageTimeInHours )
             {
                 $this->info('Failing...' . $msg->id );
                 $msg->status = 'failed';
@@ -63,6 +68,5 @@ class MarkPendingAsFailed extends Command
         $this->info('Complete...!');
 
         return 0;
-
     }
 }

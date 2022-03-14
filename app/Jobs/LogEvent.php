@@ -12,12 +12,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class LogEvent implements ShouldQueue
 {
-
-    public $tries = 10;
-    public $timeout = 60;
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $tries = 10;
+    public int $timeout = 60;
     protected $event, $source, $severity, $details, $user_id;
 
     public function __construct( $event, $source, $severity = 'info', $details = null, $user_id = null )
@@ -28,7 +26,6 @@ class LogEvent implements ShouldQueue
         $this->details = $details;
         $this->user_id = $user_id;
     }
-
 
     public function handle()
     {
@@ -43,8 +40,7 @@ class LogEvent implements ShouldQueue
             $event->save();
         }
         catch( Exception $e ){
-            return $this->release(60 );
+            $this->release(60 );
         }
-
     }
 }
