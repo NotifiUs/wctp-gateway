@@ -12,6 +12,9 @@ use App\Jobs\SendThinqSMS;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use GuzzleHttp\Client as Guzzle;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Exception\RequestException;
 
 class ThinQDriver implements Driver
 {
@@ -19,6 +22,16 @@ class ThinQDriver implements Driver
     private string $requestInputMessageKey = 'message';
     private string $requestInputUidKey = 'guid';
     private string $requestInputStatusKey = 'send_status';
+
+    public function getType( string $identifier ): string
+    {
+        return "PN";
+    }
+
+    public function getFriendlyType( string $identifier ): string
+    {
+        return "Phone Number";
+    }
 
     public function queueOutbound($host, $carrier, $recipient, $message, $messageID, $reply_with): void
     {
@@ -191,5 +204,198 @@ class ThinQDriver implements Driver
         }
 
         return true;
+    }
+
+    public function provisionNumber(Carrier $carrier, string $identifier): bool
+    {
+        $ipify = new Guzzle(['base_uri' => 'https://api.ipify.org']);
+
+        try{
+            $response = $ipify->get( '/');
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+        $ip = (string)$response->getBody();
+        $validator = Validator::make(['ip' => $ip], ['ip' => 'required|ip']);
+
+        if( $validator->fails() ) { Log::debug('IP validation failed' ); return false; }
+
+        try{
+            $thinq = new Guzzle([
+                'base_uri' => 'https://api.thinq.com',
+                'auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)],
+                'headers' => [ 'content-type' => 'application/json' ],
+            ]);
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage());return false; }
+
+        //get all current ip whitelists
+        $url = "/account/{$carrier->thinq_account_id}/product/origination/sms/ip";
+
+        try{
+            $res = $thinq->get($url);
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+        $hasIP = false;
+        $list = json_decode( (string)$res->getBody(), true );
+        foreach( $list['rows'] as $row )
+        {
+            if( $row['ip'] == $ip ){  $hasIP = true; break; }
+        }
+
+        //if our public ip is in the whitelist list, continue
+        //if our public ip is not in the whitlelist list, add it
+        if( ! $hasIP )
+        {
+            $url = "/account/{$carrier->thinq_account_id}/product/origination/sms/ip/{$ip}";
+            try{
+                $res = $thinq->post($url);
+            }
+            catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+        }
+
+        //get all current sms routing profiles
+        $url = "/account/{$carrier->thinq_account_id}/product/origination/sms/profile";
+        try{
+            $res = $thinq->get($url);
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+        $hasProfile = false;
+        $list = json_decode( (string)$res->getBody(), true );
+        $sms_routing_profile = '';
+
+        foreach( $list['rows'] as $row )
+        {
+            if( $row['name'] == $identifier )
+            {
+                $sms_routing_profile = $row['id'];
+                $hasProfile = true;
+                break;
+            }
+        }
+
+        //if our url is in the profile list, continue
+        //if our url is not in the profile list, add it
+        if( ! $hasProfile )
+        {
+            $webhook = secure_url("/sms/inbound/{$identifier}/primary" );
+            $body = [
+                "sms_routing_profile" => [
+                    'name' => $identifier,
+                    'url' => $webhook,
+                    'attachment_type' => 'url'
+                ]
+            ];
+
+            $url = "/account/{$carrier->thinq_account_id}/product/origination/sms/profile";
+            try{
+                $res = $thinq->post($url, ['body' => json_encode( $body ) ]);
+            }
+            catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+            $profile = json_decode( (string)$res->getBody(), true );
+
+            $sms_routing_profile = $profile['id'];
+        }
+        else
+        {
+            //update it so we enesure it has our most recent url
+            $webhook = secure_url("/sms/inbound/{$identifier}/primary" );
+            $body = [
+                "sms_routing_profile" => [
+                    'name' => $identifier,
+                    'url' => $webhook,
+                    'attachment_type' => 'url'
+                ]
+            ];
+
+            $url = "/account/{$carrier->thinq_account_id}/product/origination/sms/profile/{$sms_routing_profile}";
+            try{
+                $res = $thinq->put($url, ['body' => json_encode( $body ) ]);
+            }
+            catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+        }
+
+        //set our outbound message status url
+        //update it so we enesure it has our most recent url
+        $webhook = secure_url("/sms/callback/{$identifier}/status" );
+        $body = [
+            "settings" => [
+                'deliveryConfirmationUrl' => $webhook,
+                'deliveryNotificationType' => 'form-data',
+            ]
+        ];
+
+        $url = "/account/{$carrier->thinq_account_id}/product/origination/sms/settings/outbound";
+        try{
+            $res = $thinq->post($url, ['body' => json_encode( $body ) ]);
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+        //create a feature order to do the following:
+        //  enable SMS
+        //  associate sms routing profile
+        $body = [
+            "order" => [
+                "tns" => [
+                    [
+                        "sms_routing_profile_id" => $sms_routing_profile,
+                        "features" => [ "cnam" => false, "e911" => false, "sms" => true ],
+                        "did" => $identifier,
+                    ]
+                ]
+            ]
+        ];
+
+        $url = "/account/{$carrier->thinq_account_id}/origination/did/features/create";
+        try{
+            $res = $thinq->post($url, ['body' => json_encode( $body ) ]);
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+        $order = json_decode( (string)$res->getBody(), true );
+
+        // complete feature order
+        $url = "/account/{$carrier->thinq_account_id}/origination/did/features/complete/{$order['order']['id']}";
+        try{
+            $res = $thinq->post($url);
+        }
+        catch( Exception $e ){ Log::debug($e->getMessage()); return false; }
+
+        return true;
+    }
+
+    public function getCarrierDetails(Carrier $carrier, string $identifier): array
+    {
+        $url = "/origination/did/search2/did/{$carrier->thinq_account_id}";
+        $guzzle = new Guzzle(
+            ['base_uri' => 'https://api.thinq.com',]
+        );
+        try{
+            $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
+        }
+        catch( RequestException $e ) {
+            return [];
+        }
+        catch( Exception $e ){
+            return [];
+        }
+
+        $thinq_numbers = json_decode( (string)$res->getBody(), true );
+
+        if( $thinq_numbers['total_rows'] > 0 )
+        {
+            foreach( $thinq_numbers['rows'] as $thinq_number )
+            {
+                if( $identifier == $thinq_number['id'] )
+                {
+                    return $thinq_number;
+                }
+            }
+        }
+
+        return [];
     }
 }
