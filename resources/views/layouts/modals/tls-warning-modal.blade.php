@@ -1,6 +1,6 @@
 <div class="modal fade" data-backdrop="static" id="tlsWarningModal" tabindex="-1" role="dialog"
      aria-labelledby="tlsWarningModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-fullscreen-lg-down" role="document">
         <div class="modal-content shadow-sm">
             <div class="modal-header border-bottom-0">
 

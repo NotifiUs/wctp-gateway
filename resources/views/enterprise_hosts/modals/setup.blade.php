@@ -1,6 +1,6 @@
 <div class="modal fade" data-backdrop="static" id="setupEnterpriseHostModal{{ $host->id }}" tabindex="-1" role="dialog"
      aria-labelledby="setupEnterpriseHostModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg modal-fullscreen-lg-down" role="document">
         <div class="modal-content shadow-sm border-dark">
             <div class="modal-header">
                 <h5 class="modal-title"
