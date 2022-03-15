@@ -1,5 +1,5 @@
 @php
-
+    use App\Models\Number;
     use App\Models\Carrier;
     use App\Models\EnterpriseHost;
 @endphp
