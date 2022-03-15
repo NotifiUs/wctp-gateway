@@ -23,17 +23,17 @@
                 <table class="table table-striped table-hover m-0">
                     <thead>
                     <tr class="text-center">
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('User') }}</th>
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('Source') }}</th>
-                        <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
+                        <th class="fw-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
+                        <th class="fw-bold text-muted-light w-25">{{ __('User') }}</th>
+                        <th class="fw-bold text-muted-light w-25">{{ __('Source') }}</th>
+                        <th class="fw-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @if( $events->count() )
                         @foreach( $events as $event )
                             <tr class="align-text-bottom">
-                                <td class="text-muted text-small font-weight-bold text-nowrap">
+                                <td class="text-muted text-small fw-bold text-nowrap">
                                     {{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
                                 </td>
                                 <td class="text-muted-light text-truncate text-center">
@@ -47,7 +47,7 @@
                                     <span class="text-small text-muted-light">{{ $event->source }}</span>
                                 </td>
                                 <td class="text-truncate text-muted text-small">
-                                    <a href="#" data-toggle="modal" data-target="#detailsEventsModal{{ $event->id}}"><i
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#detailsEventsModal{{ $event->id}}"><i
                                             class="fas fa-search text-muted-light"></i></a>
                                     {{ $event->event }}
                                 </td>
@@ -56,7 +56,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="4" class="text-muted text-center text-small font-weight-bold">
+                            <td colspan="4" class="text-muted text-center text-small fw-bold">
                                 <i class="fas fa-ban text-muted-light"></i> No events found
                             </td>
                         </tr>

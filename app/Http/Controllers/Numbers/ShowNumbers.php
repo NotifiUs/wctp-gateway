@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Numbers;
 
 use App\Http\Controllers\Controller;
-use App\Number;
+use App\Models\Number;
 
 class ShowNumbers extends Controller
 {

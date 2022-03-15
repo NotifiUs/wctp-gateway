@@ -1,7 +1,7 @@
 @php
-    use App\Number;
-    use App\Carrier;
-    use App\EnterpriseHost;
+
+    use App\Models\Carrier;
+    use App\Models\EnterpriseHost;
 @endphp
 @extends('layouts.app')
 @section('title', __('Phone Numbers'))
@@ -16,7 +16,7 @@
 
     <h5 class="text-muted-light mt-2 mt-md-0">
         {{ __('In-Use Numbers') }}
-        <a href="/numbers/available" class="float-right text-muted text-small">Available Numbers</a>
+        <a href="/numbers/available" class="float-end text-muted text-small">Available Numbers</a>
     </h5>
 
     @if( count( $active ) )
@@ -26,10 +26,10 @@
                     <table class="table table-striped table-hover m-0">
                         <thead>
                         <tr>
-                            <th class="font-weight-bold text-muted-light">{{ __('Phone Number') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Carrier Info') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Enterprise Host') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Status') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Phone Number') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Carrier Info') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Enterprise Host') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Status') }}</th>
                             <th style="max-width:20%;"></th>
                         </tr>
                         </thead>
@@ -48,11 +48,11 @@
                                 <td>
 
                                     @if( $number['enabled'])
-                                        <small class="font-weight-bold text-uppercase text-success">
+                                        <small class="fw-bold text-uppercase text-success">
                                             <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
                                         </small>
                                     @else
-                                        <small class="font-weight-bold text-uppercase text-danger">
+                                        <small class="fw-bold text-uppercase text-danger">
                                             <i class="fas fa-times-circle"></i> {{ __('Disabled') }}
                                         </small>
                                     @endif
@@ -60,7 +60,7 @@
                                 <td class="text-center">
                                     <div class="dropdown">
                                         <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button"
-                                           id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                           id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
                                            aria-expanded="false">
                                             <i class="fas fa-cog"></i>
                                         </a>
@@ -68,24 +68,24 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light"
                                              aria-labelledby="dropdownMenuLink">
 
-                                            <a class="dropdown-item" href="#" data-toggle="modal"
-                                               data-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal"
-                                               data-target="#infoPhoneNumberModal{{ $number['identifier']}}">{{ __('Number Information') }}</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal"
-                                               data-target="#hostAssignmentModal{{ $number['identifier']}}">{{ __('Host Assignment') }}</a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                               data-bs-target="#setupPhoneNumberModal{{ $number['identifier']}}">{{ __('Setup Number') }}</a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                               data-bs-target="#infoPhoneNumberModal{{ $number['identifier']}}">{{ __('Number Information') }}</a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                               data-bs-target="#hostAssignmentModal{{ $number['identifier']}}">{{ __('Host Assignment') }}</a>
 
                                             <div class="dropdown-divider"></div>
                                             @if( $number['enabled'] )
                                                 <a class="dropdown-item" style="color:#fd7e14;" href="#"
-                                                   data-toggle="modal"
-                                                   data-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#disablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Disable Number') }}</a>
                                             @else
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                   data-target="#enablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Enable Number') }}</a>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                   data-bs-target="#enablePhoneNumberModal{{ $number['identifier'] }}">{{ __('Enable Number') }}</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                                                   data-target="#deletePhoneNumberModal{{ $number['identifier'] }}">{{ __('Release Number') }}</a>
+                                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                                   data-bs-target="#deletePhoneNumberModal{{ $number['identifier'] }}">{{ __('Release Number') }}</a>
                                             @endif
                                         </div>
                                     </div>

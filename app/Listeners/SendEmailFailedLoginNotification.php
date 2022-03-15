@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\User;
+use App\Models\User;
 use App\Mail\FailedLoginEmail;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Mail;

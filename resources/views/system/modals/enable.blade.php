@@ -4,8 +4,8 @@
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header border-bottom-0">
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <form method="POST" action="/system/maintenance/enable" role="form">
@@ -23,7 +23,7 @@
                                     <small class="form-text text-muted">
                                         Number of minutes for maintenance to last.
                                         Used for including the <code
-                                            class="text-indigo font-weight-bold text-uppercase">HTTP Retry-After</code>
+                                            class="text-indigo fw-bold text-uppercase">HTTP Retry-After</code>
                                         header in the response.
                                     </small>
                                 </div>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Enable Maintenance Mode</button>
                 </div>
             </form>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\System;
 
-use App\User;
+use App\Models\User;
 use Exception;
 use App\Jobs\LogEvent;
 use Illuminate\Http\Request;

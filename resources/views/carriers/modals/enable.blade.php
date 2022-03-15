@@ -3,8 +3,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-success">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <form method="POST" action="/carriers/{{ $carrier->id }}/enable" role="form">
@@ -16,7 +16,7 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success">Enable Carrier</button>
                 </div>
             </form>

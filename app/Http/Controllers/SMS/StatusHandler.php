@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\SMS;
 
-use Exception;
-use App\Number;
-use App\Carrier;
-use App\Message;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Drivers\DriverFactory;
 use App\Http\Controllers\Controller;
+use App\Models\Carrier;
+use App\Models\Message;
+use App\Models\Number;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class StatusHandler extends Controller
 {

@@ -11,9 +11,9 @@
 @section('content')
 
 
-    <div class="container max-width-dashboard">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-8">
+            <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-6">
                 <div class="card">
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">

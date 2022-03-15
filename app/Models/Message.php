@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,11 +19,11 @@ class Message extends Model
 
     public function carrier()
     {
-        return $this->belongsTo('App\Carrier');
+        return $this->belongsTo('App\Models\Carrier');
     }
 
     public function number()
     {
-        return $this->belongsTo('App\Number');
+        return $this->belongsTo('App\Models\Number');
     }
 }

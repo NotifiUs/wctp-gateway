@@ -2,19 +2,19 @@
 
 namespace App\Drivers;
 
-use Exception;
-use App\Message;
-use App\Carrier;
-use Carbon\Carbon;
 use App\Jobs\LogEvent;
 use App\Jobs\SaveMessage;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 use App\Jobs\SendTwilioSMS;
+use App\Models\Carrier;
+use App\Models\Message;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Twilio\Security\RequestValidator;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Twilio\Rest\Client as TwilioClient;
+use Twilio\Security\RequestValidator;
 
 class TwilioDriver implements Driver
 {

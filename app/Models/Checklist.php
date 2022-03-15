@@ -1,7 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\Carrier;
+use App\Models\EnterpriseHost;
 use Illuminate\Support\Str;
 
 class Checklist

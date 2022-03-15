@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\System;
 
-use App\User;
+use App\Models\User;
 use Exception;
-use App\EventLog;
+use App\Models\EventLog;
 use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

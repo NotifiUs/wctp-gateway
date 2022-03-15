@@ -54,7 +54,7 @@
                                 <label>ThinQ Account</label>
                                 <dl class="w-100 bg-light rounded p-4">
                                     <dt class="text-muted-light">Account ID</dt>
-                                    <dl class="text-dark font-weight-bolder">
+                                    <dl class="text-dark fw-bolder">
                                         {{ $account['account_id'] }}
                                         <input type="hidden" name="thinq_account_id"
                                                value="{{ $account['account_id'] }}">
@@ -62,19 +62,19 @@
                                     <dt class="text-muted-light">API Username</dt>
                                     <dl class="">
                                         <code
-                                            class="text-primary font-weight-bold">{{ $account['api_username'] }}</code>
+                                            class="text-primary fw-bold">{{ $account['api_username'] }}</code>
                                         <input type="hidden" name="thinq_api_username"
                                                value="{{ $account['api_username'] }}">
                                     </dl>
                                     <dt class="text-muted-light">API Token</dt>
                                     <dl class="">
                                         <code
-                                            class="text-primary font-weight-bold">{{ str_pad( substr( $account['api_token'],0, 6), 40, '*') }}</code>
+                                            class="text-primary fw-bold">{{ str_pad( substr( $account['api_token'],0, 6), 40, '*') }}</code>
                                         <input type="hidden" name="thinq_api_token"
                                                value="{{  $account['api_token'] }}">
                                     </dl>
                                     <dt class="text-muted-light">Current Balance</dt>
-                                    <dl class="text-dark font-weight-bolder">
+                                    <dl class="text-dark fw-bolder">
                                         <i class="fas fa-dollar-sign text-muted"></i> {{ $account['balance'] }}
                                     </dl>
                                 </dl>

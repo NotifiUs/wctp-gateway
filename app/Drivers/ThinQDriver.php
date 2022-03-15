@@ -3,8 +3,8 @@
 namespace App\Drivers;
 
 use Exception;
-use App\Carrier;
-use App\Message;
+use App\Models\Carrier;
+use App\Models\Message;
 use Carbon\Carbon;
 use App\Jobs\LogEvent;
 use App\Jobs\SaveMessage;

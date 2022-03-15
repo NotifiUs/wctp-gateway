@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Messages;
 
-use App\Message;
+use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;

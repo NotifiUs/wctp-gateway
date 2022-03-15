@@ -2,11 +2,11 @@
 
 namespace App\Jobs;
 
-use App\User;
+use App\Models\User;
 use Throwable;
 use Exception;
-use App\Carrier;
-use App\Message;
+use App\Models\Carrier;
+use App\Models\Message;
 use Carbon\Carbon;
 use App\Mail\FailedJob;
 use Illuminate\Bus\Queueable;

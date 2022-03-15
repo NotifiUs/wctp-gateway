@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use Exception;
-use App\Message;
+use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;

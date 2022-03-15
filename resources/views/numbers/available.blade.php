@@ -12,7 +12,7 @@
     <h5 class="text-muted-light">
         {{ __('Available Numbers') }} <small class="font-weight-normal">( Page {{ $_REQUEST['page'] ?? 1  }}
             of {{ $pages }} )</small>
-        <a href="/numbers" class="float-right text-muted text-small">In-Use Numbers</a>
+        <a href="/numbers" class="float-end text-muted text-small">In-Use Numbers</a>
     </h5>
 
     @if($pages > 1)
@@ -41,9 +41,9 @@
                     <table class="table table-striped table-hover m-0">
                         <thead>
                         <tr>
-                            <th class="font-weight-bold text-muted-light">{{ __('Description') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('API Provider') }}</th>
-                            <th class="font-weight-bold text-muted-light">{{ __('Carrier Name') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Description') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('API Provider') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Carrier Name') }}</th>
                             <th style="max-width:25%;"></th>
                         </tr>
                         </thead>
@@ -51,20 +51,20 @@
                         @foreach( $available as $number )
                             <tr>
                                 <td class="text-muted">{{ $number['number'] }}</td>
-                                <td class="font-weight-bold text-small">{{ ucwords( $number['api'] ) }} {{ ucwords( $number['type'] ) }}</td>
+                                <td class="fw-bold text-small">{{ ucwords( $number['api'] ) }} {{ ucwords( $number['type'] ) }}</td>
 
                                 <td>{{ $number['carrier']->name }}</td>
                                 <td class=" text-center">
                                     @if($number['sms_enabled'])
                                         <a href="#" title="Number is available to use with the WCTP gateway"
-                                           data-toggle="modal" data-target="#usePhoneNumberModal{{ $number['id'] }}"
-                                           class="btn font-weight-bold btn-sm btn-outline-success">
+                                           data-bs-toggle="modal" data-bs-target="#usePhoneNumberModal{{ $number['id'] }}"
+                                           class="btn fw-bold btn-sm btn-outline-success">
                                             Available
                                         </a>
                                     @else
                                         <a title="Number is not SMS enabled, provisioned, or it may be part of a Messaging Service"
-                                           class="btn btn-sm btn-secondary text-white font-weight-bold" href="#"
-                                           data-toggle="modal" data-target="#invalidPhoneNumberModal">
+                                           class="btn btn-sm btn-secondary text-white fw-bold" href="#"
+                                           data-bs-toggle="modal" data-bs-target="#invalidPhoneNumberModal">
                                             Invalid
                                         </a>
                                     @endif

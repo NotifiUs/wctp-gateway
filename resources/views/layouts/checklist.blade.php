@@ -8,7 +8,7 @@
                 @foreach( $checklist as $item )
                     <p class="my-1 text-muted">
                         <i class="fas fa-times-circle text-orange"></i> <span>{!!  $item['description']  !!} <small
-                                class="font-weight-bold"><a class="text-uppercase text-orange"
+                                class="fw-bold"><a class="text-uppercase text-orange"
                                                             href="{{ $item['link'] }}">Fix</a></small></span>
                     </p>
                 @endforeach

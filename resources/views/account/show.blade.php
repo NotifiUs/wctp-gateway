@@ -42,7 +42,7 @@
                                     class="fas fa-envelope text-muted"></i></strong> {{ $user->email }}
 
                         </h5>
-                        <p class="text-muted-light font-weight-bold">
+                        <p class="text-muted-light fw-bold">
                             <i class="fas fa-clock text-muted-light"></i> {{ $user->timezone }}
                         </p>
 

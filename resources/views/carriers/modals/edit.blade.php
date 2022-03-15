@@ -5,8 +5,8 @@
             <div class="modal-header">
                 <h5 class="modal-title"
                     id="editCarrierModalLabel{{ $carrier->id }}">{{ __('Edit Carrier Settings') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <form method="POST" action="/carriers/{{ $carrier->id }}/edit" role="form">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" role="button" class="btn btn-info">Update Carrier</button>
                 </div>
             </form>

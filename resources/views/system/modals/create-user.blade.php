@@ -4,8 +4,8 @@
         <div class="modal-content shadow-sm border-success">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="createUserModalLabel">{{ __('Create user account') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <form method="POST" action="/system/user/create" role="form">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" role="button" class="btn btn-success">Create Account</button>
                 </div>
             </form>

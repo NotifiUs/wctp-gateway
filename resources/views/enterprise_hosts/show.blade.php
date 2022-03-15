@@ -18,35 +18,35 @@
                 <div class="col-md-6">
                     <div class="card mb-4 bg-white">
                         <h5 class="card-header bg-transparent">
-                            <small class="d-inline text-muted-light font-weight-bold text-uppercase">
+                            <small class="d-inline text-muted-light fw-bold text-uppercase">
                                 {{ $host->name }}
                             </small>
 
-                            <div class="dropdown float-right">
+                            <div class="dropdown float-end">
                                 <a class="btn btn-sm btn-light border dropdown-toggle" href="#" role="button"
-                                   id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                   id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     <i class="fas fa-cog"></i>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right shadow-sm bg-light"
                                      aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#" data-toggle="modal"
-                                       data-target="#editEnterpriseHostModal{{ $host->id }}">{{ __('Edit Settings') }}</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal"
-                                       data-target="#credentialsEnterpriseHostModal{{ $host->id }}">{{ __('View Credentials') }}</a>
-                                    <a class="dropdown-item" href="#" data-toggle="modal"
-                                       data-target="#setupEnterpriseHostModal{{ $host->id }}">{{ __('Setup Information') }}</a>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                       data-bs-target="#editEnterpriseHostModal{{ $host->id }}">{{ __('Edit Settings') }}</a>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                       data-bs-target="#credentialsEnterpriseHostModal{{ $host->id }}">{{ __('View Credentials') }}</a>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                       data-bs-target="#setupEnterpriseHostModal{{ $host->id }}">{{ __('Setup Information') }}</a>
                                     <div class="dropdown-divider"></div>
                                     @if( $host->enabled )
-                                        <a class="dropdown-item text-orange" href="#" data-toggle="modal"
-                                           data-target="#disableEnterpriseHostModal{{ $host->id }}">{{ __('Disable Host') }}</a>
+                                        <a class="dropdown-item text-orange" href="#" data-bs-toggle="modal"
+                                           data-bs-target="#disableEnterpriseHostModal{{ $host->id }}">{{ __('Disable Host') }}</a>
                                     @else
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                           data-target="#enableEnterpriseHostModal{{ $host->id }}">{{ __('Enable Host') }}</a>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                           data-bs-target="#enableEnterpriseHostModal{{ $host->id }}">{{ __('Enable Host') }}</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                                           data-target="#deleteEnterpriseHostModal{{ $host->id }}">{{ __('Delete Host') }}</a>
+                                        <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                           data-bs-target="#deleteEnterpriseHostModal{{ $host->id }}">{{ __('Delete Host') }}</a>
                                     @endif
 
                                 </div>
@@ -59,16 +59,16 @@
                                 <h5 class="my-0 text-muted">{{ $host->senderID }}</h5>
                                 <small class="text-muted-light">
                                     https://<span
-                                        class="font-weight-bold">{{ str_replace('https://', '', $host->url) }}</span>
+                                        class="fw-bold">{{ str_replace('https://', '', $host->url) }}</span>
                                 </small>
                             </div>
                         </div>
                         <div class="card-footer">
-                            <small class="d-inline text-muted-light font-weight-bold text-uppercase">
+                            <small class="d-inline text-muted-light fw-bold text-uppercase">
                                 <i class="fas fa-plug"></i> {{ ucwords( $host->type )}}
                             </small>
-                            <div class="float-right">
-                                <small class="d-inline font-weight-bold text-uppercase">
+                            <div class="float-end">
+                                <small class="d-inline fw-bold text-uppercase">
                                     @if( $host->enabled)
                                         <span class="text-success">
                                             <i class="fas fa-check-circle"></i> {{ __('Enabled') }}
@@ -98,12 +98,12 @@
             <div class="card mb-4 border-muted bg-light pt-5 pb-4">
 
                 <div class="card-body text-muted py-5 my-0 text-center">
-                    <a href="#" data-toggle="modal" data-target="#createEnterpriseHostModal">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#createEnterpriseHostModal">
                         <i class="fas fa-3x fa-plus text-muted-light"></i>
                     </a>
 
                     <h5 class="my-3">
-                        <a href="#" data-toggle="modal" data-target="#createEnterpriseHostModal" class="text-muted">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#createEnterpriseHostModal" class="text-muted">
                             {{ __('Add Enterprise Host') }}
                         </a>
                     </h5>

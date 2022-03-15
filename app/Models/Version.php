@@ -1,14 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Carbon\Carbon;
 
 class Version
 {
     const MAJOR = 1;
-    const MINOR = 2;
-    const PATCH = 2;
+    const MINOR = 3;
+    const PATCH = 0;
 
     public static function get()
     {

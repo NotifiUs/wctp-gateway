@@ -5,7 +5,7 @@ namespace App\Http\Controllers\EnterpriseHosts;
 use Faker;
 use Exception;
 use App\Jobs\LogEvent;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Numbers;
 
 use Exception;
-use App\Number;
+use App\Models\Number;
 use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

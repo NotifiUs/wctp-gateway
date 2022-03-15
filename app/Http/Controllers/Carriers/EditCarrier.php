@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Carriers;
 
 use Exception;
-use App\Carrier;
+use App\Models\Carrier;
 use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

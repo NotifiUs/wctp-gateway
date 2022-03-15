@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\User;
+use App\Models\User;
 use App\Mail\LoginEmail;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Mail;

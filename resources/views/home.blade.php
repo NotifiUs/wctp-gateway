@@ -11,7 +11,7 @@
 @section('content')
     <h5 class="text-muted-light mt-2 mt-md-0">
         {{ __('Quick Glance') }}
-        <small class="text-small float-right text-muted">
+        <small class="text-small float-end text-muted">
             <a href="/home"
                title="{{ $activityPeriod->timezone(Auth::user()->timezone)->format("m/d/Y g:i:sA T") }} &mdash; {{ $activityPeriod->copy()->addHours(24)->format("m/d/Y g:i:sA T") }}">
                 <i class="fas fa-sync text-small"></i> Refresh
@@ -95,7 +95,7 @@
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
                             https://<span
-                                class="font-weight-bold">{{ str_replace('https://', '', secure_url('/wctp')) }}</span>
+                                class="fw-bold">{{ str_replace('https://', '', secure_url('/wctp')) }}</span>
                         </dd>
                         <dt class="col-sm-12 col-md-4">
                             {{ __('Network Ports') }}
@@ -109,16 +109,18 @@
                         </dt>
                         <dd class="col-sm-12 col-md-8 text-muted">
                             <span class="text-success"><i class="fas fa-lock"></i> <code
-                                    class="text-success font-weight-bold">{{ __('SSL/TLS') }}</code> {{__( 'required')}}</span>
+                                    class="text-success fw-bold">{{ __('SSL/TLS') }}</code> {{__( 'required')}}</span>
                             <br>
                             <span class="text-primary"><i class="fas fa-shield-alt"></i> <code
-                                    class="text-primary font-weight-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
+                                    class="text-primary fw-bold">{{ __('securityCode') }}</code> {{__( 'required')}}</span>
                         </dd>
                     </dl>
 
                     <small class="text-muted">
-                        <i class="fas fa-question-circle"></i> {{ __('Learn how to') }} <a href="#" data-toggle="modal"
-                                                                                           data-target="#setupInstructionsModal">{{ __('configure')}}</a> {{ __('your WCTP integration') }}
+                        <i class="fas fa-question-circle"></i>
+                        {{ __('Learn how to') }}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#setupInstructionsModal">{{ __('configure')}}</a>
+                        {{ __('your WCTP integration') }}
                     </small>
                 </div>
             </div>
@@ -128,7 +130,7 @@
 
     <h5 class="text-muted-light mt-2">{{ __('Recent Events') }}
         <small class="text-small">
-            <a href="/events" class="float-right text-muted">{{ __('View event log') }}</a>
+            <a href="/events" class="float-end text-muted">{{ __('View event log') }}</a>
         </small>
     </h5>
     <div class="card py-0 my-0">
@@ -137,10 +139,10 @@
                 <table class="table table-striped table-hover m-0 table-fixed">
                     <thead>
                     <tr class="text-center">
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('User') }}</th>
-                        <th class="font-weight-bold text-muted-light w-25">{{ __('Source') }}</th>
-                        <th class="font-weight-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
+                        <th class="fw-bold text-muted-light w-25">{{ __('Timestamp') }}</th>
+                        <th class="fw-bold text-muted-light w-25">{{ __('User') }}</th>
+                        <th class="fw-bold text-muted-light w-25">{{ __('Source') }}</th>
+                        <th class="fw-bold text-muted-light text-left w-25">{{ __('Event') }}</th>
 
                     </tr>
                     </thead>
@@ -148,7 +150,7 @@
                     @if( $events->count() )
                         @foreach( $events as $event )
                             <tr>
-                                <td class="text-muted text-small font-weight-bold text-nowrap">
+                                <td class="text-muted text-small fw-bold text-nowrap">
                                     {{ $event->created_at->timezone( Auth::user()->timezone )->format('m/d/Y g:i:s A T') }}
                                 </td>
                                 <td class="text-muted-light text-truncate text-center">
@@ -167,7 +169,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="4" class="text-muted text-center text-small font-weight-bold">
+                            <td colspan="4" class="text-muted text-center text-small fw-bold">
                                 <i class="fas fa-ban text-muted-light"></i> No events found
                             </td>
                         </tr>

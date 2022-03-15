@@ -1,10 +1,10 @@
 <div class="modal fade" data-backdrop="static" id="setupInstructionsModal" tabindex="-1" role="dialog"
      aria-labelledby="setupInstructionsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg modal-fullscreen-lg-down" role="document">
         <div class="modal-content shadow-sm">
             <div class="modal-header border-bottom-0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <div class="modal-body">
@@ -29,11 +29,11 @@
 
                     <dt class="text-dark col-4 text-center">Provider Name</dt>
                     <dd class="col-8 text-left"><small>ArbitraryProviderName<sup
-                                class="text-primary font-weight-bolder">*</sup></small></dd>
+                                class="text-primary fw-bolder">*</sup></small></dd>
                 </dl>
                 <p class="text-muted mb-2">
-                    <sup class="text-primary font-weight-bolder">*</sup> <small>
-                        <i class="font-weight-bold">ArbitraryProviderName</i> must match the WCTPWeb web.config file to
+                    <sup class="text-primary fw-bolder">*</sup> <small>
+                        <i class="fw-bold">ArbitraryProviderName</i> must match the WCTPWeb web.config file to
                         map incoming SMS messages to the correct provider.
                         Each provider requires a dedicated WCTPWeb instance. Contact Amtelco for licensing information.
                     </small>
@@ -44,7 +44,7 @@
 
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

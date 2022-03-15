@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Messages;
 
 use Exception;
-use App\Carrier;
-use App\Message;
+use App\Models\Carrier;
+use App\Models\Message;
 use Carbon\Carbon;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use App\Jobs\SendThinqSMS;
 use App\Jobs\SendTwilioSMS;
 use App\Jobs\SubmitToEnterpriseHost;

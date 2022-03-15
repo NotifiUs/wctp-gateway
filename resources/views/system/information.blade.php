@@ -16,23 +16,23 @@
             <ul class="list-group rounded">
                 <li class="list-group-item">
                     <i class="fas fa-server text-info"></i> {{ __('Server') }} <small
-                        class="float-right font-weight-bold text-muted">{{ $server['hostname'] }}</small>
+                        class="float-end fw-bold text-muted">{{ $server['hostname'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fas fa-ethernet text-info"></i> {{ __('IP Address') }} <small
-                        class="float-right text-muted">{{ $server['ip'] }}</small>
+                        class="float-end text-muted">{{ $server['ip'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fas fa-microchip text-info"></i> {{ __('CPU') }} <small
-                        class="float-right text-muted">{{ $server['cpu'] }}</small>
+                        class="float-end text-muted">{{ $server['cpu'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fas fa-memory text-info"></i> {{ __('Memory') }} <small
-                        class="float-right text-muted">{{ $server['memory'] }}</small>
+                        class="float-end text-muted">{{ $server['memory'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fas fa-hdd text-info"></i> {{ __('Disk Space') }}
-                    <div class="float-right w-25">
+                    <div class="float-end w-25">
                         <div class="progress">
                             <div class="progress-bar bg-info"
                                  title="{{ $server['disk']['value'] }}GB used of {{ $server['disk']['total'] }}GB ({{ $server['disk']['percent'] }}%)"
@@ -48,24 +48,24 @@
             <ul class="list-group rounded">
                 <li class="list-group-item">
                     <i class="fas fa-hourglass-half text-info"></i> {{ __('Uptime') }} <small
-                        class="float-right text-muted">{{ $advanced['uptime'] }}</small>
+                        class="float-end text-muted">{{ $advanced['uptime'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fas fa-weight-hanging text-info"></i> {{ __('Load Average') }} <small
-                        class="float-right text-muted">{{ $advanced['load'] }}</small>
+                        class="float-end text-muted">{{ $advanced['load'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fab fa-php text-info"></i> {{ __('PHP Configuration') }} <span
-                        class="float-right font-weight-bold text-muted"><a href="/system/phpinfo"><code
+                        class="float-end fw-bold text-muted"><a href="/system/phpinfo"><code
                                 class="text-primary">phpinfo();</code></a></span>
                 </li>
                 <li class="list-group-item">
                     <i class="fab fa-linux text-info"></i> {{ __('Linux Version') }} <small
-                        class="float-right text-muted">{{ $advanced['version'] }}</small>
+                        class="float-end text-muted">{{ $advanced['version'] }}</small>
                 </li>
                 <li class="list-group-item">
                     <i class="fas fa-box text-info"></i> {{ __('App') }} <small
-                        class="float-right text-muted">{{ $advanced['appversion'] }}</small>
+                        class="float-end text-muted">{{ $advanced['appversion'] }}</small>
                 </li>
             </ul>
         </div>
@@ -79,7 +79,7 @@
                 <li class="list-group-item">
                     <i class="fas fa-layer-group text-info"></i> <strong
                         class="text-muted text-small">{{ __('horizon-queue') }}</strong>
-                    <small class="float-right text-muted">
+                    <small class="float-end text-muted">
                         @if( $queue )
                             <i class="fas fa-check-circle text-success"></i> Running
                         @else
@@ -91,7 +91,7 @@
                     <li class="list-group-item">
                         <i class="{{ $details['icon'] }} text-info"></i> <strong
                             class="text-muted text-small">{{ $service }}</strong>
-                        <small title="{{$details['desc']}}" style="cursor:help;" class="float-right text-muted">
+                        <small title="{{$details['desc']}}" style="cursor:help;" class="float-end text-muted">
                             @if( $details['status'] )
                                 <i class="fas fa-check-circle text-success"></i> Running
                             @else

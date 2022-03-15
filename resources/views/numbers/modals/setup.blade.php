@@ -3,8 +3,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header border-bottom-0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <form method="POST" action="/numbers/{{ $number['id'] }}/setup" role="form">
@@ -13,7 +13,7 @@
                     <h3><strong class="text-danger">Setup</strong> this Phone Number?</h3>
 
                     @php
-                        use App\Carrier;$numberCarrier = Carrier::find( $number['carrier_id'] )
+                        use App\Models\Carrier;$numberCarrier = Carrier::find( $number['carrier_id'] )
                     @endphp
                     @if(isset($numberCarrier) && $numberCarrier->api == "twilio" )
                         <p class="text-muted">
@@ -43,7 +43,7 @@
                     @endif
                 </div>
                 <div class="modal-footer border-top-0">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Overwrite SMS Settings</button>
                 </div>
             </form>

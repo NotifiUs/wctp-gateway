@@ -3,8 +3,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm border-danger">
             <div class="modal-header border-bottom-0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <form method="POST" action="/numbers" role="form">
@@ -21,7 +21,7 @@
                     <div class="form-group row col-md-6">
                         <label class="">Enterprise Host</label>
                         <select required name="enterprise_host_id" class="form-control">
-                            @foreach( \App\EnterpriseHost::all() as $eh )
+                            @foreach( \App\Models\EnterpriseHost::all() as $eh )
                                 <option value="{{ $eh->id }}">{{ $eh->name }}</option>
                             @endforeach
                         </select>
@@ -34,7 +34,7 @@
                             assigned numbers.)
                         </p>
                     </div>
-                    <a class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#collapse{{$number['id']}}"
+                    <a class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" href="#collapse{{$number['id']}}"
                        role="button" aria-expanded="false" aria-controls="collapse{{$number['id']}}">
                         <i class="fas fa-info-circle"></i> Toggle Details
                     </a>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Use Number</button>
                 </div>
             </form>

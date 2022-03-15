@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Message;
+use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

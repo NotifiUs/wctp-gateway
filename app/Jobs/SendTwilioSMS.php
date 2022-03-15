@@ -2,18 +2,18 @@
 
 namespace App\Jobs;
 
-use Exception;
-use App\Carrier;
+use App\Models\Carrier;
+use App\Models\EnterpriseHost;
 use Carbon\Carbon;
-use App\EnterpriseHost;
-use Illuminate\Support\Str;
+use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Twilio\Rest\Client as TwilioClient;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
+use Twilio\Rest\Client as TwilioClient;
 
 class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 {

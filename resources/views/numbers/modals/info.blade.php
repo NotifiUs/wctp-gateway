@@ -7,8 +7,8 @@
                 <h5 class="modal-title"
                     id="infoPhoneNumberModalLabel{{ $number['identifier'] }}">{{ __('Phone Number Information') }} {{ $number['e164'] }}</h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <div class="modal-body">
@@ -16,7 +16,7 @@
                     <table
                         class="table  rounded table-striped bg-white table-sm table-bordered text-truncate p-0 table-fixed">
                         <tbody>
-                        @foreach( \App\Number::find( $number['id'])->getCarrierDetails() as $key => $val )
+                        @foreach( \App\Models\Number::find( $number['id'])->getCarrierDetails() as $key => $val )
                             @if( ! is_array( $val ) && ! is_object( $val ) )
                                 <tr>
                                     <th class="w-25 text-left">{{ $key }}</th>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

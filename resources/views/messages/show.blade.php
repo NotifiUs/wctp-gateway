@@ -21,11 +21,11 @@
         @endif
     </h5>
 
-    <h5 class="pull-right text-sm inline">
+    <h5 class="text-sm inline">
         @if(isset($statusList))
             <form method="get">
                 <div class="input-group input-group-sm mb-2 w-25">
-                    <select class="form-control form-control-sm" name="status">
+                    <select class="form-control bg-white form-control-sm" name="status">
                         <option value="">Any Status</option>
                         @foreach($statusList as $status)
                             @if(isset($statusFilter) && $statusFilter === $status)
@@ -36,11 +36,10 @@
 
                         @endforeach
                     </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-sm btn-outline-secondary" type="submit">
-                            <i class="fas fa-filter"></i>
-                        </button>
-                    </div>
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">
+                        <i class="fas fa-filter"></i>
+                    </button>
+
                 </div>
             </form>
         @endif
@@ -52,12 +51,12 @@
             <div class="table-responsive text-left">
                 <table class="table table-striped table-hover m-0">
                     <thead>
-                    <tr class="text-center">
-                        <th class="font-weight-bold text-muted-light">{{ __('Timestamp') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('Direction') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('From') }}</th>
-                        <th class="font-weight-bold text-muted-light">{{ __('To') }}</th>
-                        <th class="font-weight-bold text-muted-light text-left">{{ __('Status') }}</th>
+                    <tr class="text-lef0">
+                        <th class="fw-bold text-muted-light">{{ __('Timestamp') }}</th>
+                        <th class="fw-bold text-muted-light">{{ __('Direction') }}</th>
+                        <th class="fw-bold text-muted-light">{{ __('From') }}</th>
+                        <th class="fw-bold text-muted-light">{{ __('To') }}</th>
+                        <th class="fw-bold text-muted-light">{{ __('Status') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -74,7 +73,7 @@
                                         <i class="fas fa-long-arrow-alt-down text-indigo"></i> inbound
                                     @endif
                                 </td>
-                                <td class=" text-truncate text-center">
+                                <td class=" text-truncate">
                                     {{ $message->from }}
                                 </td>
                                 <td class=" align-text-bottom">
@@ -85,7 +84,7 @@
                                         @case("sent")
                                         @case("DELIVRD")
                                         @case("delivered")
-                                        <span class="badge badge-light border border-success shadow-sm px-2 py-1">
+                                        <span class="badge bg-light border border-success shadow-sm px-2 py-1">
                                             @break
                                             @case("UNDELIV")
                                             @case("undelivered")
@@ -94,22 +93,22 @@
                                             @case("DELETED")
                                             @case("EXPIRED")
                                             @case("REJECTD")
-                                            <span class="badge badge-danger px-2 py-1">
+                                            <span class="badge bg-danger px-2 py-1">
                                             @break
                                                 @default
-                                            <span class="badge badge-light border border-secondary shadow-sm px-2 py-1">
+                                            <span class="badge bg-light border border-secondary shadow-sm px-2 py-1">
                                     @endswitch
 
                                                 {{ ucwords( $message->status ) }}
                                     </span>
-                                    <a href="#" title="View message details" class="ml-2" data-toggle="modal"
-                                       data-target="#detailsMessageModal{{ $message->id}}"><i
+                                    <a href="#" title="View message details" class="ml-2" data-bs-toggle="modal"
+                                       data-bs-target="#detailsMessageModal{{ $message->id}}"><i
                                             class="fas fa-search text-muted-light"></i></a>
-                                    <a href="#" title="Re-process message" class="ml-2" data-toggle="modal"
-                                       data-target="#processMessageModal{{ $message->id}}"><i
+                                    <a href="#" title="Re-process message" class="ml-2" data-bs-toggle="modal"
+                                       data-bs-target="#processMessageModal{{ $message->id}}"><i
                                             class="fas fa-recycle text-muted-light"></i></a>
-                                    <a href="#" title="Mark message failed" class="ml-2" data-toggle="modal"
-                                       data-target="#failMessageModal{{ $message->id}}"><i
+                                    <a href="#" title="Mark message failed" class="ml-2" data-bs-toggle="modal"
+                                       data-bs-target="#failMessageModal{{ $message->id}}"><i
                                             class="fas fa-ban text-muted-light"></i></a>
                                 </td>
 
@@ -117,7 +116,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5" class="text-muted text-center text-small font-weight-bold">
+                            <td colspan="5" class="text-muted text-center text-small fw-bold">
                                 <i class="fas fa-ban text-muted-light"></i> No messages found
                             </td>
                         </tr>

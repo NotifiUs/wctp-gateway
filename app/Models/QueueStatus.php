@@ -1,9 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
+use function base_path;
 
 class QueueStatus
 {

@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use Exception;
-use App\EventLog;
+use App\Models\EventLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

@@ -3,9 +3,9 @@
 namespace App\Jobs;
 
 use Exception;
-use App\Carrier;
+use App\Models\Carrier;
 use Carbon\Carbon;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
 use Illuminate\Support\Facades\Redis;

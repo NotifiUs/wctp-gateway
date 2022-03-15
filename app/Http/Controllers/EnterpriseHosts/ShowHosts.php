@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
-use App\EnterpriseHost;
 use App\Http\Controllers\Controller;
+use App\Models\EnterpriseHost;
 
 class ShowHosts extends Controller
 {

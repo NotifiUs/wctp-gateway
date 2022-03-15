@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Carriers;
 
-use Exception;
-use App\Carrier;
-use App\Jobs\LogEvent;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\LogEvent;
+use App\Models\Carrier;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Events;
 
-use App\EventLog;
+use App\Models\EventLog;
 use App\Http\Controllers\Controller;
 
 class ShowEvents extends Controller

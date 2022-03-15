@@ -2,10 +2,10 @@
 
     namespace App\Drivers;
 
-    use App\Carrier;
-    use App\Message;
+    use App\Models\Carrier;
+    use App\Models\Message;
     use Carbon\Carbon;
-    use App\EnterpriseHost;
+    use App\Models\EnterpriseHost;
     use Illuminate\Http\Request;
     use Illuminate\Http\Response;
 

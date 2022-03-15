@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Numbers;
 
 use Exception;
-use App\Number;
-use App\Carrier;
+use App\Models\Number;
+use App\Models\Carrier;
 use Twilio\Rest\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Checklist;
-use App\ServerStats;
-use App\QueueStatus;
+use App\Models\Checklist;
+use App\Models\ServerStats;
+use App\Models\QueueStatus;
 use App\Http\Controllers\Controller;
 
 class ShowSysInfo extends Controller

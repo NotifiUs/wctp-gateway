@@ -47,23 +47,23 @@
     <ul class="list-group rounded">
         <li class="list-group-item">
             <i class="fas fa-server text-info"></i> {{ __('Server') }} <small
-                class="float-right font-weight-bold text-muted">{{ $server['hostname'] }}</small>
+                class="float-end fw-bold text-muted">{{ $server['hostname'] }}</small>
         </li>
         <li class="list-group-item">
             <i class="fas fa-ethernet text-info"></i> {{ __('IP Address') }} <small
-                class="float-right text-muted">{{ $server['ip'] }}</small>
+                class="float-end text-muted">{{ $server['ip'] }}</small>
         </li>
         <li class="list-group-item">
             <i class="fas fa-microchip text-info"></i> {{ __('CPU') }} <small
-                class="float-right text-muted">{{ $server['cpu'] }}</small>
+                class="float-end text-muted">{{ $server['cpu'] }}</small>
         </li>
         <li class="list-group-item">
             <i class="fas fa-memory text-info"></i> {{ __('Memory') }} <small
-                class="float-right text-muted">{{ $server['memory'] }}</small>
+                class="float-end text-muted">{{ $server['memory'] }}</small>
         </li>
         <li class="list-group-item">
             <i class="fas fa-hdd text-info"></i> {{ __('Disk Space') }}
-            <div class="float-right w-25">
+            <div class="float-end w-25">
                 <div class="progress">
                     <div class="progress-bar bg-info"
                          title="{{ $server['disk']['value'] }}GB used of {{ $server['disk']['total'] }}GB ({{ $server['disk']['percent'] }}%)"

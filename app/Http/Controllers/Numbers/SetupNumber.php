@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use App\Number;
+use App\Models\Number;
 use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

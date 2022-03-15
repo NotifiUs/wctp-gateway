@@ -5,8 +5,8 @@
             <div class="modal-header border-bottom-0">
 
                 <h5 class="modal-title" id="tlsWarningModal">Insecure TLS connections enabled</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <div class="modal-body my-0 py-0">
@@ -17,7 +17,7 @@
                         or un-verified certificates (such as self-signed.)
                         This warning message will not dismiss until you disable insecure TLS support.
                     </p>
-                    <div class="alert shadow-sm alert-warning border-warning font-weight-bold">
+                    <div class="alert shadow-sm alert-warning border-warning fw-bold">
                         <i class="fas fa-exclamation-triangle"></i> Configuration not recommended or considered
                         compliant for most regulations (HIPAA, PCI, SOX, etc.)
                     </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

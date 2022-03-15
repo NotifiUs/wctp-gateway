@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\SMS;
 
 use Exception;
-use App\Number;
-use App\Carrier;
+use App\Models\Number;
+use App\Models\Carrier;
 use Carbon\Carbon;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Drivers\DriverFactory;

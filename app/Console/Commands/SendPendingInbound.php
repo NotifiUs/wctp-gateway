@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Exception;
-use App\Message;
+use App\Models\Message;
 use Illuminate\Console\Command;
 use App\Jobs\SubmitToEnterpriseHost;
 

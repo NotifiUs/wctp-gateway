@@ -20,7 +20,7 @@
             <ul class="list-group rounded">
                 <li class="list-group-item">
                     <i class="fas fa-layer-group text-indigo"></i> {{ __('Queue Viewer') }}
-                    <small class="float-right">
+                    <small class="float-end">
                         <a class="btn-link" href="/queue" target="_blank">View</a>
                     </small>
                 </li>
@@ -32,7 +32,7 @@
             <ul class="list-group rounded">
                 <li class="list-group-item">
                     <i class="fas fa-bug text-indigo"></i> {{ __('Application Debug') }}
-                    <small class="float-right">
+                    <small class="float-end">
                         <a class=" btn-link" href="/debug" target="_blank">View</a>
                     </small>
                 </li>
@@ -48,7 +48,7 @@
             <ul class="list-group rounded">
                 <li class="list-group-item">
                     <i class="fas fa-stream text-indigo"></i> {{ __('Events') }}
-                    <small class="float-right">
+                    <small class="float-end">
                         <a class="btn-link" href="/events">View</a>
                     </small>
                 </li>
@@ -60,7 +60,7 @@
             <ul class="list-group rounded">
                 <li class="list-group-item">
                     <i class="fas fa-server text-indigo"></i> {{ __('System Information') }}
-                    <small class="float-right">
+                    <small class="float-end">
                         <a class=" btn-link" href="/system/information">View</a>
                     </small>
                 </li>

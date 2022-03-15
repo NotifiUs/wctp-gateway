@@ -2,14 +2,14 @@
 
 namespace App\Jobs;
 
-use App\User;
+use App\Models\User;
 use Throwable;
 use Exception;
-use App\Message;
+use App\Models\Message;
 use Carbon\Carbon;
 use App\Mail\RetryJob;
 use App\Mail\FailedJob;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use Illuminate\Bus\Queueable;
 use GuzzleHttp\Client as Guzzle;
 use NotifiUs\WCTP\XML\MessageReply;

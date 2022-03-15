@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Drivers\DriverFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +17,7 @@ class Number extends Model
 
     public function carrier()
     {
-        return $this->belongsTo('App\Carrier');
+        return $this->belongsTo('App\Models\Carrier');
     }
 
     public function getType(): string

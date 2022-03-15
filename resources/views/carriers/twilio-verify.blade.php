@@ -73,17 +73,17 @@
                                     <label>Twilio Account</label>
                                     <dl class="w-100 bg-light rounded p-4">
                                         <dt class="text-muted-light">Friendly Name</dt>
-                                        <dl class="text-dark font-weight-bolder">{{ $account['friendlyName'] }}</dl>
+                                        <dl class="text-dark fw-bolder">{{ $account['friendlyName'] }}</dl>
                                         <dt class="text-muted-light">Account SID</dt>
                                         <dl class="">
-                                            <code class="text-primary font-weight-bold">{{ $account['sid'] }}</code>
+                                            <code class="text-primary fw-bold">{{ $account['sid'] }}</code>
                                             <input type="hidden" name="twilio_account_sid"
                                                    value="{{ $account['sid'] }}">
                                         </dl>
                                         <dt class="text-muted-light">Auth Token</dt>
                                         <dl class="">
                                             <code
-                                                class="text-primary font-weight-bold">{{ str_pad( substr( $account['authToken'],0, 6), 32, '*') }}</code>
+                                                class="text-primary fw-bold">{{ str_pad( substr( $account['authToken'],0, 6), 32, '*') }}</code>
                                             <input type="hidden" name="twilio_auth_token"
                                                    value="{{ $account['authToken'] }}">
                                         </dl>

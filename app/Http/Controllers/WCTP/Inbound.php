@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\WCTP;
 
 use Exception;
-use App\Carrier;
+use App\Models\Carrier;
 use App\Jobs\LogEvent;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Drivers\DriverFactory;

@@ -4,11 +4,11 @@
             <table class="table table-striped table-hover m-0">
                 <thead class="text-left">
                 <tr>
-                    <th class="font-weight-bold text-muted-light">
+                    <th class="fw-bold text-muted-light">
                         Email
                     </th>
                     <th class="text-right">
-                        <a href="#" data-toggle="modal" data-target="#createUserModal"
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#createUserModal"
                            class="btn btn-sm btn-outline-secondary">
                             <i class="fas fa-user-plus"></i>
                         </a>
@@ -20,14 +20,14 @@
                     <tr class="text-left">
                         <td class="text-muted text-truncate"
                             title="{{$user->name}}">
-                            <a href="#" data-toggle="modal" data-target="#editUserModal{{ $user->id }}">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}">
                                 {{ $user->email }}
                             </a>
                             @if( Auth::user()->id == $user->id ) {!!  '<small>(you)</small>'  !!} @endif
                         </td>
                         <td class="text-right">
-                            <a href="#" class="btn btn-sm btn-outline-danger" data-toggle="modal"
-                               data-target="#deleteUserModal{{ $user->id }}">
+                            <a href="#" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                               data-bs-target="#deleteUserModal{{ $user->id }}">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>

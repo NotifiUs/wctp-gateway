@@ -4,7 +4,7 @@ namespace App\Http\Controllers\EnterpriseHosts;
 
 use Exception;
 use App\Jobs\LogEvent;
-use App\EnterpriseHost;
+use App\Models\EnterpriseHost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

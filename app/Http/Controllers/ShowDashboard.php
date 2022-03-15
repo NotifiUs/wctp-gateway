@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Message;
-use App\EventLog;
-use App\Checklist;
+use App\Models\Message;
+use App\Models\EventLog;
+use App\Models\Checklist;
 use Carbon\Carbon;
-use App\ServerStats;
-use App\QueueStatus;
+use App\Models\ServerStats;
+use App\Models\QueueStatus;
 use Illuminate\View\View;
 
 class ShowDashboard extends Controller
