@@ -336,7 +336,7 @@ class TwilioSMSDriver implements SMSDriver
         $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
         if($validator->fails())
         {
-            return redirect()->back()->withErrors($validator->errors());
+            return redirect()->to('/carriers')->withErrors($validator->errors());
         }
 
         try {
@@ -357,7 +357,7 @@ class TwilioSMSDriver implements SMSDriver
         $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
         if($validator->fails())
         {
-            return redirect()->back()->withErrors($validator->errors());
+            return redirect()->to('/carriers')->withErrors($validator->errors());
         }
 
         $carrier = new Carrier;
