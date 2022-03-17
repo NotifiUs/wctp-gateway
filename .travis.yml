@@ -10,11 +10,13 @@ services:
   - redis
 
 before_script:
+  - sudo apt-get update
+  - mysql -u root -e 'CREATE DATABASE travis;'
   - cp .env.travis .env
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
-  - php artisan migrate --no-interaction -vvv
+  - php artisan migrate --force --no-interaction -vvv
 
 script:
   - vendor/bin/phpunit
