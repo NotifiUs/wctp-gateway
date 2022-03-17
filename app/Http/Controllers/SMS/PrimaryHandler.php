@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\SMS;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Number;
 use App\Models\Carrier;
-use Carbon\Carbon;
-use App\Models\EnterpriseHost;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Drivers\DriverFactory;
+use App\Models\EnterpriseHost;
 use App\Http\Controllers\Controller;
 
 class PrimaryHandler extends Controller
@@ -45,7 +45,7 @@ class PrimaryHandler extends Controller
             return $this->respond();
         }
 
-        if( ! $this->driver->verifyPrimaryHandlerRequest($request, $this->carrier ) ) {
+        if( ! $this->driver->verifyHandlerRequest($request, $this->carrier ) ) {
             return $this->respond();
         }
 
