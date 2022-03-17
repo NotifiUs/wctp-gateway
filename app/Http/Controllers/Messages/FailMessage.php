@@ -23,6 +23,6 @@ class FailMessage extends Controller
             $message->status = 'failed';
             $message->save();
 
-        return redirect()->back()->withStatus('Message has been re-processed!');
+        return redirect()->back()->withStatus('Message has been marked as failed!');
     }
 }

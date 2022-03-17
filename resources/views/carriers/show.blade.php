@@ -57,16 +57,22 @@
                         </h5>
 
                         <div class="card-header bg-transparent my-0 py-4 text-center">
-                            @if( $carrier->api == 'twilio' )
-                                <img class="img-fluid" style="height:4rem;" src="/images/twilio-badge.png"
-                                     title="{{ __('Powered by Twilio') }}" alt="{{ __('Powered by Twilio') }}">
+                            @php
+                                $imageDetails = [
+                                    'url' => '/images/pager.png',
+                                    'title' => 'Unknown Carrier'
+                                ];
+                                try{
+                                    $driverFactory = new \App\Drivers\DriverFactory( $carrier->api );
+                                    $driver = $driverFactory->loadDriver();
+                                    $imageDetails = $driver->showCarrierImageDetails();
+                                }
+                                catch( Exception $e ){}
+                            @endphp
 
-                            @elseif( $carrier->api == 'thinq')
-                                <img class="img-fluid" style="height:4rem" src="/images/thinq-badge.svg"
-                                     title="{{ __('Powered by ThinQ') }}" alt="{{ __('Powered by ThinQ') }}">
-                            @else
-                                <h3>Unknown Carrier API</h3>
-                            @endif
+                            <img class="img-fluid" style="height:4rem;" src="{{ $imageDetails['url'] }}"
+                                 title="{{ $imageDetails['title'] }}" alt="{{ $imageDetails['title'] }}">
+
                         </div>
                         <div class="card-body my-0 py-2 text-center">
                             <p class="text-center">
@@ -74,7 +80,9 @@
                                     <strong class="text-muted">{{ $carrier->name }}</strong>
                                     <br>
                                     <code
-                                        class="bg-light text-dark p-1">{{ $carrier->twilio_account_sid ?? ( $carrier->thinq_account_id . " / " . $carrier->thinq_api_username ) }}</code>
+                                        class="bg-light text-dark p-1">
+                                        {{ $driver->showCarrierDetails($carrier) }}
+                                    </code>
                                 </small>
                             </p>
                         </div>

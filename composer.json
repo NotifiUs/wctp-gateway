@@ -21,7 +21,8 @@
         "notifius/php-wctp": "^0.0.7",
         "predis/predis": "^1.1.10",
         "robthree/twofactorauth": "^1.8.1",
-        "twilio/sdk": "^6.35.1"
+        "twilio/sdk": "^6.35.1",
+        "ext-intl": "*"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0.9",

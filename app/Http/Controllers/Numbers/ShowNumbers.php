@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Number;
+use App\Http\Controllers\Controller;
 
 class ShowNumbers extends Controller
 {

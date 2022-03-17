@@ -2,26 +2,35 @@
 
 namespace App\Drivers;
 
+use NumberFormatter;
 use Exception;
+use Carbon\Carbon;
 use App\Models\Carrier;
 use App\Models\Message;
-use Carbon\Carbon;
 use App\Jobs\LogEvent;
 use App\Jobs\SaveMessage;
 use App\Jobs\SendThinqSMS;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use GuzzleHttp\Client as Guzzle;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\View\View;
 
-class ThinQDriver implements Driver
+class ThinQSMSDriver implements SMSDriver
 {
     private int $maxMessageLength = 910;
     private string $requestInputMessageKey = 'message';
     private string $requestInputUidKey = 'guid';
     private string $requestInputStatusKey = 'send_status';
+    private array $carrierValidationFields = [
+        'thinq_account_id' => 'required',
+        'thinq_api_username' => 'required',
+        'thinq_api_token' => 'required',
+    ];
 
     public function getType( string $identifier ): string
     {
@@ -402,4 +411,157 @@ class ThinQDriver implements Driver
 
         return [];
     }
+
+    public function getAvailableNumbers(Request $request, Carrier $carrier ): array
+    {
+        $available = [];
+        $page = $request->get('page') ?? 1;
+
+        $url = "/origination/did/search2/did/{$carrier->thinq_account_id}?page={$page}&rows=100";
+
+        $guzzle = new Guzzle(
+            ['base_uri' => 'https://api.thinq.com',]
+        );
+        try{
+            $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
+        }
+        catch( RequestException $e ) {}
+        catch( Exception $e ){}
+
+        $thinq_numbers = json_decode( (string)$res->getBody(), true );
+
+        if( $thinq_numbers['total_rows'] > 0 )
+        {
+            foreach( $thinq_numbers['rows'] as $thinq_number )
+            {
+                $available[] = [
+                    'id' => $thinq_number['id'],
+                    'api' => $carrier->api,
+                    'type' => 'Phone Number',
+                    'number' => "+{$thinq_number['id']}",
+                    'carrier' => $carrier,
+                    'details' => Arr::dot( $thinq_number ),
+                    'sms_enabled' => $thinq_number['provisioned']
+                ];
+            }
+        }
+
+        $pages = 0;
+
+        if( $thinq_numbers['has_next_page'] === true  )
+        {
+            $pages = (int)floor( $thinq_numbers['total_rows'] / $thinq_numbers['rows_per_page'] );
+        }
+
+        return [
+            'available' => $available,
+            'pages' => $pages
+        ];
+    }
+
+    function verifyCarrierValidation( Request $request ): RedirectResponse | View
+    {
+        $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
+        if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator->errors());
+        }
+
+        $url = "/account/{$request->input('thinq_account_id')}/balance";
+        $guzzle = new Guzzle(
+            ['base_uri' => 'https://api.thinq.com',]
+        );
+        try{
+            $res = $guzzle->request('GET', $url, ['auth' => [ $request->input('thinq_api_username'), $request->input('thinq_api_token')]]);
+        }
+        catch( RequestException $e ) {
+            return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
+        }
+        catch( Exception $e ){
+            return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
+        }
+
+        try {
+            $balance = json_decode( (string)$res->getBody(), true, 512, JSON_THROW_ON_ERROR );
+        }
+        catch( Exception $e ) {
+            return redirect()->to('/carriers')->withErrors(["Unable to connect to ThinQ account: {$e->getMessage()}"]);
+        }
+
+        $fmt = new NumberFormatter( 'en_US', NumberFormatter::CURRENCY );
+        $balance['balance'] =  $fmt->formatCurrency($balance['balance'], "USD");
+
+        $account = [
+            'balance' => $balance['balance'],
+            'account_id' => $request->input('thinq_account_id'),
+            'api_username' => $request->input('thinq_api_username'),
+            'api_token' => $request->input('thinq_api_token'),
+        ];
+
+        return view('carriers.thinq-verify')->with('account', $account );
+    }
+
+    public function createCarrierInstance(Request $request): RedirectResponse
+    {
+        $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
+        if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator->errors());
+        }
+
+        $carrier = new Carrier;
+        $carrier->name = $request->input('name');
+        $carrier->enabled = 0;
+        $carrier->beta = 0;
+        $carrier->priority = $request->input('priority');
+        $carrier->thinq_account_id = $request->input('thinq_account_id');
+        $carrier->thinq_api_username = $request->input('thinq_api_username');
+        $carrier->thinq_api_token = encrypt( $request->input('thinq_api_token') );
+        $carrier->api = 'thinq';
+
+        try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier'), $e->getMessage()]); }
+
+        LogEvent::dispatch(
+            "{$carrier->name} ({$carrier->api}) created",
+            get_class( $this ), 'info', json_encode($carrier->toArray()), $request->user() ?? null
+        );
+
+        $statusHtml = "Carrier successfully created!";
+        return redirect()->to('/carriers')
+            ->with('status', $statusHtml);
+    }
+
+    public function showCarrierCredentials( Carrier $carrier ): array
+    {
+        try {
+            return [
+                'thinq_account_id' => $carrier->thinq_account_id,
+                'thinq_api_username' => $carrier->thinq_api_username,
+                'thinq_api_token' => decrypt($carrier->thinq_api_token),
+            ];
+        }
+        catch(Exception $e )
+        {
+            return [];
+        }
+    }
+
+    public function showCarrierImageDetails(): array
+    {
+        return [
+            'url' => '/images/thinq-badge.svg',
+            'title' => 'Powered by ThinQ/Commio',
+        ];
+    }
+
+    public function showCarrierDetails(Carrier $carrier ): string
+    {
+        return  $carrier->thinq_account_id ?? 'unknown' . " / " . $carrier->thinq_api_username ?? 'unknown';
+    }
+
+    public function canAutoProvision(): bool
+    {
+        return true;
+    }
+
 }

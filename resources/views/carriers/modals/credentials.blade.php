@@ -12,31 +12,22 @@
             <div class="modal-body">
                 <dl class="row">
 
-                    @if( $carrier->api == 'twilio' )
-                        <dt class="text-dark col-4 text-center">AccountID</dt>
-                        <dd class="col-8 text-left"><code
-                                class="text-dark bg-light border-light">{{ $carrier->twilio_account_sid}}</code></dd>
+                    @php
+                        $credentials = [];
+                        try{
+                            $driverFactory = new \App\Drivers\DriverFactory( $carrier->api );
+                            $driver = $driverFactory->loadDriver();
+                            $credentials = $driver->showCarrierCredentials($carrier);
+                        }
+                        catch( Exception $e ){
+                        }
+                    @endphp
 
-                        <dt class="text-dark col-4 text-center">AuthToken</dt>
+                    @foreach($credentials as $key => $credential)
+                        <dt class="text-dark col-4 text-center">{{ $key }}</dt>
                         <dd class="col-8 text-left"><code
-                                class="text-dark bg-light border-light">{{ decrypt( $carrier->twilio_auth_token) }}</code>
-                        </dd>
-
-                    @else
-                        <dt class="text-dark col-4 text-center">Account ID</dt>
-                        <dd class="col-8 text-left"><code
-                                class="text-dark bg-light border-light">{{ $carrier->thinq_account_id }}</code></dd>
-
-                        <dt class="text-dark col-4 text-center">API Username</dt>
-                        <dd class="col-8 text-left"><code
-                                class="text-dark bg-light border-light">{{ $carrier->thinq_api_username }}</code></dd>
-
-                        <dt class="text-dark col-4 text-center">API Token</dt>
-                        <dd class="col-8 text-left"><code
-                                class="text-dark bg-light border-light">{{ decrypt(  $carrier->thinq_api_token) }}</code>
-                        </dd>
-
-                    @endif
+                                class="text-dark bg-light border-light">{{ $credential }}</code></dd>
+                    @endforeach
                 </dl>
 
             </div>

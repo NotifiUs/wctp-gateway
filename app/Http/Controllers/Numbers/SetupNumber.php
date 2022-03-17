@@ -7,7 +7,6 @@ use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-
 class SetupNumber extends Controller
 {
     public function __construct()
@@ -17,7 +16,6 @@ class SetupNumber extends Controller
 
     public function __invoke( Number $number )
     {
-
         if( $number->provision() !== true )
         {
             return redirect()->back()->withErrors(['Unable to provision number with carrier.'] );

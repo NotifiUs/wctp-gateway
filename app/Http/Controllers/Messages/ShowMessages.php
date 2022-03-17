@@ -27,7 +27,6 @@ class ShowMessages extends Controller
             else {
                 $messages = Message::where( 'direction', 'inbound' )->orderBy('created_at', 'desc')->paginate(25);
             }
-
         }
         elseif(  $direction === 'outbound' ){
             if($statusFilter) {
@@ -36,7 +35,6 @@ class ShowMessages extends Controller
             else {
                 $messages = Message::where( 'direction', 'outbound' )->orderBy('created_at', 'desc')->paginate(25);
             }
-
         }
         else{
 

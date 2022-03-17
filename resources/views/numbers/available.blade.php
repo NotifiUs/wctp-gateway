@@ -14,6 +14,78 @@
             of {{ $pages }} )</small>
         <a href="/numbers" class="float-end text-muted text-small">In-Use Numbers</a>
     </h5>
+    <!--
+    'identifier' => 'required|string|unique:numbers,identifier',
+        'e164' => 'required|unique:numbers,e164',
+        'carrier_id' => 'required|exists:carriers,id',
+        'enterprise_host_id' => 'required|exists:enterprise_hosts,id'
+    -->
+    <form method="POST" action="/numbers" role="form">
+        {{ csrf_field() }}
+        <div class="col-12 mx-0 px-0">
+            <div class="card mb-4">
+                <div class="card-body my-0">
+                    <div class="form-group">
+                        <label class="fw-bold text-muted">{{ __('Identifier') }}</label>
+                        <input type="text" name="identifier" class="form-control">
+                        <small class="form-text text-muted">
+                            The unique identifier of the phone number. This is matched to incoming webhooks to determine the carrier.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="fw-bold text-muted">{{ __('E.164 Format') }}</label>
+                        <input type="text" name="e164" class="form-control">
+                        <small class="form-text text-muted">
+                            +(country-code)(phone-number) i.e., +18885551234 or +443442251826
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="fw-bold text-muted">{{ __('Carrier') }}</label>
+                        <select name="carrier_id" class="form-control">
+                            <option value=""></option>
+
+                            @foreach(\App\Models\Carrier::all() as $cr )
+                                @php
+                                    $canAutoProvision = false;
+                                    try{
+                                        $driverFactory = new \App\Drivers\DriverFactory( $cr->api );
+                                        $driver = $driverFactory->loadDriver();
+                                        $canAutoProvision = $driver->canAutoProvision();
+                                    }
+                                    catch( Exception $e ){
+                                    }
+                                @endphp
+                                @if($canAutoProvision === false)
+                                    <option value="{{ $cr->id }}">{{ $cr->name }}</option>
+                                @endif
+
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">
+                           The carrier to assign to this number. Twilio and ThinQ numbers must be provisioned from the Available Numbers list.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="fw-bold text-muted">{{ __('Enterprise Host') }}</label>
+                        <select  name="enterprise_host_id" class="form-control">
+                            <option value=""></option>
+                            @foreach(\App\Models\EnterpriseHost::all() as $eh )
+                                <option value="{{ $eh->id }}">{{ $eh->name }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">
+                            The Enterprise Host this number applies to.
+                        </small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" role="button" class="btn btn-primary">Create Number</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </form>
 
     @if($pages > 1)
 

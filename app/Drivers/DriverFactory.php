@@ -8,28 +8,27 @@
     {
         protected string $driver;
 
-        protected array $supportedDrivers = [
-            'twilio' => TwilioDriver::class,
-            'thinq' => ThinQDriver::class,
+        public static array $supportedDrivers = [
+            'twilio' => TwilioSMSDriver::class,
+            'thinq' => ThinQSMSDriver::class,
+            'webhook' => WebhookSMSDriver::class,
+            'sunwire' => SunwireSMSDriver::class,
         ];
 
         public function __construct( string $driver )
         {
-            if(array_key_exists($driver, $this->supportedDrivers ) )
-            {
-                $this->driver = $driver;
-            }
-            else
+            if( ! array_key_exists($driver, self::$supportedDrivers ) )
             {
                 throw new Exception('No compatible driver found');
             }
+
+            $this->driver = $driver;
         }
 
-        public function loadDriver(): TwilioDriver|ThinQDriver
+        public function loadDriver(): TwilioSMSDriver|ThinQSMSDriver|WebhookSMSDriver|SunwireSMSDriver
         {
-            return new $this->supportedDrivers[$this->driver]();
+            return new self::$supportedDrivers[$this->driver]();
         }
-
     }
 
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Carriers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Carrier;
+use App\Http\Controllers\Controller;
 
 class ShowCarriers extends Controller
 {

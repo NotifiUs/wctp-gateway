@@ -17,8 +17,6 @@ class DisableNumber extends Controller
 
     public function __invoke( Number $number )
     {
-
-
         $number->enabled = 0;
 
         try{ $number->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to disable Phone Number')]); }

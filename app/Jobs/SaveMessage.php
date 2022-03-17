@@ -34,7 +34,6 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
         $this->reply_with = $reply_with;
         $this->carrier_message_uid = $carrier_message_uid;
         $this->direction = $direction;
-        $this->queue = 'messages';
     }
 
     public function handle()

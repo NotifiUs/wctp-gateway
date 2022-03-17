@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', __('Verify ThinQ Account'))
+@section('title', __('Verify Webhook Setup'))
 @push('css')
 @endpush
 @push('scripts')
@@ -9,14 +9,14 @@
     @include('layouts.error')
     @include('layouts.status')
 
-    <h5 class="text-muted-light mt-2 mt-md-0">{{ __('Verify ThinQ Account') }}</h5>
+    <h5 class="text-muted-light mt-2 mt-md-0">{{ __('Verify Webhook Setup') }}</h5>
     <div class="row justify-content-start mb-2">
 
         <div class="card w-100 py-0">
             <div class="card-body py-0">
                 <form method="POST" action="/carriers" role="form">
                     {{ csrf_field() }}
-                    <input type="hidden" name="carrier_api" value="thinq">
+                    <input type="hidden" name="carrier_api" value="webhook">
                     <div class="container-fluid">
 
                         <div class="row justify-content-center">
@@ -46,41 +46,42 @@
                                         Cancel
                                     </a>
                                     <button type="submit" role="button" class="btn btn-primary">
-                                        Use this ThinQ Account
+                                        Configure Webhook
                                     </button>
                                 </div>
                             </div>
                             <div class="col-12 col-xl-6">
-                                <label>ThinQ Account</label>
+                                <label>Webhook Details</label>
                                 <dl class="w-100 bg-light rounded p-4">
-                                    <dt class="text-muted-light">Account ID</dt>
+                                    <dt class="text-muted-light">Host</dt>
                                     <dl class="text-dark fw-bolder">
-                                        {{ $account['account_id'] }}
-                                        <input type="hidden" name="thinq_account_id"
-                                               value="{{ $account['account_id'] }}">
+                                        {{ $account['webhook_host'] }}
+                                        <input type="hidden" name="webhook_host"
+                                               value="{{ $account['webhook_host'] }}">
                                     </dl>
-                                    <dt class="text-muted-light">API Username</dt>
+                                    <dt class="text-muted-light">Endpoint</dt>
+                                    <dl class="">
+                                        <code class="text-primary fw-bold">{{ $account['webhook_endpoint'] }}</code>
+                                        <input type="hidden" name="webhook_endpoint"
+                                               value="{{ $account['webhook_endpoint'] }}">
+                                    </dl>
+                                    <dt class="text-muted-light">Basic Auth User</dt>
                                     <dl class="">
                                         <code
-                                            class="text-primary fw-bold">{{ $account['api_username'] }}</code>
-                                        <input type="hidden" name="thinq_api_username"
-                                               value="{{ $account['api_username'] }}">
+                                            class="text-primary fw-bold">{{ $account['webhook_username'] }}</code>
+                                        <input type="hidden" name="webhook_username"
+                                               value="{{ $account['webhook_username'] }}">
                                     </dl>
-                                    <dt class="text-muted-light">API Token</dt>
+                                    <dt class="text-muted-light">Basic Auth User</dt>
                                     <dl class="">
                                         <code
-                                            class="text-primary fw-bold">{{ str_pad( substr( $account['api_token'],0, 6), 40, '*') }}</code>
-                                        <input type="hidden" name="thinq_api_token"
-                                               value="{{  $account['api_token'] }}">
-                                    </dl>
-                                    <dt class="text-muted-light">Current Balance</dt>
-                                    <dl class="text-dark fw-bolder">
-                                        <i class="fas fa-dollar-sign text-muted"></i> {{ $account['balance'] }}
+                                            class="text-primary fw-bold">{{ $account['webhook_password'] }}</code>
+                                        <input type="hidden" name="webhook_password"
+                                               value="{{ $account['webhook_password'] }}">
                                     </dl>
                                 </dl>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>

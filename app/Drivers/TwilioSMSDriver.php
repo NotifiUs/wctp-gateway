@@ -9,19 +9,26 @@ use App\Models\Carrier;
 use App\Models\Message;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Twilio\Rest\Client as TwilioClient;
 use Twilio\Security\RequestValidator;
 
-class TwilioDriver implements Driver
+class TwilioSMSDriver implements SMSDriver
 {
     private int $maxMessageLength = 1600;
     private string $requestInputMessageKey = 'Body';
     private string $requestInputUidKey = 'MessageSid';
     private string $requestInputStatusKey = 'MessageStatus';
+    private array $carrierValidationFields = [
+        'twilio_account_sid' => 'required',
+        'twilio_auth_token' => 'required',
+    ];
 
     public function getType( string $identifier ): string
     {
@@ -34,7 +41,6 @@ class TwilioDriver implements Driver
         {
             return "Messaging Service";
         }
-
         return "Phone Number";
     }
 
@@ -236,4 +242,174 @@ class TwilioDriver implements Driver
         }catch( Exception $e ) { return []; }
     }
 
+    public function getAvailableNumbers(Request $request, Carrier $carrier ): array
+    {
+        $available = [];
+
+        //get list of numbers from messaging services
+        try {
+            $twilio = new TwilioClient( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
+            $services = $twilio->messaging->v1->services->read(100, 100);
+
+            foreach ( $services as $record ) {
+                //check to see if it has phonenumbers or shortcodes
+                $hasNumbers = false;
+                $hasShortCodes = false;
+                $serviceAddons = [];
+                $service_name = $record->friendlyName;
+                foreach( $record->phoneNumbers->read(100, 100) as $num )
+                {
+                    $hasNumbers = true;
+                    $service_name = $num->phoneNumber;
+                    $exclude[] = $num->sid;
+                    $serviceAddons['numbers'][] = $num->toArray();
+                }
+
+                foreach( $record->shortCodes->read(100, 100) as $shortcode )
+                {
+                    $hasShortCodes = true;
+                    $service_name = $shortcode->shortCode;
+                    $exclude[] = $shortcode->sid;
+                    $serviceAddons['shortcodes'][] = $shortcode->toArray();
+                }
+
+                $available[] = [
+                    'id' => $record->sid,
+                    'api' => $carrier->api,
+                    'type' => 'Messaging Service',
+                    'number' => $service_name,
+                    'carrier' => $carrier,
+                    'details' => Arr::dot( array_merge($record->toArray(), $serviceAddons ) ),
+                    'sms_enabled' => $hasNumbers || $hasShortCodes,
+                ];
+            }
+        }
+        catch( Exception $e ) {}
+
+        //get list of numbers
+        try {
+            $twilio = new TwilioClient( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
+            $incomingPhoneNumbers = $twilio->incomingPhoneNumbers->read(array(
+                ['capabilities' => [
+                    'sms' => 1
+                ]]
+            ), 100);
+
+            foreach ( $incomingPhoneNumbers as $record ) {
+
+                if( in_array( $record->sid, $exclude ) )
+                {
+                    $available[] = [
+                        'id' => $record->sid,
+                        'api' => $carrier->api,
+                        'type' => 'Phone Number',
+                        'number' => $record->phoneNumber,
+                        'carrier' => $carrier,
+                        'details' => Arr::dot($record->toArray()),
+                        'sms_enabled' => 0,
+                    ];
+                }
+                else
+                {
+                    $available[] = [
+                        'id' => $record->sid,
+                        'api' => $carrier->api,
+                        'type' => 'Phone Number',
+                        'number' => $record->phoneNumber,
+                        'carrier' => $carrier,
+                        'details' => Arr::dot($record->toArray()),
+                        'sms_enabled' => $record->capabilities['sms'],
+                    ];
+                }
+
+            }
+        }
+        catch( Exception $e ){}
+        return [
+            'available' => $available,
+            'pages' => null
+        ];
+    }
+
+    public function verifyCarrierValidation( Request $request ): RedirectResponse | View
+    {
+        $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
+        if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator->errors());
+        }
+
+        try {
+            $twilio = new TwilioClient( $request->input('twilio_account_sid'), $request->input('twilio_auth_token'));
+            $account = $twilio->api->v2010->accounts($request->input('twilio_account_sid'))->fetch();
+        }
+        catch( Exception $e )
+        {
+            return redirect()->to('/carriers')->withErrors(['Unable to connect to Twilio account']);
+        }
+
+        return view('carriers.twilio-verify')->with('account', $account->toArray() );
+
+    }
+
+    public function createCarrierInstance(Request $request): RedirectResponse
+    {
+        $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
+        if($validator->fails())
+        {
+            return redirect()->back()->withErrors($validator->errors());
+        }
+
+        $carrier = new Carrier;
+        $carrier->name = $request->input('name');
+        $carrier->enabled = 0;
+        $carrier->beta = 0;
+        $carrier->priority = $request->input('priority');
+        $carrier->twilio_account_sid = $request->input('twilio_account_sid');
+        $carrier->twilio_auth_token = encrypt( $request->input('twilio_auth_token') );
+        $carrier->api = 'twilio';
+
+        try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier')]); }
+
+        LogEvent::dispatch(
+            "{$carrier->name} ({$carrier->api}) created",
+            get_class( $this ), 'info', json_encode($carrier->toArray()), $request->user() ?? null
+        );
+
+        $statusHtml = "Carrier successfully created!";
+        return redirect()->to('/carriers')
+            ->with('status', $statusHtml);
+    }
+
+    public function showCarrierCredentials( Carrier $carrier ): array
+    {
+        try {
+            return [
+                'twilio_account_sid' => $carrier->twilio_account_sid,
+                'twilio_auth_token' => decrypt($carrier->twilio_auth_token),
+            ];
+        }
+        catch(Exception $e )
+        {
+            return [];
+        }
+    }
+
+    public function showCarrierImageDetails(): array
+    {
+        return [
+            'url' => '/images/twilio-badge.png',
+            'title' => 'Powered by Twilio',
+        ];
+    }
+
+    public function showCarrierDetails(Carrier $carrier ): string
+    {
+        return  $carrier->twilio_account_sid ?? 'unknown';
+    }
+
+    public function canAutoProvision(): bool
+    {
+        return true;
+    }
 }

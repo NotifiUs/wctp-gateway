@@ -26,9 +26,6 @@ class Inbound extends Controller
         }
 
         try{
-            //Note to refactor?
-            // I tried returning TwilioDriver from construct but it didn't work
-            // Moved to its own method which returns the driver fine.
             $driverFactory = new DriverFactory( $carrier->api );
             $driver = $driverFactory->loadDriver();
         }
