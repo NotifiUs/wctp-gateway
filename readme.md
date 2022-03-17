@@ -17,18 +17,18 @@ Ardently crafted for the Amtelco and [NAEO](https://www.naeo.org) community, you
 The modern WCTP engine brings the following features and more:
 
 - Create and manage Enterprise Host credentials
-- Bring your own Twilio or ThinQ accounts
+- Bring your own [Twilio](https://twilio.com), [ThinQ/Commio](https://thinq.com), or [Sunwire](https://sunwire.ca) accounts
 - Support for using Twilio Messaging Services or Phone Numbers
 - Carrier priority
 - TLS/SSL required by default
 - Email login notifications
 - Work's out of the box with Twilio's WhatsApp integration
+- A generic webhook API provider
 
 **Coming Soon**
 
 - Improved fail-over between carrier
-- Two additional telecom API providers
-- A generic webhook API provider
+- More telecom API providers
 - MergeComm scripting integration for Amtelco ecosystems
 
 ## Status
