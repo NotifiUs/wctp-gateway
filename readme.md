@@ -71,9 +71,7 @@ For various splash pages (errors, etc), we use open source illustrations from [U
 You can setup and run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, and just about any modern PHP web environment. 
 Start from a single-server appliance setup and grow into a full blown load balancing and clustering setup.
 
-Laravel [Forge](https://forge.laravel.com) is an easy to use server management tool to try out! 
-
-You can also go *serverless*, and try out [Vapor](https://vapor.laravel.com/). 
+Laravel [Forge](https://forge.laravel.com) is an easy to use server management tool to try out!
 
 ## Contributing
 
