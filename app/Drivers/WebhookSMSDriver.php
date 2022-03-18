@@ -188,6 +188,7 @@ class WebhookSMSDriver implements SMSDriver
                 'webhook_endpoint' => $carrier->webhook_endpoint,
                 'webhook_username' => decrypt($carrier->webhook_username),
                 'webhook_password' => decrypt($carrier->webhook_password),
+                'inboud_endpoint' => secure_url("/sms/inbound/{identifier}/primary")
             ];
         }
         catch(Exception $e )

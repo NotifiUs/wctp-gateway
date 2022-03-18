@@ -2,10 +2,10 @@
 
 <div align="center">
 
-[![Build Status](https://travis-ci.org/NotifiUs/wctp-gateway.svg?branch=main)](https://travis-ci.org/NotifiUs/wctp-gateway)
+[![Build Status](https://app.travis-ci.com/NotifiUs/wctp-gateway.svg?branch=main)](https://app.travis-ci.com/NotifiUs/wctp-gateway)
 [![GitHub license](https://img.shields.io/github/license/notifius/wctp-gateway?color=blue)](https://github.com/NotifiUs/wctp-gateway/blob/master/LICENSE)
-[![GitHub Release (latest by date)](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3ecc8cd5d2f5462293c901f69a424ee8)](https://www.codacy.com/gh/NotifiUs/wctp-gateway/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NotifiUs/wctp-gateway&amp;utm_campaign=Badge_Grade)
+[![GitHub Release](https://img.shields.io/github/v/tag/NotifiUs/wctp-gateway)](https://github.com/NotifiUs/wctp-gateway/releases)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3781c4b9d7b64ea0a5d7cdf8652e0723)](https://www.codacy.com/gh/NotifiUs/wctp-gateway/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NotifiUs/wctp-gateway&amp;utm_campaign=Badge_Grade)
 </div>
 
 ## About WCTP Gateway

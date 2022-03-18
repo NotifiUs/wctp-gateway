@@ -80,23 +80,24 @@
                                     {{ $message->to }}
                                 </td>
                                 <td class="text-truncate text-muted text-small text-right">
-                                    @switch( $message->status )
+                                    @switch( strtolower($message->status))
                                         @case("sent")
-                                        @case("DELIVRD")
+                                        @case("delivrd")
                                         @case("delivered")
-                                        <span class="badge bg-light border border-success shadow-sm px-2 py-1">
+                                            <span class="badge bg-light text-success border border-success shadow-sm px-2 py-1">
                                             @break
-                                            @case("UNDELIV")
-                                            @case("undelivered")
-                                            @case("failed")
-                                            @case("UNKNOWN")
-                                            @case("DELETED")
-                                            @case("EXPIRED")
-                                            @case("REJECTD")
-                                            <span class="badge bg-danger px-2 py-1">
+                                        @case("undeliv")
+                                        @case("undelivered")
+                                        @case("failed")
+                                        @case("deleted")
+                                        @case("expired")
+                                        @case("rejectd")
+                                            <span class="badge bg-light border border-danger text-danger shadow-sm px-2 py-1">
                                             @break
-                                                @default
-                                            <span class="badge bg-light border border-secondary shadow-sm px-2 py-1">
+                                        @case("unknown")
+                                        @case("in-transit")
+                                            @default
+                                            <span class="badge bg-light border text-secondary border-secondary shadow-sm px-2 py-1">
                                     @endswitch
 
                                                 {{ ucwords( $message->status ) }}

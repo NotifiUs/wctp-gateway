@@ -1,6 +1,6 @@
 <div class="modal fade" data-backdrop="static" id="credentialsCarrierModal{{ $carrier->id }}" tabindex="-1"
      role="dialog" aria-labelledby="credentialsCarrierModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-sm border-dark">
             <div class="modal-header">
                 <h5 class="modal-title"
