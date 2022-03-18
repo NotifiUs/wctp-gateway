@@ -2,6 +2,7 @@
 
 namespace App\Drivers;
 
+use App\Models\Number;
 use NumberFormatter;
 use Exception;
 use Carbon\Carbon;
@@ -382,34 +383,10 @@ class ThinQSMSDriver implements SMSDriver
 
     public function getCarrierDetails(Carrier $carrier, string $identifier): array
     {
-        $url = "/origination/did/search2/did/{$carrier->thinq_account_id}";
-        $guzzle = new Guzzle(
-            ['base_uri' => 'https://api.thinq.com',]
-        );
-        try{
-            $res = $guzzle->get( $url, ['auth' => [ $carrier->thinq_api_username, decrypt($carrier->thinq_api_token)]]);
-        }
-        catch( RequestException $e ) {
-            return [];
-        }
-        catch( Exception $e ){
-            return [];
-        }
-
-        $thinq_numbers = json_decode( (string)$res->getBody(), true );
-
-        if( $thinq_numbers['total_rows'] > 0 )
-        {
-            foreach( $thinq_numbers['rows'] as $thinq_number )
-            {
-                if( $identifier == $thinq_number['id'] )
-                {
-                    return $thinq_number;
-                }
-            }
-        }
-
-        return [];
+        $number = Number::where('identifier', $identifier)->first();
+        return Arr::dot(array_merge(['carrier' => $carrier->only([
+            'id','name','priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
+        ]), 'number' => $number->toArray() ?? [] ]));
     }
 
     public function getAvailableNumbers(Request $request, Carrier $carrier ): array

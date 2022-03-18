@@ -2,12 +2,14 @@
 
 namespace App\Drivers;
 
+use App\Models\Number;
 use Exception;
 use Carbon\Carbon;
 use App\Jobs\LogEvent;
 use App\Models\Carrier;
 use App\Models\Message;
 use App\Jobs\SaveMessage;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebhookSMS;
@@ -129,9 +131,10 @@ class WebhookSMSDriver implements SMSDriver
 
     public function getCarrierDetails(Carrier $carrier, string $identifier ): array
     {
-       return $carrier->only([
-           'id','name','webhook_host','webhook_endpoint','webhook_username', 'webhook_password','priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
-       ]);
+        $number = Number::where('identifier', $identifier)->first();
+        return Arr::dot(array_merge(['carrier' => $carrier->only([
+            'id','name','webhook_host','webhook_endpoint','webhook_username', 'webhook_password','priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
+        ]), 'number' => $number->toArray() ?? [] ]));
     }
 
     public function getAvailableNumbers(Request $request, Carrier $carrier ): array

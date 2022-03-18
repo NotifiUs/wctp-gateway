@@ -26,7 +26,7 @@
                     <table class="table table-striped table-hover m-0">
                         <thead>
                         <tr>
-                            <th class="fw-bold text-muted-light">{{ __('Phone Number') }}</th>
+                            <th class="fw-bold text-muted-light">{{ __('Phone Number') }}/{{ __('Identifier') }}</th>
                             <th class="fw-bold text-muted-light">{{ __('Carrier Info') }}</th>
                             <th class="fw-bold text-muted-light">{{ __('Enterprise Host') }}</th>
                             <th class="fw-bold text-muted-light">{{ __('Status') }}</th>
@@ -41,7 +41,7 @@
                                 $eh = EnterpriseHost::find( $number['enterprise_host_id'])
                             @endphp
                             <tr>
-                                <td title="{{ $type }}" class="text-muted">{{ $number['e164'] }}</td>
+                                <td title="{{ $type }}" class="text-dark">{{ $number['e164'] }} <small class="d-block text-xs text-muted">Identifier: {{ $number['identifier'] }}</small></td>
                                 <td class="text-small"><strong>{{ ucwords( $c->api ) }}</strong>
                                     &middot; {{ $c->name  }}</td>
                                 <td class="text-small">{{ $eh->name }} </td>

@@ -2,11 +2,13 @@
 
 namespace App\Drivers;
 
+use App\Models\Number;
 use Exception;
 use Carbon\Carbon;
 use App\Jobs\LogEvent;
 use App\Models\Carrier;
 use App\Models\Message;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use App\Jobs\SaveMessage;
 use App\Jobs\SendSunwireSMS;
@@ -203,9 +205,11 @@ class SunwireSMSDriver implements SMSDriver
 
     public function getCarrierDetails(Carrier $carrier, string $identifier ): array
     {
-        return $carrier->only([
+        $number = Number::where('identifier', $identifier)->first();
+        return Arr::dot(array_merge(['carrier' => $carrier->only([
             'id','name','priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
-        ]);
+        ]), 'number' => $number->toArray() ?? [] ]));
+
     }
 
     public function getAvailableNumbers(Request $request, Carrier $carrier ): array

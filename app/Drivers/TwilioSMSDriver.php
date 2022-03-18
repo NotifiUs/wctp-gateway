@@ -231,12 +231,16 @@ class TwilioSMSDriver implements SMSDriver
                 {
                     $serviceAddons['shortcodes'][] = $shortcode->toArray();
                 }
-                return Arr::dot(array_merge( $results->toArray(), $serviceAddons ) );
+
+                return Arr::dot(array_merge(['carrier' => $carrier->only([
+                    'id','name', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
+                ]), 'number' => $results->toArray(), 'addons' => $serviceAddons ]));
             }
             else {
-
                 $results = $twilio->incomingPhoneNumbers($identifier)->fetch();
-                return Arr::dot($results->toArray() );
+                return Arr::dot(array_merge(['carrier' => $carrier->only([
+                    'id','name', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
+                ]), 'number' => $results ]));
             }
 
         }catch( Exception $e ) { return []; }
