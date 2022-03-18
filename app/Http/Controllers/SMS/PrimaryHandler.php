@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Drivers\DriverFactory;
 use App\Models\EnterpriseHost;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 
 class PrimaryHandler extends Controller
@@ -22,19 +23,13 @@ class PrimaryHandler extends Controller
         $number = Number::where('enabled', 1)->where('identifier', $identifier)->first();
 
         if( $number === null ){
-            return $this->respond();
-        }
-
-        $host = EnterpriseHost::where('enabled', 1)->where('id', $number->enterprise_host_id )->first();
-
-        if( $host === null ) {
-            return $this->respond();
+            return $this->fail();
         }
 
         $this->carrier = Carrier::where('enabled',1)->where('id', $number->carrier_id )->first();
 
         if( $this->carrier === null ){
-            return $this->respond();
+            return $this->fail();
         }
 
         try{
@@ -42,6 +37,12 @@ class PrimaryHandler extends Controller
             $this->driver = $driverFactory->loadDriver();
         }
         catch( Exception $e ) {
+            return $this->fail();
+        }
+
+        $host = EnterpriseHost::where('enabled', 1)->where('id', $number->enterprise_host_id )->first();
+
+        if( $host === null ) {
             return $this->respond();
         }
 
@@ -77,5 +78,10 @@ class PrimaryHandler extends Controller
     protected function respond(): Response
     {
         return $this->driver->getHandlerResponse();
+    }
+
+    protected function fail(): Response|JsonResponse
+    {
+        return response()->json(['error' => 400, 'desc' => 'bad request'], 400, null, JSON_PRETTY_PRINT );
     }
 }

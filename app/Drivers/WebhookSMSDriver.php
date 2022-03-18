@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 
 class WebhookSMSDriver implements SMSDriver
 {
+    private array $json;
     private int $maxMessageLength = 8192;
     private string $requestInputMessageKey = 'body';
     private string $requestInputUidKey = 'id';
@@ -79,11 +80,40 @@ class WebhookSMSDriver implements SMSDriver
 
     public function verifyHandlerRequest( Request $request, Carrier $carrier ): bool
     {
-        //We are using the same user/pass for inbound/outbound webhooks ...I can see this needing changed
+        if( $request->wantsJson())
+        {
+            $this->json = json_decode($request->getContent(), true);
+            $to = $this->json[$this->getRequestInputToKey()];
+            $from = $this->json[$this->getRequestInputFromKey()];
+            $message = $this->json[$this->getRequestInputMessageKey()];
+        }
+        else
+        {
+            $to = $request->input($this->getRequestInputToKey());
+            $from = $request->input($this->getRequestInputFromKey());
+            $message = $request->input($this->getRequestInputMessageKey());
+        }
+
+        $validator = Validator::make([
+            'to' => $to,
+            'from' => $from,
+            'message' => $message
+        ], [
+            'to' => 'required',
+            'from' => 'required',
+            'message' => 'required',
+
+        ]);
+
+        if ($validator->fails()) { return false; }
+
+        //We are using the same user/pass for inbound/outbound webhooks ...I can see this needing changed at some point
+        //but for now it forces people to use TLS with a valid certificate + Basic Auth which is demonstratively common/safe in most cases
         if( $request->getUser() === decrypt($carrier->webhook_username) && $request->getPassword() === decrypt($carrier->webhook_password))
         {
             return true;
         }
+
         return false;
     }
 
