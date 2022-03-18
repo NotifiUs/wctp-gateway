@@ -2,6 +2,9 @@
 # Web visits will receive a 503 error
 # SMS and WCTP endpoints will still accept messages to be queued
 # Messages will not send until deployment is over.
+php artisan down
+
+# Clears the cache
 php artisan optimize:clear
 
 # You may need to setup git to point to github.com/notifius/wctp-gateway
