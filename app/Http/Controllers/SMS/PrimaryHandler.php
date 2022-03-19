@@ -82,6 +82,6 @@ class PrimaryHandler extends Controller
 
     protected function fail(): Response|JsonResponse
     {
-        return response()->json(['error' => 400, 'desc' => 'bad request'], 400, null, JSON_PRETTY_PRINT );
+        return response()->json(['error' => 400, 'desc' => 'bad request'], 400, [], JSON_PRETTY_PRINT );
     }
 }
