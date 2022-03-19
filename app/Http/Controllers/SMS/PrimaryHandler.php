@@ -80,7 +80,7 @@ class PrimaryHandler extends Controller
         return $this->driver->getHandlerResponse();
     }
 
-    protected function fail(): Response|JsonResponse
+    protected function fail(): JsonResponse
     {
         return response()->json(['error' => 400, 'desc' => 'bad request'], 400, [], JSON_PRETTY_PRINT );
     }

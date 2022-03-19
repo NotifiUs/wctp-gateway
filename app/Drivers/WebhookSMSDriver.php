@@ -127,6 +127,7 @@ class WebhookSMSDriver implements SMSDriver
 
         if( $request->wantsJson())
         {
+            $this->json = json_decode($request->getContent(), true);
             $to = $this->json[$this->getRequestInputToKey()];
             $from = $this->json[$this->getRequestInputFromKey()];
             $message = $this->json[$this->getRequestInputMessageKey()];
