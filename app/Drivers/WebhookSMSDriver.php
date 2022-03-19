@@ -124,17 +124,33 @@ class WebhookSMSDriver implements SMSDriver
 
     public function saveInboundMessage(Request $request, int $carrier_id, int $number_id, int $enterprise_host_id, Carbon $submitted_at, $reply_with = null): void
     {
+
+        if( $request->wantsJson())
+        {
+            $to = $this->json[$this->getRequestInputToKey()];
+            $from = $this->json[$this->getRequestInputFromKey()];
+            $message = $this->json[$this->getRequestInputMessageKey()];
+            $status = $this->json[$this->getRequestInputStatusKey()];
+        }
+        else
+        {
+            $to = $request->input($this->getRequestInputToKey());
+            $from = $request->input($this->getRequestInputFromKey());
+            $message = $request->input($this->getRequestInputMessageKey());
+            $status = $request->input($this->getRequestInputUidKey() );
+        }
+
         SaveMessage::dispatch(
             $carrier_id,
             $number_id,
             $enterprise_host_id,
-            $request->input($this->getRequestInputToKey()),
-            $request->input($this->getRequestInputFromKey()),
-            encrypt( $request->input($this->getRequestInputMessageKey()) ),
+            $to,
+            $from,
+            encrypt( $message ),
             null,
             $submitted_at,
             $reply_with,
-            $request->input($this->getRequestInputUidKey() ),
+            $status,
             'inbound'
         );
     }

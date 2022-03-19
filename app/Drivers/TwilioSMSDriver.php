@@ -25,6 +25,8 @@ class TwilioSMSDriver implements SMSDriver
     private string $requestInputMessageKey = 'Body';
     private string $requestInputUidKey = 'MessageSid';
     private string $requestInputStatusKey = 'MessageStatus';
+    private string $requestInputToKey = 'To';
+    private string $requestInputFromKey = 'From';
     private array $carrierValidationFields = [
         'twilio_account_sid' => 'required',
         'twilio_auth_token' => 'required',
@@ -42,6 +44,16 @@ class TwilioSMSDriver implements SMSDriver
             return "Messaging Service";
         }
         return "Phone Number";
+    }
+
+    public function getRequestInputToKey(): string
+    {
+        return $this->requestInputToKey;
+    }
+
+    public function getRequestInputFromKey(): string
+    {
+        return $this->requestInputFromKey;
     }
 
     public function queueOutbound($host, $carrier, $recipient, $message, $messageID, $reply_with): void
@@ -112,13 +124,13 @@ class TwilioSMSDriver implements SMSDriver
             $carrier_id,
             $number_id,
             $enterprise_host_id,
-            $request->input('To'),
-            $request->input('From'),
+            $request->input($this->getRequestInputToKey()),
+            $request->input($this->getRequestInputFromKey()),
             encrypt( $request->input($this->getRequestInputMessageKey()) ),
             null,
             $submitted_at,
             $reply_with,
-            $request->input('MessageSid'),
+            $request->input($this->getRequestInputStatusKey()),
             'inbound'
         );
     }
