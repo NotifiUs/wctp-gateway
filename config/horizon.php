@@ -146,11 +146,12 @@ return [
             'supervisor-1' => [
                 'connection' => 'redis',
                 'queue' => [
-                    'default',
-                    'enterprise-host',
                     'messages',
                     'outbound',
-                    'outbound-throttled'
+                    'outbound-throttled',
+                    'enterprise-host',
+                    'email',
+                    'default',
                 ],
                 'balance' => 'auto',
                 'minProcesses' => 1,
@@ -163,11 +164,12 @@ return [
             'supervisor-1' => [
                 'connection' => 'redis',
                 'queue' => [
-                    'default',
-                    'enterprise-host',
                     'messages',
                     'outbound',
-                    'outbound-throttled'
+                    'outbound-throttled',
+                    'enterprise-host',
+                    'email',
+                    'default',
                 ],
                 'balance' => 'simple',
                 'processes' => 1,

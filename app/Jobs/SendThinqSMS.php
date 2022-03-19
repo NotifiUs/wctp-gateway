@@ -2,11 +2,12 @@
 
 namespace App\Jobs;
 
+use Throwable;
 use Exception;
-use App\Models\Carrier;
 use Carbon\Carbon;
-use App\Models\EnterpriseHost;
+use App\Models\Carrier;
 use Illuminate\Bus\Queueable;
+use App\Models\EnterpriseHost;
 use GuzzleHttp\Client as Guzzle;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Queue\SerializesModels;
@@ -22,12 +23,13 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
     public int $tries = 10;
     public int $timeout = 60;
     public int $uniqueFor = 3600;
+    public bool $failOnTimeout = true;
     public bool $deleteWhenMissingModels = true;
     protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
     public function  __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int $messageID, $reply_with  )
     {
-        $this->queue = 'outbound-throttled';
+        $this->onQueue('outbound-throttled');
         $this->host = $host;
         $this->carrier = $carrier;
         $this->recipient = $recipient;
@@ -127,5 +129,23 @@ class SendThinqSMS implements ShouldQueue, ShouldBeUnique
     public function uniqueId()
     {
         return $this->messageID;
+    }
+
+    public function failed(Throwable $exception)
+    {
+        SaveMessage::dispatch(
+            $this->carrier->id,
+            $this->from->id,
+            $this->host->id,
+            "+1{$this->recipient}",
+            $this->from->e164,
+            encrypt( $this->message ),
+            $this->messageID,
+            Carbon::now(),
+            $this->reply_with,
+            'thinq',
+            'outbound',
+            'failed'
+        );
     }
 }

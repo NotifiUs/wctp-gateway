@@ -2,18 +2,19 @@
 
 namespace App\Jobs;
 
-use App\Models\Carrier;
-use App\Models\EnterpriseHost;
-use Carbon\Carbon;
 use Exception;
+use Throwable;
+use Carbon\Carbon;
+use App\Models\Carrier;
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Models\EnterpriseHost;
+use Illuminate\Queue\SerializesModels;
+use Twilio\Rest\Client as TwilioClient;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
-use Twilio\Rest\Client as TwilioClient;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 {
@@ -21,13 +22,15 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
 
     public int $tries = 10;
     public int $timeout = 60;
+    protected string $number;
     public int $uniqueFor = 3600;
+    public bool $failOnTimeout = true;
     public bool $deleteWhenMissingModels = true;
     protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
     public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int|null $messageID, $reply_with  )
     {
-        $this->queue = 'outbound';
+        $this->onQueue('outbound');
         $this->host = $host;
         $this->carrier = $carrier;
         $this->recipient = $recipient;
@@ -87,25 +90,25 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
            if(Str::startsWith($this->recipient, '+'))
            {
                //the + symbol is the exit code, so we assume the remaining is country code + number
-               $number = $this->recipient;
+               $this->number = $this->recipient;
            }
            elseif(Str::length($this->recipient) === 11 && Str::startsWith($this->recipient, '1')){
                //11 digit number with no + and 1 as the country code
                //i.e. NANP area codes
-               $number = "+{$this->recipient}";
+               $this->number = "+{$this->recipient}";
            }
            elseif(Str::length($this->recipient) === 10)
            {
                //assume 10 digits are NANP
-               $number = "+1{$this->recipient}";
+               $this->number = "+1{$this->recipient}";
            }
            else
            {
-               $number = "+{$this->recipient}";
+               $this->number = "+{$this->recipient}";
            }
 
             $msg = $client->messages->create(
-                $number,
+                $this->number,
                 $params
             );
         }
@@ -121,7 +124,7 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
             $this->carrier->id,
             $this->from->id,
             $this->host->id,
-            $number,
+            $this->number,
             $this->from->e164,
             encrypt( $this->message ),
             $this->messageID,
@@ -137,5 +140,23 @@ class SendTwilioSMS implements ShouldQueue, ShouldBeUnique
     public function uniqueId()
     {
         return $this->messageID;
+    }
+
+    public function failed(Throwable $exception)
+    {
+        SaveMessage::dispatch(
+            $this->carrier->id,
+            $this->from->id,
+            $this->host->id,
+            $this->number ?? 'unknown',
+            $this->from->e164,
+            encrypt( $this->message ),
+            $this->messageID,
+            Carbon::now(),
+            $this->reply_with,
+            'twilio',
+            'outbound',
+            'failed'
+        );
     }
 }

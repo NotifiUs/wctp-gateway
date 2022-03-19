@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Throwable;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Carrier;
@@ -21,12 +22,13 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
     public int $tries = 10;
     public int $timeout = 60;
     public int $uniqueFor = 3600;
+    public bool $failOnTimeout = true;
     public bool $deleteWhenMissingModels = true;
     protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
     public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int|null $messageID, $reply_with  )
     {
-        $this->queue = 'outbound';
+        $this->onQueue('outbound');
         $this->host = $host;
         $this->carrier = $carrier;
         $this->recipient = $recipient;
@@ -146,5 +148,23 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
     public function uniqueId()
     {
         return $this->messageID;
+    }
+
+    public function failed(Throwable $exception)
+    {
+        SaveMessage::dispatch(
+            $this->carrier->id,
+            $this->from->id,
+            $this->host->id,
+            $this->recipient,
+            $this->from->e164,
+            encrypt( $this->message ),
+            $this->messageID,
+            Carbon::now(),
+            $this->reply_with,
+            'sunwire',
+            'outbound',
+            'failed'
+        );
     }
 }

@@ -2,28 +2,29 @@
 
 namespace App\Drivers;
 
-use App\Models\Number;
 use Exception;
 use Carbon\Carbon;
+use App\Models\Number;
 use App\Jobs\LogEvent;
 use App\Models\Carrier;
 use App\Models\Message;
 use App\Jobs\SaveMessage;
-use Illuminate\Support\Arr;
 use Illuminate\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Jobs\SendWebhookSMS;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
+use JetBrains\PhpStorm\NoReturn;
 
 class WebhookSMSDriver implements SMSDriver
 {
     private array $json;
     private int $maxMessageLength = 8192;
-    private string $requestInputMessageKey = 'body';
+    private string $requestInputMessageKey = 'message';
     private string $requestInputUidKey = 'id';
-    private string $requestInputStatusKey = 'status'; //note: status updates are not supported
+    private string $requestInputStatusKey = 'status';
     private string $requestInputToKey = 'to';
     private string $requestInputFromKey = 'from';
     private array $carrierValidationFields = [
@@ -78,7 +79,7 @@ class WebhookSMSDriver implements SMSDriver
         return response( json_encode([ 'success' => true ]), 200, ['content-type' => 'application/json']);
     }
 
-    public function verifyHandlerRequest( Request $request, Carrier $carrier ): bool
+    public function verifyHandlerRequest(Request $request, Carrier $carrier ): bool
     {
         if( $request->wantsJson())
         {
@@ -86,23 +87,26 @@ class WebhookSMSDriver implements SMSDriver
             $to = $this->json[$this->getRequestInputToKey()];
             $from = $this->json[$this->getRequestInputFromKey()];
             $message = $this->json[$this->getRequestInputMessageKey()];
+            $id = $this->json[$this->getRequestInputUidKey()];
         }
         else
         {
             $to = $request->input($this->getRequestInputToKey());
             $from = $request->input($this->getRequestInputFromKey());
             $message = $request->input($this->getRequestInputMessageKey());
+            $id = $request->input($this->getRequestInputUidKey());
         }
 
         $validator = Validator::make([
             'to' => $to,
             'from' => $from,
-            'message' => $message
+            'message' => $message,
+            'id' => $id
         ], [
             'to' => 'required',
             'from' => 'required',
             'message' => 'required',
-
+            'id' => 'required'
         ]);
 
         if ($validator->fails()) { return false; }
@@ -124,36 +128,42 @@ class WebhookSMSDriver implements SMSDriver
 
     public function saveInboundMessage(Request $request, int $carrier_id, int $number_id, int $enterprise_host_id, Carbon $submitted_at, $reply_with = null): void
     {
-
         if( $request->wantsJson())
         {
             $this->json = json_decode($request->getContent(), true);
             $to = $this->json[$this->getRequestInputToKey()];
             $from = $this->json[$this->getRequestInputFromKey()];
             $message = $this->json[$this->getRequestInputMessageKey()];
-            $status = $this->json[$this->getRequestInputStatusKey()];
+            $uid = $this->json[$this->getRequestInputUidKey()];
         }
         else
         {
             $to = $request->input($this->getRequestInputToKey());
             $from = $request->input($this->getRequestInputFromKey());
             $message = $request->input($this->getRequestInputMessageKey());
-            $status = $request->input($this->getRequestInputUidKey() );
+            $uid = $request->input($this->getRequestInputUidKey() );
         }
-
-        SaveMessage::dispatch(
-            $carrier_id,
-            $number_id,
-            $enterprise_host_id,
-            $to,
-            $from,
-            encrypt( $message ),
-            null,
-            $submitted_at,
-            $reply_with,
-            $status,
-            'inbound'
-        );
+        try{
+            SaveMessage::dispatch(
+                $carrier_id,
+                $number_id,
+                $enterprise_host_id,
+                $to,
+                $from,
+                encrypt( $message ),
+                null,
+                $submitted_at,
+                $reply_with,
+                $uid,
+                'inbound'
+            );
+        }
+        catch( Exception $e ){
+            LogEvent::dispatch(
+                "Unable to save inbound message",
+                get_class( $this ), 'info', json_encode(['error' => $e->getMessage(), 'to' => $to, 'from' => $from, 'message' => encrypt($message), 'status' => $uid]), $request->user() ?? null
+            );
+        }
     }
 
     public function updateMessageStatus(Carrier $carrier, Message $message ): bool

@@ -19,10 +19,12 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
     public int $tries = 10;
     public int $timeout = 60;
     public int $uniqueFor = 3600;
-    protected $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction;
+    public bool $failOnTimeout = true;
+    protected $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction, $status;
 
-    public function __construct( $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction )
+    public function __construct( $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction, string $status = 'pending' )
     {
+        $this->onQueue('messages');
         $this->carrier_id = $carrier_id;
         $this->number_id = $number_id;
         $this->enterprise_host_id = $enterprise_host_id;
@@ -34,6 +36,7 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
         $this->reply_with = $reply_with;
         $this->carrier_message_uid = $carrier_message_uid;
         $this->direction = $direction;
+        $this->status = $status;
     }
 
     public function handle()
@@ -52,6 +55,7 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
             $message->reply_with = $this->reply_with;
             $message->carrier_message_uid = $this->carrier_message_uid;
             $message->direction = $this->direction;
+            $message->status = $this->status;
             $message->save();
         }
         catch( Exception $e ){

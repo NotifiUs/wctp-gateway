@@ -12,14 +12,17 @@ use App\Drivers\DriverFactory;
 use App\Models\EnterpriseHost;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use JetBrains\PhpStorm\NoReturn;
 
 class PrimaryHandler extends Controller
 {
     private $driver;
     private Carrier|null $carrier = null;
 
+    #[NoReturn]
     public function __invoke(Request $request, string $identifier): Response|JsonResponse
     {
+
         $number = Number::where('enabled', 1)->where('identifier', $identifier)->first();
 
         if( $number === null ){
@@ -80,7 +83,7 @@ class PrimaryHandler extends Controller
         return $this->driver->getHandlerResponse();
     }
 
-    protected function fail(): JsonResponse
+    protected function fail(): JsonResponse|Response
     {
         return response()->json(['error' => 400, 'desc' => 'bad request'], 400, [], JSON_PRETTY_PRINT );
     }

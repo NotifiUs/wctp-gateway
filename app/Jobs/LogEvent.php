@@ -16,10 +16,12 @@ class LogEvent implements ShouldQueue
 
     public int $tries = 10;
     public int $timeout = 60;
+    public bool $failOnTimeout = true;
     protected $event, $source, $severity, $details, $user_id;
 
     public function __construct( $event, $source, $severity = 'info', $details = null, $user_id = null )
     {
+        $this->onQueue('default');
         $this->event = $event;
         $this->source = $source;
         $this->severity = $severity;

@@ -19,8 +19,10 @@ class FailedJob extends Mailable implements ShouldQueue
      */
     public function __construct( array $details = [] )
     {
+        $this->onQueue('email');
         $this->details = $details;
         $this->host = config('app.url');
+
     }
 
     /**

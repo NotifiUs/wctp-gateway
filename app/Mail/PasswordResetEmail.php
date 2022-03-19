@@ -20,6 +20,7 @@ class PasswordResetEmail extends Mailable implements ShouldQueue
      */
     public function __construct()
     {
+        $this->onQueue('email');
         $this->host = config('app.url');
     }
 

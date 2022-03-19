@@ -30,11 +30,12 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
     public int $tries = 10;
     public int $timeout = 60;
     public int $uniqueFor = 3600;
+    public bool $failOnTimeout = true;
     public bool $deleteWhenMissingModels = true;
 
     public function __construct( Message $message )
     {
-        $this->queue = 'enterprise-host';
+        $this->onQueue('enterprise-host');
         $this->message = $message;
     }
 

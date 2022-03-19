@@ -28,10 +28,12 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
     public int $uniqueFor = 3600;
     public Message|null $message;
     public Carrier|null $carrier;
+    public bool $failOnTimeout = true;
     public bool $deleteWhenMissingModels = true;
 
     public function __construct( Message $message )
     {
+        $this->onQueue('outbound');
         $this->message = $message;
     }
 

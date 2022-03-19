@@ -22,6 +22,7 @@ class SendWelcomeEmail extends Mailable implements ShouldQueue
      */
     public function __construct( $email, $password )
     {
+        $this->onQueue('email');
         $this->email = $email;
         $this->password = $password;
         $this->host = config('app.url');
