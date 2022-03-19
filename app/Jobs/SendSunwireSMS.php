@@ -49,16 +49,15 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         //API URLs: https://mars2.sunwire.ca/sms/ or https://mars1.sunwire.ca/sms/
         try{
             $json_array = [
-                'From' => substr( $this->from->e164, 2),
-                'To' => $this->recipient,
+                'From' => $this->from->identifier, //the identifier will need to be the short code, 10, or 11 digit without +
+                'To' => str_replace('+', '', $this->recipient), //10 or 11 digit per docs
                 'Body' => $this->message,
-                'Receipt' => 'yes'
+                //'Receipt' => 'yes' //only supported on short-codes
             ];
 
             $shared_config = [
                 'timeout' => 10.0,
                 'headers' => [ 'content-type' => 'application/json' ],
-                'json' => $json_array,
             ];
 
             $sunwire1 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars1.sunwire.ca']));
@@ -75,7 +74,9 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         //Try the primary mars1, and if it fails, try mars2
         //then finally mark as failed if mars2 fails
         try{
-            $result = $sunwire1->post('/sms');
+            $result = $sunwire1->post('/sms', [
+                'json' => $json_array
+            ]);
         }
         catch( Exception $e ){
             LogEvent::dispatch(
@@ -84,7 +85,9 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             );
 
             try{
-                $result = $sunwire2->post('/sms');
+                $result = $sunwire2->post('/sms', [
+                    'json' => $json_array
+                ]);
             }
             catch( Exception $e2 ){
                 LogEvent::dispatch(
