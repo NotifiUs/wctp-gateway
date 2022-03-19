@@ -18,7 +18,7 @@ class PrimaryHandler extends Controller
     private $driver;
     private Carrier|null $carrier = null;
 
-    public function __invoke(Request $request, string $identifier): Response
+    public function __invoke(Request $request, string $identifier): Response|JsonResponse
     {
         $number = Number::where('enabled', 1)->where('identifier', $identifier)->first();
 

@@ -8,7 +8,7 @@ class Version
 {
     const MAJOR = 1;
     const MINOR = 4;
-    const PATCH = 15;
+    const PATCH = 16;
 
     public static function get()
     {
@@ -19,3 +19,4 @@ class Version
         return "wctpd " . sprintf('v%s.%s.%s.%s (%s)', self::MAJOR, self::MINOR, self::PATCH, $commitHash, $commitDate->format('Y-m-d H:i:s'));
     }
 }
+
