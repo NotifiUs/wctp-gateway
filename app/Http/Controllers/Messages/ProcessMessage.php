@@ -38,7 +38,7 @@ class ProcessMessage extends Controller
         if( $message->direction == 'outbound' )
         {
             try{
-                $driver->queueOutbound( $host, $carrier, substr($message->to, 2), decrypt($message->message), $message->messageID, $message->reply_with  );
+                $driver->queueOutbound( $host, $carrier, $message->to, decrypt($message->message), $message->messageID, $message->reply_with  );
             }
             catch(Exception $e){
                 return redirect()->back()->withErrors(['Unable to queue message for carrier']);
