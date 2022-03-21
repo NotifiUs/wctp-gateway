@@ -51,7 +51,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         //API URLs: https://mars2.sunwire.ca/sms/ or https://mars1.sunwire.ca/sms/
         try{
             $json_array = [
-                'From' => $this->from->identifier, //the identifier will need to be the short code, 10, or 11 digit without +
+                'From' => str_replace('+', '', $this->from->identifier), //the identifier will need to be the short code, 10, or 11 digit without +
                 'To' => str_replace('+', '', $this->recipient), //10 or 11 digit per docs
                 'Body' => $this->message,
                 'Receipt' => 'no' //only supported on short-codes
