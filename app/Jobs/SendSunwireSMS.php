@@ -62,18 +62,13 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
                 'headers' => [ 'content-type' => 'application/json' ],
             ];
 
-            LogEvent::dispatch(
-                "Failed creating Sunwire JSON request",
-                get_class( $this ), 'info', json_encode($json_array), null
-            );
-
             $sunwire1 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars1.sunwire.ca']));
             $sunwire2 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars2.sunwire.ca']));
         }
         catch( Exception $e ){
             LogEvent::dispatch(
                 "Failed creating Sunwire JSON request",
-                get_class( $this ), 'error', json_encode($this->carrier->toArray()), null
+                get_class( $this ), 'error', json_encode(['error' => $e->getMessage(), $this->carrier->toArray()]), null
             );
             $this->release(60 );
         }
@@ -129,7 +124,11 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         {
             LogEvent::dispatch(
                 "Failure submitting message",
-                get_class( $this ), 'error', json_encode(['response' => $arr, 'reason' => $result->getReasonPhrase()]), null
+                get_class( $this ), 'error', json_encode([
+                    'json_response' => $arr,
+                    'reason' => $result->getReasonPhrase(),
+                    'response' => print_r($result, true)
+                ]), null
             );
             $this->release(60);
         }
