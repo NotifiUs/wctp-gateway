@@ -126,8 +126,13 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
                 "Failure submitting message",
                 get_class( $this ), 'error', json_encode([
                     'json_response' => $arr,
-                    'reason' => $result->getReasonPhrase(),
-                    'response' => print_r($result, true)
+                    'json_request_array' => $json_array,
+                    'response' => [
+                        'header' => $result->getHeaders(),
+                        'protocol' => $result->getProtocolVersion(),
+                        'reason' => $result->getReasonPhrase(),
+                        'status' => $result->getStatusCode(),
+                    ]
                 ]), null
             );
             $this->release(60);
