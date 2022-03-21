@@ -54,13 +54,18 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
                 'From' => $this->from->identifier, //the identifier will need to be the short code, 10, or 11 digit without +
                 'To' => str_replace('+', '', $this->recipient), //10 or 11 digit per docs
                 'Body' => $this->message,
-                //'Receipt' => 'yes' //only supported on short-codes
+                'Receipt' => 'no' //only supported on short-codes
             ];
 
             $shared_config = [
                 'timeout' => 10.0,
                 'headers' => [ 'content-type' => 'application/json' ],
             ];
+
+            LogEvent::dispatch(
+                "Failed creating Sunwire JSON request",
+                get_class( $this ), 'info', json_encode($json_array), null
+            );
 
             $sunwire1 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars1.sunwire.ca']));
             $sunwire2 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars2.sunwire.ca']));
