@@ -139,7 +139,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             $this->messageID,
             Carbon::now(),
             $this->reply_with,
-            $arr['ID'],
+            $arr['ID'] ?? null,
             'outbound'
         );
         return 0;
