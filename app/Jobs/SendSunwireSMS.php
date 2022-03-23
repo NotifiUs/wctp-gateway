@@ -81,7 +81,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         //Try the primary mars1, and if it fails, try mars2
         //then finally mark as failed if mars2 fails
         try{
-            $result = $sunwire1->post('/sms', [
+            $result = $sunwire1->post('/sms/', [
                 'body' => json_encode($json_array, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES )
             ]);
         }
@@ -92,7 +92,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             );
 
             try{
-                $result = $sunwire2->post('/sms', [
+                $result = $sunwire2->post('/sms/', [
                     'body' => json_encode($json_array, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES )
                 ]);
             }
