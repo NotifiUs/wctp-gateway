@@ -60,7 +60,13 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             $shared_config = [
                 'timeout' => 10.0,
                 'headers' => [ 'content-type' => 'application/json' ],
+
             ];
+
+            if(config('app.guzzle_allow_selfsigned') === true)
+            {
+                $shared_config['verify'] = false;
+            }
 
             $sunwire1 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars1.sunwire.ca']));
             $sunwire2 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars2.sunwire.ca']));
