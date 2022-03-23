@@ -60,7 +60,6 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             $shared_config = [
                 'timeout' => 10.0,
                 'headers' => [ 'content-type' => 'application/json' ],
-
             ];
 
             if(config('app.guzzle_allow_selfsigned') === true)
@@ -83,7 +82,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         //then finally mark as failed if mars2 fails
         try{
             $result = $sunwire1->post('/sms', [
-                'json' => $json_array
+                'body' => json_encode($json_array, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES )
             ]);
         }
         catch( Exception $e ){
@@ -94,7 +93,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
 
             try{
                 $result = $sunwire2->post('/sms', [
-                    'json' => $json_array
+                    'body' => json_encode($json_array, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES )
                 ]);
             }
             catch( Exception $e2 ){
@@ -140,7 +139,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
                         'reason' => $result->getReasonPhrase(),
                         'status' => $result->getStatusCode(),
                     ]
-                ]), null
+                ], JSON_UNESCAPED_SLASHES), null
             );
             $this->release(60);
         }
