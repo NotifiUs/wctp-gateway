@@ -130,7 +130,7 @@ class TwilioSMSDriver implements SMSDriver
             null,
             $submitted_at,
             $reply_with,
-            $request->input($this->getRequestInputStatusKey()),
+            $request->input($this->getRequestInputUidKey()),
             'inbound'
         );
     }
