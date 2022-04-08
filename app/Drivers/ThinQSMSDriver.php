@@ -107,7 +107,7 @@ class ThinQSMSDriver implements SMSDriver
         );
     }
 
-    public function updateMessageStatus(Carrier $carrier, Message $message): bool
+    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message): bool
     {
         /*
         * https://api.thinq.com/account/{{account_id}}/product/origination/sms/{{message_id}}

@@ -64,7 +64,7 @@ class SyncOutboundStatus implements ShouldQueue, ShouldBeUnique
             $this->release(60);
         }
 
-        if( $this->driver->updateMessageStatus( $this->carrier, $this->message ) === false )
+        if( $this->driver->updateMessageStatus(null,  $this->carrier, $this->message ) === false )
         {
             $this->release(60);
         }

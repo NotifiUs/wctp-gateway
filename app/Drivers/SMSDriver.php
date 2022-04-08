@@ -38,7 +38,7 @@
         function provisionNumber(Carrier $carrier, string $identifier ): bool;
 
         /** Uses the primary/status handler (depending on carrier) to update status of sent messages (i.e., sent, delivered, failed, etc.) */
-        function updateMessageStatus(Carrier $carrier, Message $message): bool;
+        function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message): bool;
 
         /** Used to return carrier details to display when initially linking the accounts */
         function getCarrierDetails(Carrier $carrier, string $identifier): array;

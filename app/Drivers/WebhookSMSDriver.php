@@ -166,7 +166,7 @@ class WebhookSMSDriver implements SMSDriver
         }
     }
 
-    public function updateMessageStatus(Carrier $carrier, Message $message ): bool
+    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message ): bool
     {
         //mark message as delivered, as it was already sent
         $message->status = 'delivered';

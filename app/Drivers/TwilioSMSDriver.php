@@ -135,7 +135,7 @@ class TwilioSMSDriver implements SMSDriver
         );
     }
 
-    public function updateMessageStatus(Carrier $carrier, Message $message ): bool
+    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message ): bool
     {
         //use twilio api to check status of message->carrier_uniquie_id
         try{

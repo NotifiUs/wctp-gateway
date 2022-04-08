@@ -89,34 +89,33 @@ class SunwireSMSDriver implements SMSDriver
 
     public function saveInboundMessage(Request $request, int $carrier_id, int $number_id, int $enterprise_host_id, Carbon $submitted_at, $reply_with = null): void
     {
-        $json = json_decode($request->getContent(), true );
+        $this->json = json_decode($request->getContent(), true );
 
-        if($json['Type'] === 'Message')
+        if($this->json['Type'] === 'Message')
         {
             SaveMessage::dispatch(
                 $carrier_id,
                 $number_id,
                 $enterprise_host_id,
-                $json['To'],
-                $json['From'],
-                encrypt( $json[$this->getRequestInputMessageKey()] ),
+                $this->json['To'],
+                $this->json['From'],
+                encrypt( $this->json[$this->getRequestInputMessageKey()] ),
                 null,
                 $submitted_at,
                 $reply_with,
-                $json[$this->getRequestInputUidKey()],
+                $this->json[$this->getRequestInputUidKey()],
                 'inbound'
             );
         }
-        elseif( $json['Type'] === 'Report')
+        elseif( $this->json['Type'] === 'Report')
         {
-            $this->json = $json;
-            $message = Message::where('identifier', $json['ID'])->first();
+            $message = Message::where('identifier', $this->json['ID'])->first();
             $carrier = Carrier::find($carrier_id);
-            if($this->updateMessageStatus( $carrier, $message ) === false )
+            if($this->updateMessageStatus( $request, $carrier, $message ) === false )
             {
                 LogEvent::dispatch(
                     "Unable to update Sunwire message status",
-                    get_class( $this ), 'error', json_encode($json), null
+                    get_class( $this ), 'error', json_encode($this->json), null
                 );
             }
         }
@@ -124,14 +123,19 @@ class SunwireSMSDriver implements SMSDriver
         {
             LogEvent::dispatch(
                 "Unknown Sunwire webhook Type",
-                get_class( $this ), 'error', json_encode($json), null
+                get_class( $this ), 'error', json_encode($this->json), null
             );
         }
 
     }
 
-    public function updateMessageStatus(Carrier $carrier, Message $message ): bool
+    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message ): bool
     {
+        if($request === null)
+        {
+            return true;
+        }
+
         /**
          *
             Type ‘Report’ – Indicates the type of request
@@ -159,7 +163,9 @@ class SunwireSMSDriver implements SMSDriver
             7 => 'UNKNOWN',
         ];
 
-        $status = $this->json['Status'] ?? null;
+        $this->json = json_decode($request->getContent(), true );
+
+        $status = $this->json['Status'] ?? 7;
 
         Log::info(print_r($this->json, true));
 
