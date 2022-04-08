@@ -9,6 +9,7 @@ use App\Jobs\LogEvent;
 use App\Models\Carrier;
 use App\Models\Message;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Jobs\SaveMessage;
 use App\Jobs\SendSunwireSMS;
@@ -160,20 +161,22 @@ class SunwireSMSDriver implements SMSDriver
 
         $status = $this->json['Status'] ?? null;
 
+        Log::info(print_r($this->json, true));
+
         switch( $status ) {
             case 0: //delivered
-                $message->status = $statusCodes[$status];
+                $message->status = $statusCodes[$status] ?? "UNKNOWN";
                 $message->delivered_at = Carbon::now();
                 break;
             case 3: //in-transit
-                $message->status = $statusCodes[$status];
+                $message->status = $statusCodes[$status]?? "UNKNOWN";
                 $message->delivered_at = Carbon::now();
                 break;
             case 1: //expired
             case 2: //deleted
             case 5: //undeliverable / failed
             case 7: //unknown
-                $message->status = $statusCodes[$status];
+                $message->status = $statusCodes[$status] ?? "UNKNOWN";
                 $message->failed_at = Carbon::now();
                 break;
             default:
