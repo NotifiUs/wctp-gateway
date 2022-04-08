@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 
 class SaveMessage implements ShouldQueue, ShouldBeUnique
 {
@@ -59,6 +60,7 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
             $message->save();
         }
         catch( Exception $e ){
+            Log::error("Unable to save message: " . $e->getMessage());
             $this->release(60 );
         }
 
