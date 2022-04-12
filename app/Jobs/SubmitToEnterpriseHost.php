@@ -155,7 +155,12 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
         {
             LogEvent::dispatch(
                 "Response was not XML.",
-                get_class( $this ), 'error', json_encode( $body ), null
+                get_class( $this ), 'error', json_encode( ['body' => $body,
+                    'results' => [
+                        'status_code' => $result->getStatusCode(),
+                        'headers' => $result->getHeaders(),
+                    ]
+                ]), null
             );
             $this->release(60 );
         }
