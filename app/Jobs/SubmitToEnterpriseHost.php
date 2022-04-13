@@ -118,7 +118,7 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 
         $guzzleConfig = [
             'http_errors' => false, //don't throw exception
-            'timeout' => 10.0,
+            'timeout' =>  30.0,
             'headers' => [ 'content-type' => 'application/xml' ],
             'body' => $xml->asXML(),
             'verify' => config('tls.verify_certificates'),
