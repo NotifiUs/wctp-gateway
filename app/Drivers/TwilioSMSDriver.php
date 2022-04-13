@@ -107,7 +107,7 @@ class TwilioSMSDriver implements SMSDriver
 
         LogEvent::dispatch(
             "Failed inbound message",
-            get_class( $this ), 'error', json_encode(["Unable to verify Twilio request", 'header' => $request->headers(), 'post' => $request->post()]), null
+            get_class( $this ), 'error', json_encode(["Unable to verify Twilio request", 'request' => $_REQUEST]), null
         );
 
         return false;
