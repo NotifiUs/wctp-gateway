@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Throwable;
 use Exception;
 use App\Models\Message;
@@ -64,12 +65,15 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
 
         $responding_to = null;
 
+        $msg_from =  Str::startsWith( $this->message->from, '+1') ? substr($this->message->from, 2) : $this->message->from;
+        $msg_to =   Str::startsWith( $this->message->to, '+1') ? substr($this->message->to, 2) : $this->message->to;
+
         if( $this->message->reply_with )
         {
             $responding_to = Message::where('reply_with', $this->message->reply_with )
                 ->where('direction','outbound')
-                ->where('to', $this->message->from )
-                ->where('from', $this->message->to )
+                ->where('to', $msg_from )
+                ->where('from', $msg_to )
                 ->where('created_at', '>=', Carbon::now()->subHours(4 ) )
                 ->first();
         }
@@ -81,8 +85,8 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 $xml = $messageReply
                     ->responseToMessageID( $responding_to->messageID )
                     ->submitTimestamp( Carbon::now() )
-                    ->senderID( substr( $this->message->from, 2) )
-                    ->recipientID( substr($this->message->to, 2) )
+                    ->senderID( $msg_from )
+                    ->recipientID( $msg_to )
                     ->messageID( $this->message->id )
                     ->payload( decrypt($this->message->message ) ?? '' )
                     ->xml();
@@ -101,8 +105,8 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
             try{
                 $xml = $submitRequest
                     ->submitTimestamp( Carbon::now() )
-                    ->senderID( substr( $this->message->from, 2) )
-                    ->recipientID( substr($this->message->to, 2) )
+                    ->senderID( $msg_from )
+                    ->recipientID( $msg_to )
                     ->messageID( $this->message->messageID ?? $this->message->id )
                     ->payload( decrypt($this->message->message ) ?? '' )
                     ->xml();
