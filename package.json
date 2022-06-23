@@ -14,6 +14,7 @@
         "axios": "^0.26.1",
         "bootstrap": "^5.1.3",
         "cross-env": "^7.0.3",
+        "eslint": "^8.18.0",
         "laravel-mix": "^6.0.43",
         "lodash": "^4.17.21",
         "postcss": "8.4.8",
