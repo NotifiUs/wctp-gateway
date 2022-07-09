@@ -220,7 +220,13 @@ class TwilioSMSDriver implements SMSDriver
                     );
             }
         }
-        catch( Exception $e ) { return false; }
+        catch( Exception $e ) {
+            LogEvent::dispatch(
+                "Failure provisioning number.",
+                get_class( $this ), 'error', json_encode($e->getMessage()), null
+            );
+            return false;
+        }
 
         return true;
     }
