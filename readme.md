@@ -1,3 +1,5 @@
+# WCTP Gateaway
+
 <p align="center"><img src="https://wctp.io/assets/images/phones.svg" width="200"></p>
 
 <div align="center">
@@ -25,10 +27,10 @@ The modern WCTP engine brings the following features and more:
 - Work's out of the box with Twilio's WhatsApp integration
 - A generic webhook API provider
 
-**Coming Soon**
+### Coming Soon
 
-- Improved fail-over between carrier
-- More telecom API providers
+- Improved fail-over and priorities between carrier
+- More telecom API providers (Bandwidth.com)
 - MergeComm scripting integration for Amtelco ecosystems
 
 ## Status
@@ -53,11 +55,12 @@ We use application, language, and OS features that require the following tools a
 - **`supervisord`** to watch queue processes
 
 We utilize linux specific methods of obtaining data about the hardware/server (such as memory, disk space, CPU, etc.)
-Because of this, we require the use of a linux host. We generally recommend Ubuntu for most users. 
+Because of this, we require the use of a linux host. We generally recommend Ubuntu for most users.
 
 ## Technologies
 
-WCTP Gateway is a [Laravel](https://laravel.com) web-application that implements a WCTP endpoint and administrative portal. 
+WCTP Gateway is a [Laravel](https://laravel.com) web-application 
+that implements a WCTP endpoint and administrative portal. 
 This system cannot send SMS messages without a supported carrier (Telecom API provider) like Twilio or ThinQ. 
 
 ### Front End
@@ -68,14 +71,14 @@ For various splash pages (errors, etc), we use open source illustrations from [U
 
 ### Laravel Application
 
-You can setup and run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, and just about any modern PHP web environment. 
-Start from a single-server appliance setup and grow into a full blown load balancing and clustering setup.
-
-Laravel [Forge](https://forge.laravel.com) is an easy to use server management tool to try out!
+You can run Laravel in a wide-variety of environments, including Digital Ocean, Amazon, Azure, 
+and just about any modern PHP web environment. 
+Start from a single-server appliance setup and grow into a full-blown load balancing and clustering setup.
 
 ## Contributing
 
-Thank you for considering contributing to WCTP Gateway! Please email [Patrick Labbett](mailto:patrick.labbett@notifi.us) or submit a PR!
+Thank you for considering contributing to WCTP Gateway! 
+Please email [Patrick Labbett](mailto:patrick.labbett@notifi.us) or submit a PR!
 
 ## Security Vulnerabilities
 
@@ -87,9 +90,9 @@ WCTP Gateway is open-sourced software licensed under the [MIT license](https://o
 
 ## Tested compatability list
 
--  Amtelco WCTP 2-Way Messaging API
--  InfoRad Messaging Gateway
--  NotePage PageGate / PageGate Platinum
+- Amtelco WCTP 2-Way Messaging API
+- InfoRad Messaging Gateway
+- NotePage PageGate / PageGate Platinum
 
 ## Carrier Drivers
 

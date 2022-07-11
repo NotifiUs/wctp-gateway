@@ -1,4 +1,4 @@
-# Security Policy
+# Security
 
 All security vulnerabilities will be promptly addressed.
 
