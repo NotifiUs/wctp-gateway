@@ -13,6 +13,7 @@
             'thinq' => ThinQSMSDriver::class,
             'webhook' => WebhookSMSDriver::class,
             'sunwire' => SunwireSMSDriver::class,
+            'bandwidth' => BandwidthSMSDriver::class,
         ];
 
         public function __construct( string $driver )
@@ -25,7 +26,7 @@
             $this->driver = $driver;
         }
 
-        public function loadDriver(): TwilioSMSDriver|ThinQSMSDriver|WebhookSMSDriver|SunwireSMSDriver
+        public function loadDriver(): TwilioSMSDriver|ThinQSMSDriver|WebhookSMSDriver|SunwireSMSDriver|BandwidthSMSDriver
         {
             return new self::$supportedDrivers[$this->driver]();
         }

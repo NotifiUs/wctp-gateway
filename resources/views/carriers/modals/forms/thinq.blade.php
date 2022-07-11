@@ -8,7 +8,7 @@
                     <div class="form-group">
                         <input type="hidden" name="carrier_api" value="thinq">
                         <label class="fw-bold text-muted">{{ __('Account ID') }}</label>
-                        <input type="text" name="thinq_account_id" class="form-control">
+                        <input type="text" name="thinq_account_id" class="form-control" value="{{ old('thinq_account_id') }}">
                         <small class="form-text text-muted">
                             Found in the <a target="_blank"
                                             href="https://i.thinq.com/#/user_profile">ThinQ User
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('API User') }}</label>
-                        <input type="text" name="thinq_api_username" class="form-control">
+                        <input type="text" name="thinq_api_username" class="form-control" value="{{ old('thinq_api_username') }}">
                         <small class="form-text text-muted">
                             Found in the <a target="_blank" href="https://i.thinq.com/#/apiTokens">ThinQ
                                 API Tokens</a> section
@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('API Token') }}</label>
-                        <input type="password" name="thinq_api_token" class="form-control">
+                        <input type="password" name="thinq_api_token" class="form-control" value="{{ old('thinq_api_token') }}">
                         <small class="form-text text-muted">
                             Found in the <a target="_blank" href="https://i.thinq.com/#/apiTokens">ThinQ
                                 API Tokens</a> section

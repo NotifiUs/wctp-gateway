@@ -10,14 +10,14 @@
                     <input type="hidden" name="carrier_api" value="twilio">
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('Account SID') }}</label>
-                        <input type="text" name="twilio_account_sid" class="form-control">
+                        <input type="text" name="twilio_account_sid" class="form-control" value="{{ old('twilio_account_sid') }}">
                         <small class="form-text text-muted">
                             We recommend using a dedicated Twilio sub-account off of your master.
                         </small>
                     </div>
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('Auth Token') }}</label>
-                        <input type="password" name="twilio_auth_token" class="form-control">
+                        <input type="password" name="twilio_auth_token" class="form-control" value="{{ old('twilio_auth_token') }}">
                         <small class="form-text text-muted">
                             The Auth Token associated with the Account SID above.
                         </small>

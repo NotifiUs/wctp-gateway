@@ -12,13 +12,16 @@
                     <ul class="nav nav-pills mb-3 nav-justified text-center" id="carriers-tab" role="tablist">
                         @include('carriers.modals.nav.twilio')
                         @include('carriers.modals.nav.thinq')
+                        @include('carriers.modals.nav.bandwidth')
                         @include('carriers.modals.nav.sunwire')
+
                         @include('carriers.modals.nav.webhook')
 
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         @include('carriers.modals.forms.twilio')
                         @include('carriers.modals.forms.thinq')
+                        @include('carriers.modals.forms.bandwidth')
                         @include('carriers.modals.forms.sunwire')
                         @include('carriers.modals.forms.webhook')
                     </div>

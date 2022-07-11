@@ -14,28 +14,28 @@
 
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('Webhook Host') }}</label>
-                        <input type="text" name="webhook_host" class="form-control">
+                        <input type="text" name="webhook_host" class="form-control" value="{{ old('webhook_host') }}">
                         <small class="form-text text-muted">
                             The base URL for the webhook host to receive outbound messages (i.e., https://example.com).
                         </small>
                     </div>
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('Webhook Endpoint') }}</label>
-                        <input type="text" name="webhook_endpoint" class="form-control">
+                        <input type="text" name="webhook_endpoint" class="form-control" value="{{ old('webhook_endpoint') }}">
                         <small class="form-text text-muted">
                             The URL path to the webhook endpoint (i.e., /webhook)
                         </small>
                     </div>
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('Webhook Basic Auth User') }}</label>
-                        <input type="text" name="webhook_username" class="form-control">
+                        <input type="text" name="webhook_username" class="form-control" value="{{ old('webhook_username') }}">
                         <small class="form-text text-muted">
                             The HTTP Basic Auth username for webhook authentication
                         </small>
                     </div>
                     <div class="form-group">
                         <label class="fw-bold text-muted">{{ __('Webhook Basic Auth Pass') }}</label>
-                        <input type="password" name="webhook_password" class="form-control">
+                        <input type="password" name="webhook_password" class="form-control" value="{{ old('webhook_password') }}">
                         <small class="form-text text-muted">
                             The HTTP Basic Auth password for webhook authentication
                         </small>

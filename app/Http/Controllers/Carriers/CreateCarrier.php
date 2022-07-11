@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Carriers;
 
-use App\Drivers\DriverFactory;
-use App\Http\Controllers\Controller;
-use App\Jobs\LogEvent;
-use App\Models\Carrier;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Drivers\DriverFactory;
+use App\Http\Controllers\Controller;
 
 class CreateCarrier extends Controller
 {

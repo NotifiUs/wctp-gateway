@@ -7,8 +7,8 @@ use Carbon\Carbon;
 class Version
 {
     const MAJOR = 1;
-    const MINOR = 6;
-    const PATCH = 3;
+    const MINOR = 7;
+    const PATCH = 1;
 
     public static function get()
     {

@@ -9,20 +9,21 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "fruitcake/laravel-cors": "^3.0.0",
-        "laravel/framework": "^9.0",
-        "laravel/sanctum": "^2.14.2",
-        "laravel/tinker": "^2.7.0",
+        "ext-intl": "*",
+        "bandwidth/sdk": "^10.0",
         "endroid/qr-code": "^4.4.7",
+        "fruitcake/laravel-cors": "^3.0.0",
         "guzzlehttp/guzzle": "^7.4.1",
+        "laravel/framework": "^9.0",
         "laravel/helpers": "^1.5.0",
         "laravel/horizon": "^5.9.3",
+        "laravel/sanctum": "^2.14.2",
         "laravel/telescope": "^4.7.4",
+        "laravel/tinker": "^2.7.0",
         "notifius/php-wctp": "^0.0.7",
         "predis/predis": "^1.1.10",
         "robthree/twofactorauth": "^1.8.1",
-        "twilio/sdk": "^6.35.1",
-        "ext-intl": "*"
+        "twilio/sdk": "^6.35.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.19.0",
