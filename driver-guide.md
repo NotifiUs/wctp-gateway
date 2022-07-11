@@ -1,6 +1,7 @@
-## Driver Creation Steps
+# Driver Creation Steps
 
-This is a guide on what files you have to create/edit to implement a new driver for sending out SMS messages using this platform. 
+This is a guide on what files you have to create/edit 
+to implement a new driver for sending out SMS messages using this platform. 
 
 > **Notice** &middot; Work in progress
 
@@ -8,7 +9,15 @@ This guide is intended for developers who wish to implement a new carrier provid
 
 ## Identity the API authentication requirements
 
-This could be some combination of `username`, `password`, `api_key`, `account_id`, `secret_token`, `application_id`, etc..
+This could be some combination of:
+
+- `username`
+- `password`
+- `api_key`
+- `account_id`
+- `secret_token`
+- `application_id`
+- etc..
 
 > This will vary from API to API
 
@@ -22,7 +31,8 @@ php artisan make:migration add_example_fields_to_carrier --table=carriers
 
 ### database/migrations/YYYY_MM_DD_HHIISS_add_example_fields_to_carrier.php
 
-Implement the `up()` and `down()` functions to include the fields needed to authenticate and make API calls for the API in question. 
+Implement the `up()` and `down()` functions to include the fields needed 
+to authenticate and make API calls for the API in question. 
 
 `up()`:
 
@@ -39,9 +49,16 @@ Implement the `up()` and `down()` functions to include the fields needed to auth
 
 ```php
     Schema::table('carriers', function (Blueprint $table) {
-        $table->dropColumn(['example_api_username','example_api_password', 'example_api_account_id', 'example_api_application_id']);
+        $table->dropColumn([
+            'example_api_username',
+            'example_api_password', 
+            'example_api_account_id', 
+            'example_api_application_id'
+        ]);
     });
 ```
+
+> Use the *text* field type for secrets that should be encrypted
 
 ## app/Drivers/ExampleSMSDriver.php
 
@@ -53,7 +70,7 @@ Implement the `up()` and `down()` functions to include the fields needed to auth
 
 1. Copy `app/Jobs/SendWebhookSMS.php` to `app/Jobs/SendExampleSMS.php`
 2. Rename the class name to `SendExampleSMS`
-3. Re-implement the job-class to send the SMS using the example API. 
+3. Re-implement the job-class to send the SMS using the example API.
 
 ```diff
     public static array $supportedDrivers = [
@@ -104,7 +121,8 @@ public/images/example-badge.svg
 
 ### app/Drivers/DriverFactory.php
 
-Create a *slug*, like `example`, to refer to the API driver and correlate it to the `ExampleSMSDriver::class` you copied:
+Create a *slug*, like `example`, to refer to the API driver 
+and correlate it to the `ExampleSMSDriver::class` you copied:
 
 ### resources/views/carriers/modals/verify.blade.php
 
