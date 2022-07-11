@@ -1,0 +1,4 @@
+---
+exclude_paths:
+  - "public/vendor/telescope/**/*"
+  - "database/migrations/**/*"

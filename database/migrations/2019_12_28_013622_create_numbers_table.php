@@ -8,10 +8,8 @@ class CreateNumbersTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('numbers', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -26,10 +24,8 @@ class CreateNumbersTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('numbers');
     }

@@ -1,5 +1,7 @@
 # Security Policy
 
+All security vulnerabilities will be promptly addressed.
+
 ## Supported Versions
 
 The following versions are currently being supported with security updates.
@@ -11,6 +13,5 @@ The following versions are currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability within WCTP Gateway, please send an e-mail to [patrick.labbett@notifi.us](mailto:patrick.labbett@notifi.us).
-
-All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within WCTP Gateway, 
+please send an e-mail to [patrick.labbett@notifi.us](mailto:patrick.labbett@notifi.us).

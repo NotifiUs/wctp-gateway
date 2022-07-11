@@ -8,10 +8,8 @@ class CreateEnterpriseHostsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('enterprise_hosts', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -27,10 +25,8 @@ class CreateEnterpriseHostsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('enterprise_hosts');
     }

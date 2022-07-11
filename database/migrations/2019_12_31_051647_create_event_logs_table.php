@@ -8,10 +8,8 @@ class CreateEventLogsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('event_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -26,10 +24,8 @@ class CreateEventLogsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('event_logs');
     }
