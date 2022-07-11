@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\System;
 
-use App\Models\Checklist;
-use App\Models\ServerStats;
-use App\Models\QueueStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Checklist;
+use App\Models\QueueStatus;
+use App\Models\ServerStats;
 
 class ShowSysInfo extends Controller
 {
@@ -13,6 +13,7 @@ class ShowSysInfo extends Controller
     {
         $this->middleware('auth');
     }
+
     public function __invoke()
     {
         $server = ServerStats::get();
@@ -20,10 +21,10 @@ class ShowSysInfo extends Controller
         $advanced = ServerStats::advanced();
         $checklist = Checklist::get();
 
-        return view('system.information' )
-                ->with('server', $server )
-                ->with('queue', $queue )
-                ->with('advanced', $advanced )
-                ->with('checklist', $checklist );
+        return view('system.information')
+                ->with('server', $server)
+                ->with('queue', $queue)
+                ->with('advanced', $advanced)
+                ->with('checklist', $checklist);
     }
 }

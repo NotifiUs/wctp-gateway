@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use function base_path;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
-use function base_path;
 
 class QueueStatus
 {
@@ -12,14 +12,12 @@ class QueueStatus
     {
         $queue = Redis::get('queue_status');
 
-        if(  $queue === null )
-        {
+        if ($queue === null) {
             $queue = 0;
-            $artisan = base_path('artisan') ;
+            $artisan = base_path('artisan');
             $horizon = exec("php {$artisan} horizon:status");
 
-            if( Str::contains( $horizon, 'running' ) )
-            {
+            if (Str::contains($horizon, 'running')) {
                 $queue = 1;
             }
 

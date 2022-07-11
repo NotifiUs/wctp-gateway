@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
-use Exception;
+use App\Http\Controllers\Controller;
 use App\Jobs\LogEvent;
 use App\Models\EnterpriseHost;
+use Exception;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class EditHost extends Controller
@@ -16,9 +16,9 @@ class EditHost extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Request $request, EnterpriseHost $host )
+    public function __invoke(Request $request, EnterpriseHost $host)
     {
-        $this->validate( $request, [
+        $this->validate($request, [
             'name' => "required|string|min:2|max:255|unique:enterprise_hosts,name,{$host->id}",
             'url' => 'required|url|starts_with:https',
         ]);
@@ -26,13 +26,18 @@ class EditHost extends Controller
         $host->name = $request->input('name');
         $host->url = $request->input('url');
 
-        try{ $host->save(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to update host')]); }
+        try {
+            $host->save();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([__('Unable to update host')]);
+        }
 
         LogEvent::dispatch(
             "{$host->senderID} updated",
-            get_class( $this ), 'info', json_encode($host->toArray()), Auth::user()->id ?? null
+            get_class($this), 'info', json_encode($host->toArray()), Auth::user()->id ?? null
         );
-        $statusHtml = "Enterprise host updated!";
+        $statusHtml = 'Enterprise host updated!';
+
         return redirect()->back()
             ->with('status', $statusHtml);
     }

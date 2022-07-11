@@ -13,7 +13,7 @@ class Message extends Model
         'failed_at',
     ];
 
-    protected $hidden  = [
+    protected $hidden = [
         'message',
     ];
 

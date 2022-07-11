@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Messages;
 
+use App\Http\Controllers\Controller;
 use App\Models\Message;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ShowMessages extends Controller
 {
@@ -13,41 +13,35 @@ class ShowMessages extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke(Request $request, $direction = null )
+    public function __invoke(Request $request, $direction = null)
     {
         $filter = $direction;
 
         $statusList = collect(Message::distinct('status')->get('status')->toArray() ?? [])->flatten();
         $statusFilter = $request->get('status') ?? null;
 
-        if(  $direction === 'inbound' ){
-            if($statusFilter) {
-                $messages = Message::where( 'direction', 'inbound' )->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
+        if ($direction === 'inbound') {
+            if ($statusFilter) {
+                $messages = Message::where('direction', 'inbound')->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
+            } else {
+                $messages = Message::where('direction', 'inbound')->orderBy('created_at', 'desc')->paginate(25);
             }
-            else {
-                $messages = Message::where( 'direction', 'inbound' )->orderBy('created_at', 'desc')->paginate(25);
+        } elseif ($direction === 'outbound') {
+            if ($statusFilter) {
+                $messages = Message::where('direction', 'outbound')->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
+            } else {
+                $messages = Message::where('direction', 'outbound')->orderBy('created_at', 'desc')->paginate(25);
             }
-        }
-        elseif(  $direction === 'outbound' ){
-            if($statusFilter) {
-                $messages = Message::where( 'direction', 'outbound' )->where('status', $statusFilter)->orderBy('created_at', 'desc')->paginate(25);
-            }
-            else {
-                $messages = Message::where( 'direction', 'outbound' )->orderBy('created_at', 'desc')->paginate(25);
-            }
-        }
-        else{
-
+        } else {
             $filter = null;
 
-            if($statusFilter) {
+            if ($statusFilter) {
                 $messages = Message::orderBy('created_at', 'desc')->where('status', $statusFilter)->paginate(25);
-            }
-            else {
+            } else {
                 $messages = Message::orderBy('created_at', 'desc')->paginate(25);
             }
         }
 
-        return view('messages.show')->with('messages', $messages )->with('filter', $filter )->with('statusFilter', $statusFilter )->with('statusList', $statusList);
+        return view('messages.show')->with('messages', $messages)->with('filter', $filter)->with('statusFilter', $statusFilter)->with('statusList', $statusList);
     }
 }

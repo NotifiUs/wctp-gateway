@@ -3,9 +3,9 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LoginEmail extends Mailable implements ShouldQueue
 {
@@ -18,7 +18,7 @@ class LoginEmail extends Mailable implements ShouldQueue
      *
      * @return void
      */
-    public function __construct( )
+    public function __construct()
     {
         $this->onQueue('email');
         $this->host = config('app.url');
@@ -31,7 +31,7 @@ class LoginEmail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->subject('User login at ' . config('app.name') )
+        return $this->subject('User login at '.config('app.name'))
             ->markdown('emails.user_login');
     }
 }

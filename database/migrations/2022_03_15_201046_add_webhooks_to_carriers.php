@@ -29,7 +29,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('carriers', function (Blueprint $table) {
-            $table->dropColumn(['webhook_host','webhook_endpoint', 'webhook_username', 'webhook_password']);
+            $table->dropColumn(['webhook_host', 'webhook_endpoint', 'webhook_username', 'webhook_password']);
         });
     }
 };

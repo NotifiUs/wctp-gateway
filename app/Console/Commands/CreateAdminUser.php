@@ -40,19 +40,18 @@ class CreateAdminUser extends Command
     {
         $name = $this->ask('Name');
         $email = $this->ask('Email');
-        $timezone = $this->ask("Timezone");
+        $timezone = $this->ask('Timezone');
         $pass = $this->secret('Password');
-        $confirm = $this->secret( 'Confirm');
-        if( $confirm !== $pass )
-        {
-            $this->info("");
-            $this->error("Password did not match confirmation");
-            $this->info("");
+        $confirm = $this->secret('Confirm');
+        if ($confirm !== $pass) {
+            $this->info('');
+            $this->error('Password did not match confirmation');
+            $this->info('');
+
             return;
         }
 
-        if( ! $timezone )
-        {
+        if (! $timezone) {
             $timezone = 'America/New_York';
         }
 
@@ -60,12 +59,12 @@ class CreateAdminUser extends Command
         $user->name = $name;
         $user->email = $email;
         $user->timezone = $timezone;
-        $user->password = bcrypt( $pass );
+        $user->password = bcrypt($pass);
         $user->save();
 
-        $this->info( json_encode( $user->toArray(), JSON_PRETTY_PRINT) );
-        $this->info("");
-        $this->info("User created!");
-        $this->info("");
+        $this->info(json_encode($user->toArray(), JSON_PRETTY_PRINT));
+        $this->info('');
+        $this->info('User created!');
+        $this->info('');
     }
 }

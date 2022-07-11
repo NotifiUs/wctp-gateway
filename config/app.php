@@ -6,7 +6,7 @@ return [
      * Should the guzzle implementation allow self-signed certificates?
      *
      */
-    'guzzle_allow_selfsigned' => env('GUZZLE_ALLOW_SELFSIGNED', false ),
+    'guzzle_allow_selfsigned' => env('GUZZLE_ALLOW_SELFSIGNED', false),
     /*
     |--------------------------------------------------------------------------
     | Application Name

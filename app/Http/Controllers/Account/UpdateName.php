@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Account;
 
+use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateName extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -21,17 +20,18 @@ class UpdateName extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:255',
         ]);
-        if( $validator->fails())
-        {
-            return redirect()->back()->withErrors( $validator->errors() );
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors());
         }
 
         $user = Auth::user();
         $user->name = $request->input('name');
-        try{
+        try {
             $user->save();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
         }
-        catch( Exception $e ){ return redirect()->back()->withErrors( [$e->getMessage()]); }
+
         return redirect()->back()->withStatus('Your name has been updated!');
     }
 }

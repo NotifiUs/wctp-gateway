@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Account;
 
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ShowAccount extends Controller
 {
@@ -14,6 +14,6 @@ class ShowAccount extends Controller
 
     public function __invoke()
     {
-        return view('account.show' )->with('user', Auth::user() );
+        return view('account.show')->with('user', Auth::user());
     }
 }

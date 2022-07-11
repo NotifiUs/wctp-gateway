@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Numbers;
 
-use App\Models\Number;
-use App\Jobs\LogEvent;
 use App\Http\Controllers\Controller;
+use App\Jobs\LogEvent;
+use App\Models\Number;
 use Illuminate\Support\Facades\Auth;
 
 class SetupNumber extends Controller
@@ -14,18 +14,18 @@ class SetupNumber extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( Number $number )
+    public function __invoke(Number $number)
     {
-        if( $number->provision() !== true )
-        {
-            return redirect()->back()->withErrors(['Unable to provision number with carrier.'] );
+        if ($number->provision() !== true) {
+            return redirect()->back()->withErrors(['Unable to provision number with carrier.']);
         }
 
         LogEvent::dispatch(
             "{$number->e164} setup",
-            get_class( $this ), 'info', json_encode($number->toArray()), Auth::user()->id ?? null
+            get_class($this), 'info', json_encode($number->toArray()), Auth::user()->id ?? null
         );
-        $statusHtml = "Number successfully setup!";
+        $statusHtml = 'Number successfully setup!';
+
         return redirect()->to('/numbers')
             ->with('status', $statusHtml);
     }

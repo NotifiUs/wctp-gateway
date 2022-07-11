@@ -2,15 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Exception;
+use App\Jobs\SyncOutboundStatus;
 use App\Models\Message;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
-use App\Jobs\SyncOutboundStatus;
 
 class CheckPendingOutbound extends Command
 {
-
     /**
      * The number of hours to check for pending messages
      */
@@ -40,22 +39,20 @@ class CheckPendingOutbound extends Command
         $this->hours = $this->option('hours');
 
         $this->info("Getting pending outbound messages in the last {$this->hours} hour(s)...");
-        try{
-            $messages = Message::where('created_at', '>=', Carbon::now()->subHours( $this->hours ) )->where('direction', 'outbound' )->whereIn('status', ['pending','sent'])->get();
-        }
-        catch( Exception $e )
-        {
-            $this->error("Unable to get pending outbound messages");
+        try {
+            $messages = Message::where('created_at', '>=', Carbon::now()->subHours($this->hours))->where('direction', 'outbound')->whereIn('status', ['pending', 'sent'])->get();
+        } catch (Exception $e) {
+            $this->error('Unable to get pending outbound messages');
+
             return;
         }
 
-        $this->info( $messages->count() . " pending outbound message(s) found");
+        $this->info($messages->count().' pending outbound message(s) found');
 
-        foreach( $messages as $message )
-        {
-            SyncOutboundStatus::dispatch( $message );
+        foreach ($messages as $message) {
+            SyncOutboundStatus::dispatch($message);
         }
 
-        $this->info("Pending outbound messages updated");
+        $this->info('Pending outbound messages updated');
     }
 }

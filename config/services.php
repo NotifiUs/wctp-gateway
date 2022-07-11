@@ -31,13 +31,12 @@ return [
     ],
     'recaptcha_v3' => [
         'site_key' => env('GOOGLE_RECAPTCHA_V3_SITE_KEY', ''),
-        'secret_key' => env('GOOGLE_RECAPTCHA_V3_SECRET_KEY', '')
+        'secret_key' => env('GOOGLE_RECAPTCHA_V3_SECRET_KEY', ''),
     ],
     'twilio' => [
         'number' => env('TWILIO_NUMBER', ''),
         'account' => env('TWILIO_ACCOUNT_SID', ''),
         'token' => env('TWILIO_AUTH_TOKEN', ''),
     ],
-
 
 ];

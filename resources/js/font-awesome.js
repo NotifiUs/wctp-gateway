@@ -1,3 +1,3 @@
-require("@fortawesome/fontawesome-free/js/fontawesome");
-require("@fortawesome/fontawesome-free/js/solid");
-require("@fortawesome/fontawesome-free/js/brands");
+import "@fortawesome/fontawesome-free/js/fontawesome.js";
+import "@fortawesome/fontawesome-free/js/solid.js";
+import "@fortawesome/fontawesome-free/js/brands.js";

@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Exception;
 use App\Models\Message;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 
 class PurgeMessageList extends Command
 {
-
     protected $keep_for = 30; //days
 
     /**
@@ -44,15 +43,14 @@ class PurgeMessageList extends Command
     public function handle()
     {
         $this->info("Removing messages older than {$this->keep_for} days");
-        try{
-            Message::where('created_at', '<', Carbon::today()->subDays( $this->keep_for ) )->delete();
-        }
-        catch( Exception $e )
-        {
-            $this->error("Unable to remove old message entries");
+        try {
+            Message::where('created_at', '<', Carbon::today()->subDays($this->keep_for))->delete();
+        } catch (Exception $e) {
+            $this->error('Unable to remove old message entries');
+
             return;
         }
 
-        $this->info("Messages successfully purged");
+        $this->info('Messages successfully purged');
     }
 }

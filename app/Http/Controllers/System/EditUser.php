@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\System;
 
+use App\Http\Controllers\Controller;
+use App\Jobs\LogEvent;
 use App\Models\User;
 use Exception;
-use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class EditUser extends Controller
@@ -18,11 +18,11 @@ class EditUser extends Controller
 
     public function __invoke(Request $request, User $user)
     {
-        $this->validate( $request, [
+        $this->validate($request, [
             'name' => 'required|string|min:3|max:255',
-            'email' => "required|email|unique:users,email," . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'email_notifications' => 'nullable',
-            'timezone' => 'required|timezone'
+            'timezone' => 'required|timezone',
         ]);
 
         $user->name = $request->input('name');
@@ -32,17 +32,15 @@ class EditUser extends Controller
 
         try {
             $user->save();
-        }
-        catch( Exception $e )
-        {
+        } catch (Exception $e) {
             return redirect()->back()->withErrors([$e->getMessage()]);
         }
 
         LogEvent::dispatch(
-            "User edited",
-            get_class( $this ), 'info',json_encode( $user->toArray()) , Auth::user()->id ?? null
+            'User edited',
+            get_class($this), 'info', json_encode($user->toArray()), Auth::user()->id ?? null
         );
 
-       return redirect()->back()->with('status', 'User updated!');
+        return redirect()->back()->with('status', 'User updated!');
     }
 }

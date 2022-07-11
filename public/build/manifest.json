@@ -1,0 +1,31 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app.467d355c.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "_lodash.11675a96.js",
+      "_index.1507a6ea.js",
+      "node_modules/bootstrap/dist/js/bootstrap.esm.js"
+    ],
+    "css": [
+      "assets/app.149108c9.css"
+    ]
+  },
+  "_lodash.11675a96.js": {
+    "file": "assets/lodash.11675a96.js",
+    "isDynamicEntry": true
+  },
+  "_index.1507a6ea.js": {
+    "file": "assets/index.1507a6ea.js",
+    "isDynamicEntry": true
+  },
+  "node_modules/bootstrap/dist/js/bootstrap.esm.js": {
+    "file": "assets/bootstrap.esm.d39a7f8c.js",
+    "src": "node_modules/bootstrap/dist/js/bootstrap.esm.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index.1507a6ea.js"
+    ]
+  }
+}

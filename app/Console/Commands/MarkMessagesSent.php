@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Exception;
 use App\Models\Message;
-use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 
 class MarkMessagesSent extends Command
@@ -40,22 +39,20 @@ class MarkMessagesSent extends Command
      */
     public function handle()
     {
-        $this->info("Marking pending messages as sent.");
-        try{
+        $this->info('Marking pending messages as sent.');
+        try {
             $messages = Message::where('status', 'pending')->where('direction', 'outbound')->get();
-        }
-        catch( Exception $e )
-        {
-            $this->error("Unable to update pending messages.");
+        } catch (Exception $e) {
+            $this->error('Unable to update pending messages.');
+
             return;
         }
 
-        foreach( $messages as $message )
-        {
+        foreach ($messages as $message) {
             $message->status = 'sent';
             $message->save();
         }
 
-        $this->info("Messages successfully marked as sent.");
+        $this->info('Messages successfully marked as sent.');
     }
 }

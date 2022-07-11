@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\EnterpriseHosts;
 
-use Exception;
+use App\Http\Controllers\Controller;
 use App\Jobs\LogEvent;
 use App\Models\EnterpriseHost;
-use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class DeleteHost extends Controller
@@ -15,16 +15,21 @@ class DeleteHost extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( EnterpriseHost $host )
+    public function __invoke(EnterpriseHost $host)
     {
         LogEvent::dispatch(
             "{$host->senderID} deleted",
-            get_class( $this ), 'info', json_encode($host->toArray()), Auth::user()->id ?? null
+            get_class($this), 'info', json_encode($host->toArray()), Auth::user()->id ?? null
         );
 
-        try{ $host->delete(); }catch( Exception $e ){ return redirect()->back()->withErrors([__('Unable to delete host')]); }
+        try {
+            $host->delete();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([__('Unable to delete host')]);
+        }
 
-        $statusHtml = "Enterprise host deleted!";
+        $statusHtml = 'Enterprise host deleted!';
+
         return redirect()->back()
             ->with('status', $statusHtml);
     }

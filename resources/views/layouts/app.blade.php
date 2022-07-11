@@ -9,8 +9,8 @@
 
     <title>@yield('title') &middot; {{ config('app.name') }}</title>
 
-    <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @vite('resources/js/app.js')
+
     @stack('css')
 
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png">
@@ -58,8 +58,6 @@
 
 @stack('modals')
 
-<script src="{{ mix('js/app.js') }}"></script>
-<script src="{{ mix('js/font-awesome.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

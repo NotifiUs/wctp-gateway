@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Exception;
 use App\Models\EventLog;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 
 class PurgeEventLog extends Command
 {
-
     protected $keep_for = 30; //days
 
     /**
@@ -44,15 +43,14 @@ class PurgeEventLog extends Command
     public function handle()
     {
         $this->info("Removing event log entries older than {$this->keep_for} days");
-        try{
-            EventLog::where('created_at', '<', Carbon::today()->subDays( $this->keep_for ) )->delete();
-        }
-        catch( Exception $e )
-        {
-            $this->error("Unable to remove old log entries");
+        try {
+            EventLog::where('created_at', '<', Carbon::today()->subDays($this->keep_for))->delete();
+        } catch (Exception $e) {
+            $this->error('Unable to remove old log entries');
+
             return;
         }
 
-        $this->info("Event log successfully purged");
+        $this->info('Event log successfully purged');
     }
 }

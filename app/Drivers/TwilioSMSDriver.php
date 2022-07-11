@@ -22,28 +22,34 @@ use Twilio\Security\RequestValidator;
 class TwilioSMSDriver implements SMSDriver
 {
     private int $maxMessageLength = 1600;
+
     private string $requestInputMessageKey = 'Body';
+
     private string $requestInputUidKey = 'MessageSid';
+
     private string $requestInputStatusKey = 'MessageStatus';
+
     private string $requestInputToKey = 'To';
+
     private string $requestInputFromKey = 'From';
+
     private array $carrierValidationFields = [
         'twilio_account_sid' => 'required',
         'twilio_auth_token' => 'required',
     ];
 
-    public function getType( string $identifier ): string
+    public function getType(string $identifier): string
     {
-        return substr( $identifier, 0, 2);
+        return substr($identifier, 0, 2);
     }
 
-    public function getFriendlyType( string $identifier ): string
+    public function getFriendlyType(string $identifier): string
     {
-        if( Str::startsWith( $identifier, 'MG') )
-        {
-            return "Messaging Service";
+        if (Str::startsWith($identifier, 'MG')) {
+            return 'Messaging Service';
         }
-        return "Phone Number";
+
+        return 'Phone Number';
     }
 
     public function getRequestInputToKey(): string
@@ -58,7 +64,7 @@ class TwilioSMSDriver implements SMSDriver
 
     public function queueOutbound($host, $carrier, $recipient, $message, $messageID, $reply_with): void
     {
-        SendTwilioSMS::dispatch( $host, $carrier, $recipient, $message, $messageID, $reply_with );
+        SendTwilioSMS::dispatch($host, $carrier, $recipient, $message, $messageID, $reply_with);
     }
 
     public function getRequestInputStatusKey(): string
@@ -81,33 +87,30 @@ class TwilioSMSDriver implements SMSDriver
         return response('<Response></Response>', 200, ['content-type' => 'application/xml']);
     }
 
-    public function verifyHandlerRequest( Request $request, Carrier $carrier ): bool
+    public function verifyHandlerRequest(Request $request, Carrier $carrier): bool
     {
-        try{
-            $validator = new RequestValidator( decrypt( $carrier->twilio_auth_token )  );
-        }
-        catch( Exception $e )
-        {
+        try {
+            $validator = new RequestValidator(decrypt($carrier->twilio_auth_token));
+        } catch (Exception $e) {
             LogEvent::dispatch(
-                "Failed inbound message",
-                get_class( $this ), 'error', json_encode("Unable to decrypt twilio auth token"), null
+                'Failed inbound message',
+                get_class($this), 'error', json_encode('Unable to decrypt twilio auth token'), null
             );
 
             return false;
         }
 
-        if( $validator->validate(
-            $request->header('X-Twilio-Signature') ?? $_SERVER["HTTP_X_TWILIO_SIGNATURE"],
+        if ($validator->validate(
+            $request->header('X-Twilio-Signature') ?? $_SERVER['HTTP_X_TWILIO_SIGNATURE'],
             $request->fullUrl(),
             $request->post()
-        ))
-        {
+        )) {
             return true;
         }
 
         LogEvent::dispatch(
-            "Failed inbound message",
-            get_class( $this ), 'error', json_encode(["Unable to verify Twilio request", 'request' => $_REQUEST]), null
+            'Failed inbound message',
+            get_class($this), 'error', json_encode(['Unable to verify Twilio request', 'request' => $_REQUEST]), null
         );
 
         return false;
@@ -126,7 +129,7 @@ class TwilioSMSDriver implements SMSDriver
             $enterprise_host_id,
             $request->input($this->getRequestInputToKey()),
             $request->input($this->getRequestInputFromKey()),
-            encrypt( $request->input($this->getRequestInputMessageKey()) ),
+            encrypt($request->input($this->getRequestInputMessageKey())),
             null,
             $submitted_at,
             $reply_with,
@@ -135,52 +138,52 @@ class TwilioSMSDriver implements SMSDriver
         );
     }
 
-    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message ): bool
+    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message): bool
     {
         //use twilio api to check status of message->carrier_uniquie_id
-        try{
+        try {
             $client = new TwilioClient(
                 $carrier->twilio_account_sid,
-                decrypt( $carrier->twilio_auth_token )
+                decrypt($carrier->twilio_auth_token)
             );
-        }
-        catch( Exception $e ){
+        } catch (Exception $e) {
             LogEvent::dispatch(
-                "Failure synchronizing message status",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
+                'Failure synchronizing message status',
+                get_class($this), 'error', json_encode($e->getMessage()), null
             );
+
             return false;
         }
 
-        try{
-            $carrier_message = $client->messages( $message->carrier_message_uid )->fetch();
+        try {
+            $carrier_message = $client->messages($message->carrier_message_uid)->fetch();
             $message->status = $carrier_message->status;
 
             switch (strtolower($carrier_message->status)) {
-                case "sent":
-                case "delivrd":
-                case "delivered":
+                case 'sent':
+                case 'delivrd':
+                case 'delivered':
                     $message->delivered_at = Carbon::now();
                     break;
-                case "rejectd":
-                case "expired":
-                case "deleted":
-                case "unknown":
-                case "failed":
-                case "undelivered":
-                case "undeliv":
+                case 'rejectd':
+                case 'expired':
+                case 'deleted':
+                case 'unknown':
+                case 'failed':
+                case 'undelivered':
+                case 'undeliv':
                 default:
                     $message->failed_at = Carbon::now();
                     break;
             }
 
             $message->save();
-        }
-        catch( Exception $e ){
+        } catch (Exception $e) {
             LogEvent::dispatch(
-                "Failure synchronizing message status",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
+                'Failure synchronizing message status',
+                get_class($this), 'error', json_encode($e->getMessage()), null
             );
+
             return false;
         }
 
@@ -189,106 +192,99 @@ class TwilioSMSDriver implements SMSDriver
 
     public function provisionNumber(Carrier $carrier, $identifier): bool
     {
-        try{
-            $twilio = new TwilioClient( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
+        try {
+            $twilio = new TwilioClient($carrier->twilio_account_sid, decrypt($carrier->twilio_auth_token));
 
-            if( $this->getType($identifier) == 'MG' )
-            {
+            if ($this->getType($identifier) == 'MG') {
                 $twilio->messaging->v1->services($identifier)
                     ->update([
-                        'inboundRequestUrl' => secure_url("/sms/inbound/{$identifier}/primary" ),
+                        'inboundRequestUrl' => secure_url("/sms/inbound/{$identifier}/primary"),
                         'inboundMethod' => 'POST',
-                        'fallbackUrl' => secure_url("/sms/inbound/{$identifier}/fallback" ),
+                        'fallbackUrl' => secure_url("/sms/inbound/{$identifier}/fallback"),
                         'fallbackMethod' => 'POST',
                         'statusCallback' => secure_url("/sms/callback/{$identifier}/status"),
                         //'statusCallbackMethod' => 'POST', //not in docs
                     ]);
-            }
-            else
-            {
+            } else {
                 $twilio
-                    ->incomingPhoneNumbers( $identifier )
-                    ->update(array(
-                            'smsApplicationSid' => '',
-                            'smsFallbackMethod' => 'POST',
-                            'smsFallbackUrl' => secure_url("/sms/inbound/{$identifier}/fallback"),
-                            'smsMethod' => 'POST',
-                            'smsUrl' => secure_url("/sms/inbound/{$identifier}/primary" ),
-                            'statusCallback' => secure_url("/sms/callback/{$identifier}/status"),
-                            'statusCallbackMethod' => 'POST',
-                        )
+                    ->incomingPhoneNumbers($identifier)
+                    ->update([
+                        'smsApplicationSid' => '',
+                        'smsFallbackMethod' => 'POST',
+                        'smsFallbackUrl' => secure_url("/sms/inbound/{$identifier}/fallback"),
+                        'smsMethod' => 'POST',
+                        'smsUrl' => secure_url("/sms/inbound/{$identifier}/primary"),
+                        'statusCallback' => secure_url("/sms/callback/{$identifier}/status"),
+                        'statusCallbackMethod' => 'POST',
+                    ]
                     );
             }
-        }
-        catch( Exception $e ) {
+        } catch (Exception $e) {
             LogEvent::dispatch(
-                "Failure provisioning number.",
-                get_class( $this ), 'error', json_encode($e->getMessage()), null
+                'Failure provisioning number.',
+                get_class($this), 'error', json_encode($e->getMessage()), null
             );
+
             return false;
         }
 
         return true;
     }
 
-    public function getCarrierDetails(Carrier $carrier, string $identifier ): array
+    public function getCarrierDetails(Carrier $carrier, string $identifier): array
     {
         try {
-            $twilio = new TwilioClient( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
+            $twilio = new TwilioClient($carrier->twilio_account_sid, decrypt($carrier->twilio_auth_token));
 
-            if( $this->getType($identifier) == 'MG' )
-            {
+            if ($this->getType($identifier) == 'MG') {
                 $serviceAddons = [];
-                $results = $twilio->messaging->v1->services( $identifier )->fetch();
-                foreach( $results->phoneNumbers->read(100, 100) as $num )
-                {
+                $results = $twilio->messaging->v1->services($identifier)->fetch();
+                foreach ($results->phoneNumbers->read(100, 100) as $num) {
                     $serviceAddons['numbers'][] = $num->toArray();
                 }
 
-                foreach( $results->shortCodes->read(100, 100) as $shortcode )
-                {
+                foreach ($results->shortCodes->read(100, 100) as $shortcode) {
                     $serviceAddons['shortcodes'][] = $shortcode->toArray();
                 }
 
                 return Arr::dot(array_merge(['carrier' => $carrier->only([
-                    'id','name', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
-                ]), 'number' => $results->toArray(), 'addons' => $serviceAddons ]));
-            }
-            else {
+                    'id', 'name', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at',
+                ]), 'number' => $results->toArray(), 'addons' => $serviceAddons]));
+            } else {
                 $results = $twilio->incomingPhoneNumbers($identifier)->fetch();
-                return Arr::dot(array_merge(['carrier' => $carrier->only([
-                    'id','name', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
-                ]), 'number' => $results ]));
-            }
 
-        }catch( Exception $e ) { return []; }
+                return Arr::dot(array_merge(['carrier' => $carrier->only([
+                    'id', 'name', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at',
+                ]), 'number' => $results]));
+            }
+        } catch (Exception $e) {
+            return [];
+        }
     }
 
-    public function getAvailableNumbers(Request $request, Carrier $carrier ): array
+    public function getAvailableNumbers(Request $request, Carrier $carrier): array
     {
         $available = [];
 
         //get list of numbers from messaging services
         try {
-            $twilio = new TwilioClient( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
+            $twilio = new TwilioClient($carrier->twilio_account_sid, decrypt($carrier->twilio_auth_token));
             $services = $twilio->messaging->v1->services->read(100, 100);
 
-            foreach ( $services as $record ) {
+            foreach ($services as $record) {
                 //check to see if it has phonenumbers or shortcodes
                 $hasNumbers = false;
                 $hasShortCodes = false;
                 $serviceAddons = [];
                 $service_name = $record->friendlyName;
-                foreach( $record->phoneNumbers->read(100, 100) as $num )
-                {
+                foreach ($record->phoneNumbers->read(100, 100) as $num) {
                     $hasNumbers = true;
                     $service_name = $num->phoneNumber;
                     $exclude[] = $num->sid;
                     $serviceAddons['numbers'][] = $num->toArray();
                 }
 
-                foreach( $record->shortCodes->read(100, 100) as $shortcode )
-                {
+                foreach ($record->shortCodes->read(100, 100) as $shortcode) {
                     $hasShortCodes = true;
                     $service_name = $shortcode->shortCode;
                     $exclude[] = $shortcode->sid;
@@ -301,26 +297,24 @@ class TwilioSMSDriver implements SMSDriver
                     'type' => 'Messaging Service',
                     'number' => $service_name,
                     'carrier' => $carrier,
-                    'details' => Arr::dot( array_merge($record->toArray(), $serviceAddons ) ),
+                    'details' => Arr::dot(array_merge($record->toArray(), $serviceAddons)),
                     'sms_enabled' => $hasNumbers || $hasShortCodes,
                 ];
             }
+        } catch (Exception $e) {
         }
-        catch( Exception $e ) {}
 
         //get list of numbers
         try {
-            $twilio = new TwilioClient( $carrier->twilio_account_sid, decrypt( $carrier->twilio_auth_token ) );
-            $incomingPhoneNumbers = $twilio->incomingPhoneNumbers->read(array(
+            $twilio = new TwilioClient($carrier->twilio_account_sid, decrypt($carrier->twilio_auth_token));
+            $incomingPhoneNumbers = $twilio->incomingPhoneNumbers->read([
                 ['capabilities' => [
-                    'sms' => 1
-                ]]
-            ), 100);
+                    'sms' => 1,
+                ]],
+            ], 100);
 
-            foreach ( $incomingPhoneNumbers as $record ) {
-
-                if( in_array( $record->sid, $exclude ) )
-                {
+            foreach ($incomingPhoneNumbers as $record) {
+                if (in_array($record->sid, $exclude)) {
                     $available[] = [
                         'id' => $record->sid,
                         'api' => $carrier->api,
@@ -330,9 +324,7 @@ class TwilioSMSDriver implements SMSDriver
                         'details' => Arr::dot($record->toArray()),
                         'sms_enabled' => 0,
                     ];
-                }
-                else
-                {
+                } else {
                     $available[] = [
                         'id' => $record->sid,
                         'api' => $carrier->api,
@@ -343,42 +335,37 @@ class TwilioSMSDriver implements SMSDriver
                         'sms_enabled' => $record->capabilities['sms'],
                     ];
                 }
-
             }
+        } catch (Exception $e) {
         }
-        catch( Exception $e ){}
+
         return [
             'available' => $available,
-            'pages' => null
+            'pages' => null,
         ];
     }
 
-    public function verifyCarrierValidation( Request $request ): RedirectResponse | View
+    public function verifyCarrierValidation(Request $request): RedirectResponse | View
     {
         $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect()->to('/carriers')->withErrors($validator->errors());
         }
 
         try {
-            $twilio = new TwilioClient( $request->input('twilio_account_sid'), $request->input('twilio_auth_token'));
+            $twilio = new TwilioClient($request->input('twilio_account_sid'), $request->input('twilio_auth_token'));
             $account = $twilio->api->v2010->accounts($request->input('twilio_account_sid'))->fetch();
-        }
-        catch( Exception $e )
-        {
+        } catch (Exception $e) {
             return redirect()->to('/carriers')->withErrors(['Unable to connect to Twilio account']);
         }
 
-        return view('carriers.twilio-verify')->with('account', $account->toArray() );
-
+        return view('carriers.twilio-verify')->with('account', $account->toArray());
     }
 
     public function createCarrierInstance(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect()->to('/carriers')->withErrors($validator->errors());
         }
 
@@ -388,31 +375,34 @@ class TwilioSMSDriver implements SMSDriver
         $carrier->beta = 0;
         $carrier->priority = $request->input('priority');
         $carrier->twilio_account_sid = $request->input('twilio_account_sid');
-        $carrier->twilio_auth_token = encrypt( $request->input('twilio_auth_token') );
+        $carrier->twilio_auth_token = encrypt($request->input('twilio_auth_token'));
         $carrier->api = 'twilio';
 
-        try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier')]); }
+        try {
+            $carrier->save();
+        } catch (Exception $e) {
+            return redirect()->to('/carriers')->withErrors([__('Unable to save carrier')]);
+        }
 
         LogEvent::dispatch(
             "{$carrier->name} ({$carrier->api}) created",
-            get_class( $this ), 'info', json_encode($carrier->toArray()), $request->user() ?? null
+            get_class($this), 'info', json_encode($carrier->toArray()), $request->user() ?? null
         );
 
-        $statusHtml = "Carrier successfully created!";
+        $statusHtml = 'Carrier successfully created!';
+
         return redirect()->to('/carriers')
             ->with('status', $statusHtml);
     }
 
-    public function showCarrierCredentials( Carrier $carrier ): array
+    public function showCarrierCredentials(Carrier $carrier): array
     {
         try {
             return [
                 'twilio_account_sid' => $carrier->twilio_account_sid,
                 'twilio_auth_token' => decrypt($carrier->twilio_auth_token),
             ];
-        }
-        catch(Exception $e )
-        {
+        } catch (Exception $e) {
             return [];
         }
     }
@@ -425,7 +415,7 @@ class TwilioSMSDriver implements SMSDriver
         ];
     }
 
-    public function showCarrierDetails(Carrier $carrier ): string
+    public function showCarrierDetails(Carrier $carrier): string
     {
         return  $carrier->twilio_account_sid ?? 'unknown';
     }

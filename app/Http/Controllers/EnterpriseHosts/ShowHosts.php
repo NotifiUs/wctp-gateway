@@ -15,6 +15,7 @@ class ShowHosts extends Controller
     public function __invoke()
     {
         $hosts = EnterpriseHost::all()->sortBy('enabled', null, true);
-        return view('enterprise_hosts.show')->with('enterpriseHosts', $hosts );
+
+        return view('enterprise_hosts.show')->with('enterpriseHosts', $hosts);
     }
 }

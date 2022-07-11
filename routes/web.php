@@ -23,7 +23,6 @@ Route::namespace('Auth')->group(function () {
     Route::post('/mfa', 'MFAController@checkCode');
 });
 
-
 Route::namespace('Account')->group(function () {
     Route::get('/account', 'ShowAccount');
     Route::get('/account/verify-email', 'VerifyEmail')->middleware('verified');
@@ -96,6 +95,4 @@ Route::namespace('Messages')->group(function () {
     Route::get('/messages/{direction?}', 'ShowMessages');
     Route::post('/messages/process/{message}', 'ProcessMessage');
     Route::post('/messages/fail/{message}', 'FailMessage');
-
 });
-

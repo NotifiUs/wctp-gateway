@@ -3,20 +3,24 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class RetryJob extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    public $details, $host;
+
+    public $details;
+
+    public $host;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct( array $details = [] )
+    public function __construct(array $details = [])
     {
         $this->onQueue('email');
         $this->details = $details;
@@ -30,6 +34,6 @@ class RetryJob extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('emails.retry_job')->subject('WCTP job retried at ' . config('app.name') );
+        return $this->markdown('emails.retry_job')->subject('WCTP job retried at '.config('app.name'));
     }
 }

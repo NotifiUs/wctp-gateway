@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Exception;
-use App\Models\Message;
-use Illuminate\Console\Command;
 use App\Jobs\SubmitToEnterpriseHost;
+use App\Models\Message;
+use Exception;
+use Illuminate\Console\Command;
 
 class SendPendingInbound extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -41,23 +40,21 @@ class SendPendingInbound extends Command
      */
     public function handle()
     {
-        $this->info("Getting pending inbound messages...");
-        try{
-            $messages = Message::whereNull('delivered_at')->where('direction', '=', 'inbound' )->where('status', 'pending')->get();
-        }
-        catch( Exception $e )
-        {
-            $this->error("Unable to get pending inbound messages");
+        $this->info('Getting pending inbound messages...');
+        try {
+            $messages = Message::whereNull('delivered_at')->where('direction', '=', 'inbound')->where('status', 'pending')->get();
+        } catch (Exception $e) {
+            $this->error('Unable to get pending inbound messages');
+
             return;
         }
 
-        $this->info( $messages->count() . " pending inbound message(s) found");
+        $this->info($messages->count().' pending inbound message(s) found');
 
-        foreach( $messages as $message )
-        {
-            SubmitToEnterpriseHost::dispatch( $message );
+        foreach ($messages as $message) {
+            SubmitToEnterpriseHost::dispatch($message);
         }
 
-        $this->info("Pending inbound messages processed");
+        $this->info('Pending inbound messages processed');
     }
 }

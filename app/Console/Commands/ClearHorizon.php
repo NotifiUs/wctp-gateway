@@ -42,19 +42,19 @@ class ClearHorizon extends Command
 
         /* https://github.com/laravel/horizon/issues/122 */
 
-        $this->info("");
-        $this->info("Running queue:flush...");
+        $this->info('');
+        $this->info('Running queue:flush...');
         $this->call('queue:flush');
 
-        $this->info("");
+        $this->info('');
         $this->info("Deleting {$prefix}failed:*...");
         Redis::connection()->del(["{$prefix}failed:*"]);
 
-        $this->info("");
+        $this->info('');
         $this->info("Deleting {$prefix}failed_jobs:*...");
         Redis::connection()->del(["{$prefix}failed_jobs"]);
 
-        $this->info("");
+        $this->info('');
         $this->alert('Complete!');
     }
 }

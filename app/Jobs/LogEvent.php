@@ -2,24 +2,35 @@
 
 namespace App\Jobs;
 
-use Exception;
 use App\Models\EventLog;
+use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class LogEvent implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 10;
-    public int $timeout = 60;
-    public bool $failOnTimeout = true;
-    protected $event, $source, $severity, $details, $user_id;
 
-    public function __construct( $event, $source, $severity = 'info', $details = null, $user_id = null )
+    public int $timeout = 60;
+
+    public bool $failOnTimeout = true;
+
+    protected $event;
+
+    protected $source;
+
+    protected $severity;
+
+    protected $details;
+
+    protected $user_id;
+
+    public function __construct($event, $source, $severity = 'info', $details = null, $user_id = null)
     {
         $this->onQueue('default');
         $this->event = $event;
@@ -33,16 +44,15 @@ class LogEvent implements ShouldQueue
     {
         $event = new EventLog;
         $event->event = $this->event;
-        $event->source = str_replace(["App\\Http\\Controllers\\","App\\"], "", $this->source );
+        $event->source = str_replace(['App\\Http\\Controllers\\', 'App\\'], '', $this->source);
         $event->severity = $this->severity;
         $event->details = $this->details;
         $event->user_id = $this->user_id;
 
-        try{
+        try {
             $event->save();
-        }
-        catch( Exception $e ){
-            $this->release(60 );
+        } catch (Exception $e) {
+            $this->release(60);
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\Drivers;
+namespace App\Drivers;
 
     use Exception;
 
@@ -16,10 +16,9 @@
             'bandwidth' => BandwidthSMSDriver::class,
         ];
 
-        public function __construct( string $driver )
+        public function __construct(string $driver)
         {
-            if( ! array_key_exists($driver, self::$supportedDrivers ) )
-            {
+            if (! array_key_exists($driver, self::$supportedDrivers)) {
                 throw new Exception('No compatible driver found');
             }
 
@@ -31,6 +30,3 @@
             return new self::$supportedDrivers[$this->driver]();
         }
     }
-
-
-

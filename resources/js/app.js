@@ -1,4 +1,7 @@
-require("./bootstrap");
+import './bootstrap';
+import '../css/tailwind.css';
+import '../sass/app.scss';
+import './font-awesome';
 
 window.addEventListener('DOMContentLoaded', (loaded) => {
     let tables = document.querySelectorAll('.table-responsive');

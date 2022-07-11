@@ -11,7 +11,7 @@ class Number extends Model
 
     private function setupDriver()
     {
-        $driverFactory = new DriverFactory( $this->carrier->api );
+        $driverFactory = new DriverFactory($this->carrier->api);
         $this->driver = $driverFactory->loadDriver();
     }
 
@@ -23,24 +23,28 @@ class Number extends Model
     public function getType(): string
     {
         $this->setupDriver();
-        return $this->driver->getType( $this->identifier );
+
+        return $this->driver->getType($this->identifier);
     }
 
     public function getFriendlyType(): string
     {
         $this->setupDriver();
-        return $this->driver->getFriendlyType( $this->identifier );
+
+        return $this->driver->getFriendlyType($this->identifier);
     }
 
     public function provision(): bool
     {
         $this->setupDriver();
+
         return $this->driver->provisionNumber($this->carrier, $this->identifier);
     }
 
     public function getCarrierDetails(): array
     {
         $this->setupDriver();
-        return $this->driver->getCarrierDetails( $this->carrier, $this->identifier );
+
+        return $this->driver->getCarrierDetails($this->carrier, $this->identifier);
     }
 }

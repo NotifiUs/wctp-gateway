@@ -3,11 +3,9 @@
 namespace App\Listeners;
 
 use App\Mail\PasswordResetEmail;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
+use Illuminate\Support\Facades\Mail;
 
 class SendEmailPasswordResetNotification implements ShouldQueue
 {
@@ -29,7 +27,6 @@ class SendEmailPasswordResetNotification implements ShouldQueue
      */
     public function handle(PasswordReset $event)
     {
-        Mail::to( $event->user->email )->send(new PasswordResetEmail());
+        Mail::to($event->user->email)->send(new PasswordResetEmail());
     }
-
 }

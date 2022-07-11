@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Account;
 
+use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
 class DisableMFA extends Controller
@@ -19,10 +19,11 @@ class DisableMFA extends Controller
         Session::forget('mfa_valid');
         $user = Auth::user();
         $user->mfa_secret = null;
-        try{
+        try {
             $user->save();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
         }
-        catch( Exception $e ){ return redirect()->back()->withErrors([$e->getMessage()]); }
 
         return redirect()->back()->withStatus('Multi-factor authentication removed from your account.');
     }

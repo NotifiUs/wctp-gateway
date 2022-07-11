@@ -44,24 +44,19 @@ class MarkPendingAsFailed extends Command
      */
     public function handle()
     {
+        foreach (Message::where('status', 'pending')->where('direction', 'inbound')->get() as $msg) {
+            $this->comment('Processing '.$msg->id);
+            $this->info($msg->created_at);
+            $this->info(Carbon::now());
+            $this->info('Difference: '.Carbon::now()->diffInMinutes(Carbon::parse($msg->created_at)));
 
-        foreach( Message::where('status', 'pending')->where('direction', 'inbound')->get() as $msg )
-        {
-            $this->comment( 'Processing ' . $msg->id );
-            $this->info( $msg->created_at );
-            $this->info( Carbon::now() );
-            $this->info(  'Difference: ' . Carbon::now()->diffInMinutes( Carbon::parse($msg->created_at))  );
-
-            if( Carbon::now()->diffInMinutes( Carbon::parse($msg->created_at)) > $this->failMessageTimeInHours )
-            {
-                $this->info('Failing...' . $msg->id );
+            if (Carbon::now()->diffInMinutes(Carbon::parse($msg->created_at)) > $this->failMessageTimeInHours) {
+                $this->info('Failing...'.$msg->id);
                 $msg->status = 'failed';
                 $msg->failed_at = Carbon::now()->timezone('America/New_York');
                 $msg->save();
-            }
-            else
-            {
-                $this->info('Ignoring...' . $msg->id );
+            } else {
+                $this->info('Ignoring...'.$msg->id);
             }
         }
 

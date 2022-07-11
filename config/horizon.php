@@ -81,7 +81,7 @@ return [
     'waits' => [
         'redis:default' => 10,
         'redis:mail' => 60,
-        'redis:events' => 90
+        'redis:events' => 90,
     ],
 
     /*

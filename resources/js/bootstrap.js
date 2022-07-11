@@ -1,9 +1,4 @@
-window._ = require("lodash");
+window._ = import("lodash");
+window.Popper = import("@popperjs/core");
+import("bootstrap");
 
-window.Popper = require("@popperjs/core");
-
-require("bootstrap");
-
-window.axios = require("axios");
-
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";

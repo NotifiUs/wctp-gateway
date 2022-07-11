@@ -1,16 +1,18 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
+<?php
+
+/** @noinspection PhpComposerExtensionStubsInspection */
 
 namespace App\Http\Controllers\WCTP;
 
-use Exception;
-use App\Models\Carrier;
-use App\Jobs\LogEvent;
-use App\Models\EnterpriseHost;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Drivers\DriverFactory;
 use App\Http\Controllers\Controller;
+use App\Jobs\LogEvent;
+use App\Models\Carrier;
+use App\Models\EnterpriseHost;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class Inbound extends Controller
 {
@@ -20,18 +22,16 @@ class Inbound extends Controller
     {
         $carrier = Carrier::where('enabled', 1)->orderBy('priority')->first();
 
-        if( $carrier === null ){
-            return $this->showError( 606, 'Service Unavailable',
+        if ($carrier === null) {
+            return $this->showError(606, 'Service Unavailable',
                 'No upstream carriers are enabled');
         }
 
-        try{
-            $driverFactory = new DriverFactory( $carrier->api );
+        try {
+            $driverFactory = new DriverFactory($carrier->api);
             $driver = $driverFactory->loadDriver();
-        }
-        catch( Exception $e )
-        {
-            return $this->showError( 604, 'Internal Server Error',
+        } catch (Exception $e) {
+            return $this->showError(604, 'Internal Server Error',
                 'This carrier API is not yet implemented');
         }
 
@@ -39,17 +39,16 @@ class Inbound extends Controller
 
         libxml_use_internal_errors(true);
 
-        if($xmlCheck === '' )
-        {
+        if ($xmlCheck === '') {
             return $this->showError(301, 'Cannot Parse Input',
                 'Message body is empty');
         }
 
-        $wctp = simplexml_load_string( $xmlCheck );
+        $wctp = simplexml_load_string($xmlCheck);
         $xmlError = libxml_get_last_error();
         libxml_clear_errors();
 
-        if( $wctp === false || $xmlError !== false ) {
+        if ($wctp === false || $xmlError !== false) {
             return $this->showError(302, 'XML Validation Error',
                 'Unable to parse malformed or invalid XML.');
         }
@@ -62,8 +61,7 @@ class Inbound extends Controller
 
         $wctpTransientMethodOperation = $wctp->xpath('/wctp-Operation/wctp-SubmitClientMessage')[0] ?? null;
 
-        if($wctpTransientMethodOperation !== null && $wctpTransientMethodOperation->count() > 0)
-        {
+        if ($wctpTransientMethodOperation !== null && $wctpTransientMethodOperation->count() > 0) {
             $this->wctpMethodType = 'SubmitClientMessage';
 
             $recipientXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-Recipient/@recipientID';
@@ -73,72 +71,60 @@ class Inbound extends Controller
             $messageIDXPath = '/wctp-Operation/wctp-SubmitClientMessage/wctp-SubmitClientHeader/wctp-ClientMessageControl/@messageID';
         }
 
-        try{
-            $recipient = (string)$wctp->xpath($recipientXPath)[0] ?? null;
-            $senderID = (string)$wctp->xpath($senderIDXPath)[0] ?? null;
-            $securityCode = (string)$wctp->xpath($securityCodeXPath)[0] ?? null;
-        }
-        catch(Exception $e )
-        {
+        try {
+            $recipient = (string) $wctp->xpath($recipientXPath)[0] ?? null;
+            $senderID = (string) $wctp->xpath($senderIDXPath)[0] ?? null;
+            $securityCode = (string) $wctp->xpath($securityCodeXPath)[0] ?? null;
+        } catch (Exception $e) {
             return $this->showError(302, 'XML Validation Error',
                 'recipientID, wctp-Alphanumeric, senderID, and securityCode (or miscInfo) are required.');
         }
 
-        try{
-            $messageID = (string)$wctp->xpath($messageIDXPath)[0] ?? null;
+        try {
+            $messageID = (string) $wctp->xpath($messageIDXPath)[0] ?? null;
+        } catch (Exception $e) {
+            $messageID = null;
         }
-        catch(Exception $e){ $messageID = null; }
 
-        try{
-            $message = (string)$wctp->xpath($messageXPath)[0] ?? null;
-        }
-        catch(Exception $e)
-        {
+        try {
+            $message = (string) $wctp->xpath($messageXPath)[0] ?? null;
+        } catch (Exception $e) {
             $message = null;
         }
 
-        if($message === null)
-        {
-            try{
-                $message = (string)$wctp->xpath("/wctp-Operation/wctp-{$this->wctpMethodType}/wctp-Payload/wctp-TransparentData")[0] ?? null;
-            }
-            catch(Exception $e)
-            {
+        if ($message === null) {
+            try {
+                $message = (string) $wctp->xpath("/wctp-Operation/wctp-{$this->wctpMethodType}/wctp-Payload/wctp-TransparentData")[0] ?? null;
+            } catch (Exception $e) {
                 $message = null;
             }
 
-            if($message !== null )
-            {
+            if ($message !== null) {
                 $message = base64_decode($message);
             }
         }
 
-        if($this->wctpMethodType === 'SubmitMessage' )
-        {
-            if($messageID === null )
-            {
+        if ($this->wctpMethodType === 'SubmitMessage') {
+            if ($messageID === null) {
                 return $this->showError(302, 'XML Validation Error',
                     'messageID is required.');
             }
         }
 
-        if( $recipient === null || $message === null || $senderID === null || $securityCode === null )
-        {
+        if ($recipient === null || $message === null || $senderID === null || $securityCode === null) {
             return $this->showError(302, 'XML Validation Error',
                 'recipientID, wctp-Alphanumeric, senderID, and securityCode (or miscInfo) are required.');
         }
 
         $reply_with = null;
-        $reply_phrase = preg_match('/\bReply with \d+$/i', $message, $matches );
+        $reply_phrase = preg_match('/\bReply with \d+$/i', $message, $matches);
 
         //strip anything other than digits
-        $recipient = preg_replace('/\D+/i', '', $recipient );
+        $recipient = preg_replace('/\D+/i', '', $recipient);
 
-        if( $reply_phrase && isset($matches[0]) )
-        {
-            $parts = explode(" ", $matches[0] );
-            if( isset( $parts[2] ) )
-            {
+        if ($reply_phrase && isset($matches[0])) {
+            $parts = explode(' ', $matches[0]);
+            if (isset($parts[2])) {
                 $reply_with = $parts[2];
             }
         }
@@ -152,79 +138,70 @@ class Inbound extends Controller
             'reply_with' => $reply_with,
         ]);
 
-        if( ! $paramCheck['success'] )
-        {
-            return $this->showError( $paramCheck['errorCode'], $paramCheck['errorText'],
+        if (! $paramCheck['success']) {
+            return $this->showError($paramCheck['errorCode'], $paramCheck['errorText'],
                 $paramCheck['errorDesc']);
         }
 
         //we're assuming sender ids are unique here
-        $host = EnterpriseHost::where('senderID', $senderID )->where('enabled', 1)->first();
+        $host = EnterpriseHost::where('senderID', $senderID)->where('enabled', 1)->first();
 
-        if( $host === null )
-        {
-            return $this->showError( 401, 'Invalid senderID',
+        if ($host === null) {
+            return $this->showError(401, 'Invalid senderID',
                 'senderID does not live on this system');
         }
 
-        try{
-            if( $securityCode != decrypt( $host->securityCode ) )
-            {
-                return $this->showError( 402, 'Invalid securityCode',
+        try {
+            if ($securityCode != decrypt($host->securityCode)) {
+                return $this->showError(402, 'Invalid securityCode',
                     'Unable to decrypt securityCode');
             }
-        }
-        catch( Exception $e ){
-            return $this->showError( 402, 'Invalid securityCode',
+        } catch (Exception $e) {
+            return $this->showError(402, 'Invalid securityCode',
                 'Unable to decrypt securityCode');
         }
 
-        try{
-            $driver->queueOutbound( $host, $carrier, $recipient, $message, $messageID, $reply_with  );
-        }
-        catch(Exception $e){
-            return $this->showError( 604, 'Internal Server Error',
-                'Unable to queue message for ' . $carrier->api );
+        try {
+            $driver->queueOutbound($host, $carrier, $recipient, $message, $messageID, $reply_with);
+        } catch (Exception $e) {
+            return $this->showError(604, 'Internal Server Error',
+                'Unable to queue message for '.$carrier->api);
         }
 
         return view('WCTP.wctp-Confirmation')
-            ->with('successCode', '200' )
-            ->with('successText', 'Message queued for delivery' );
+            ->with('successCode', '200')
+            ->with('successText', 'Message queued for delivery');
     }
 
-    private function showError( $code, $text, $desc ): View
+    private function showError($code, $text, $desc): View
     {
         LogEvent::dispatch(
-            "Failed WCTP connection",
-            get_class( $this ), 'info', json_encode([$code, $text, $desc]), null
+            'Failed WCTP connection',
+            get_class($this), 'info', json_encode([$code, $text, $desc]), null
         );
 
-        if( $this->wctpMethodType === 'SubmitClientMessage')
-        {
+        if ($this->wctpMethodType === 'SubmitClientMessage') {
             return view('WCTP.wctp-SubmitClientResponseFailure')
-                ->with('errorCode', $code )
-                ->with('errorText', $text )
-                ->with('errorDesc', $desc );
-        }
-        else
-        {
+                ->with('errorCode', $code)
+                ->with('errorText', $text)
+                ->with('errorDesc', $desc);
+        } else {
             return view('WCTP.wctp-Failure')
-                ->with('errorCode', $code )
-                ->with('errorText', $text )
-                ->with('errorDesc', $desc );
+                ->with('errorCode', $code)
+                ->with('errorText', $text)
+                ->with('errorDesc', $desc);
         }
     }
 
-    private function checkParams( $driver, array $data ): array
+    private function checkParams($driver, array $data): array
     {
         $validator = Validator::make([
             'recipient' => $data['recipient'],
-        ],[
+        ], [
             'recipient' => 'required|string',
         ]);
 
-        if( $validator->fails() )
-        {
+        if ($validator->fails()) {
             return [
                 'success' => false,
                 'errorCode' => 403,
@@ -235,28 +212,26 @@ class Inbound extends Controller
 
         $validator = Validator::make([
             'message' => $data['message'],
-        ],[
-            'message' => 'required|string|max:' . $driver->getMaxMessageLength(),
+        ], [
+            'message' => 'required|string|max:'.$driver->getMaxMessageLength(),
         ]);
 
-        if( $validator->fails() )
-        {
+        if ($validator->fails()) {
             return [
                 'success' => false,
                 'errorCode' => 411,
                 'errorText' => 'Message exceeds allowable length',
-                'errorDesc' => 'Message exceeds allowable message length of ' . $driver->getMaxMessageLength(),
+                'errorDesc' => 'Message exceeds allowable message length of '.$driver->getMaxMessageLength(),
             ];
         }
 
         $validator = Validator::make([
             'senderID' => $data['senderID'],
-        ],[
+        ], [
             'senderID' => 'required|string|max:128',
         ]);
 
-        if( $validator->fails() )
-        {
+        if ($validator->fails()) {
             return [
                 'success' => false,
                 'errorCode' => 401,
@@ -267,12 +242,11 @@ class Inbound extends Controller
 
         $validator = Validator::make([
             'securityCode' => $data['securityCode'],
-        ],[
+        ], [
             'securityCode' => 'required|string|max:16',
         ]);
 
-        if( $validator->fails() )
-        {
+        if ($validator->fails()) {
             return [
                 'success' => false,
                 'errorCode' => 402,
@@ -281,8 +255,7 @@ class Inbound extends Controller
             ];
         }
 
-        if($this->wctpMethodType === 'SubmitMessage' )
-        {
+        if ($this->wctpMethodType === 'SubmitMessage') {
             $validator = Validator::make([
                 'messageID' => $data['messageID'],
             ], [
@@ -301,12 +274,11 @@ class Inbound extends Controller
 
         $validator = Validator::make([
             'reply_with' => $data['reply_with'],
-        ],[
+        ], [
             'reply_with' => 'nullable|numeric',
         ]);
 
-        if( $validator->fails() )
-        {
+        if ($validator->fails()) {
             return [
                 'success' => false,
                 'errorCode' => 403,

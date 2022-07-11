@@ -2,15 +2,15 @@
 
 namespace App\Jobs;
 
-use Exception;
 use App\Models\Message;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 class SaveMessage implements ShouldQueue, ShouldBeUnique
@@ -18,12 +18,38 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 10;
-    public int $timeout = 60;
-    public int $uniqueFor = 3600;
-    public bool $failOnTimeout = true;
-    protected $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction, $status;
 
-    public function __construct( $carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction, string $status = 'pending' )
+    public int $timeout = 60;
+
+    public int $uniqueFor = 3600;
+
+    public bool $failOnTimeout = true;
+
+    protected $carrier_id;
+
+    protected $number_id;
+
+    protected $enterprise_host_id;
+
+    protected $to;
+
+    protected $from;
+
+    protected $message;
+
+    protected $messageID;
+
+    protected $submitted_at;
+
+    protected $reply_with;
+
+    protected $carrier_message_uid;
+
+    protected $direction;
+
+    protected $status;
+
+    public function __construct($carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction, string $status = 'pending')
     {
         $this->onQueue('messages');
         $this->carrier_id = $carrier_id;
@@ -42,7 +68,7 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        try{
+        try {
             $message = new Message;
             $message->carrier_id = $this->carrier_id;
             $message->number_id = $this->number_id;
@@ -58,15 +84,13 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
             $message->direction = $this->direction;
             $message->status = $this->status;
             $message->save();
-        }
-        catch( Exception $e ){
-            Log::error("Unable to save message: " . $e->getMessage());
-            $this->release(60 );
+        } catch (Exception $e) {
+            Log::error('Unable to save message: '.$e->getMessage());
+            $this->release(60);
         }
 
-        if( $message->direction == 'inbound' )
-        {
-            SubmitToEnterpriseHost::dispatch( $message );
+        if ($message->direction == 'inbound') {
+            SubmitToEnterpriseHost::dispatch($message);
         }
     }
 

@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Models\User;
 use App\Mail\FailedLoginEmail;
+use App\Models\User;
 use Illuminate\Auth\Events\Failed;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 
 class SendEmailFailedLoginNotification implements ShouldQueue
 {
@@ -28,15 +28,14 @@ class SendEmailFailedLoginNotification implements ShouldQueue
      */
     public function handle(Failed $event)
     {
-        Mail::to( $event->credentials['email'] )->send(new FailedLoginEmail());
+        Mail::to($event->credentials['email'])->send(new FailedLoginEmail());
     }
 
-    public function shouldQueue( Failed $event )
+    public function shouldQueue(Failed $event)
     {
-        $user = User::where('email', $event->credentials['email'] )->first();
+        $user = User::where('email', $event->credentials['email'])->first();
 
-        if( $user === null )
-        {
+        if ($user === null) {
             return false;
         }
 

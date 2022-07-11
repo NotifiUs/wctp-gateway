@@ -2,32 +2,36 @@
 
 namespace App\Drivers;
 
-use Exception;
-use Carbon\Carbon;
 use App\Jobs\LogEvent;
-use App\Models\Number;
+use App\Jobs\SaveMessage;
+use App\Jobs\SendBandwidthSMS;
 use App\Models\Carrier;
 use App\Models\Message;
-use App\Jobs\SaveMessage;
-use Illuminate\View\View;
-use Illuminate\Support\Arr;
+use App\Models\Number;
+use BandwidthLib\APIException;
+use BandwidthLib\BandwidthClient;
+use BandwidthLib\Configuration;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Jobs\SendBandwidthSMS;
-use BandwidthLib\APIException;
-use BandwidthLib\Configuration;
-use BandwidthLib\BandwidthClient;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class BandwidthSMSDriver implements SMSDriver
 {
     private int $maxMessageLength = 2048;
 
     private string $requestInputMessageKey = 'message.text';
+
     private string $requestInputUidKey = 'message.id';
+
     private string $requestInputStatusKey = 'type';
+
     private string $requestInputToKey = 'to';
+
     private string $requestInputFromKey = 'message.from';
 
     private array $carrierValidationFields = [
@@ -37,14 +41,14 @@ class BandwidthSMSDriver implements SMSDriver
         'bandwidth_api_application_id' => 'required',
     ];
 
-    public function getType( string $identifier ): string
+    public function getType(string $identifier): string
     {
-        return "PN";
+        return 'PN';
     }
 
-    public function getFriendlyType( string $identifier ): string
+    public function getFriendlyType(string $identifier): string
     {
-        return "Phone Number";
+        return 'Phone Number';
     }
 
     public function getRequestInputToKey(): string
@@ -59,7 +63,7 @@ class BandwidthSMSDriver implements SMSDriver
 
     public function queueOutbound($host, $carrier, $recipient, $message, $messageID, $reply_with): void
     {
-        SendBandwidthSMS::dispatch( $host, $carrier, $recipient, $message, $messageID, $reply_with );
+        SendBandwidthSMS::dispatch($host, $carrier, $recipient, $message, $messageID, $reply_with);
     }
 
     public function getRequestInputStatusKey(): string
@@ -79,23 +83,25 @@ class BandwidthSMSDriver implements SMSDriver
 
     public function getHandlerResponse(): Response
     {
-        return response( json_encode([ 'success' => true ]), 200, ['content-type' => 'application/json']);
+        return response(json_encode(['success' => true]), 200, ['content-type' => 'application/json']);
     }
 
-    public function verifyHandlerRequest( Request $request, Carrier $carrier ): bool
+    public function verifyHandlerRequest(Request $request, Carrier $carrier): bool
     {
         // Ensure Bandwidth's UserAgent and application_id are set/match expected values
         // Helps mitigate against non-targeted attacks (meaning they have to know the application_id to make a dent)
 
         $validator = Validator::make([
             'user_agent' => $request->userAgent(),
-            'application_id' => $request->input('message.applicationId')
+            'application_id' => $request->input('message.applicationId'),
         ], [
             'user_agent' => 'required|string|in:BandwidthAPI/v2',
-            'application_id' => "required|string|in:{$carrier->bandwidth_api_application_id}"
+            'application_id' => "required|string|in:{$carrier->bandwidth_api_application_id}",
         ]);
 
-        if ($validator->fails()) { return false; }
+        if ($validator->fails()) {
+            return false;
+        }
 
         return true;
     }
@@ -113,7 +119,7 @@ class BandwidthSMSDriver implements SMSDriver
             $enterprise_host_id,
             $request->input($this->getRequestInputToKey()),
             $request->input($this->getRequestInputFromKey()),
-            encrypt( $request->input($this->getRequestInputMessageKey()) ),
+            encrypt($request->input($this->getRequestInputMessageKey())),
             null,
             $submitted_at,
             $reply_with,
@@ -122,7 +128,7 @@ class BandwidthSMSDriver implements SMSDriver
         );
     }
 
-    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message ): bool
+    public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message): bool
     {
         return false;
     }
@@ -132,24 +138,24 @@ class BandwidthSMSDriver implements SMSDriver
         return true;
     }
 
-    public function getCarrierDetails(Carrier $carrier, string $identifier ): array
+    public function getCarrierDetails(Carrier $carrier, string $identifier): array
     {
         $number = Number::where('identifier', $identifier)->first();
+
         return Arr::dot(array_merge(['carrier' => $carrier->only([
-            'id','name','bandwidth_api_username','bandwidth_api_account_id','bandwidth_api_application_id','priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at'
-        ]), 'number' => $number->toArray() ?? [] ]));
+            'id', 'name', 'bandwidth_api_username', 'bandwidth_api_account_id', 'bandwidth_api_application_id', 'priority', 'api', 'enabled', 'beta', 'created_at', 'updated_at',
+        ]), 'number' => $number->toArray() ?? []]));
     }
 
-    public function getAvailableNumbers(Request $request, Carrier $carrier ): array
+    public function getAvailableNumbers(Request $request, Carrier $carrier): array
     {
-        return ['available' => [], 'pages' => null ];
+        return ['available' => [], 'pages' => null];
     }
 
-    public function verifyCarrierValidation( Request $request ): RedirectResponse | View
+    public function verifyCarrierValidation(Request $request): RedirectResponse | View
     {
         $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect()->to('/carriers')->withErrors($validator->errors());
         }
 
@@ -175,27 +181,20 @@ class BandwidthSMSDriver implements SMSDriver
                 null,
                 1);
                 $bandwidth_response = $response->getResult();
-
-            }
-            catch (APIException $e)
-            {
+            } catch (APIException $e) {
                 return redirect()->to('/carriers')->withErrors(['Unable to connect to your Bandwidth account']);
             }
-        }
-        catch( Exception $e )
-        {
+        } catch (Exception $e) {
             return redirect()->to('/carriers')->withErrors(['Unable to connect to your Bandwidth account']);
         }
 
-        return view('carriers.bandwidth-verify')->with('account', $request->toArray() );
-
+        return view('carriers.bandwidth-verify')->with('account', $request->toArray());
     }
 
     public function createCarrierInstance(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->toArray(), $this->carrierValidationFields);
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return redirect()->to('/carriers')->withErrors($validator->errors());
         }
 
@@ -210,19 +209,24 @@ class BandwidthSMSDriver implements SMSDriver
         $carrier->bandwidth_api_application_id = $request->input('bandwidth_api_application_id');
         $carrier->api = 'bandwidth';
 
-        try{ $carrier->save(); }catch( Exception $e ){ return redirect()->to('/carriers')->withErrors([__('Unable to save carrier')]); }
+        try {
+            $carrier->save();
+        } catch (Exception $e) {
+            return redirect()->to('/carriers')->withErrors([__('Unable to save carrier')]);
+        }
 
         LogEvent::dispatch(
             "{$carrier->name} ({$carrier->api}) created",
-            get_class( $this ), 'info', json_encode($carrier->toArray()), $request->user() ?? null
+            get_class($this), 'info', json_encode($carrier->toArray()), $request->user() ?? null
         );
 
-        $statusHtml = "Carrier successfully created!";
+        $statusHtml = 'Carrier successfully created!';
+
         return redirect()->to('/carriers')
             ->with('status', $statusHtml);
     }
 
-    public function showCarrierCredentials( Carrier $carrier ): array
+    public function showCarrierCredentials(Carrier $carrier): array
     {
         try {
             return [
@@ -231,11 +235,9 @@ class BandwidthSMSDriver implements SMSDriver
                 'bandwidth_api_account_id' => $carrier->bandwidth_api_account_id,
                 'bandwidth_api_application_id' => $carrier->bandwidth_api_application_id,
             ];
-        }
-        catch(Exception $e )
-        {
+        } catch (Exception $e) {
             return [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ];
         }
     }
@@ -248,7 +250,7 @@ class BandwidthSMSDriver implements SMSDriver
         ];
     }
 
-    public function showCarrierDetails(Carrier $carrier ): string
+    public function showCarrierDetails(Carrier $carrier): string
     {
         return  $carrier->bandwidth_api_account_id ?? 'unknown';
     }

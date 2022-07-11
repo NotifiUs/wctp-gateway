@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\System;
 
-use Exception;
-use App\Jobs\LogEvent;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-
+use App\Jobs\LogEvent;
+use Exception;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 class DisableMaintenanceMode extends Controller
 {
@@ -15,19 +14,18 @@ class DisableMaintenanceMode extends Controller
     {
         $this->middleware('auth');
     }
+
     public function __invoke()
     {
-        try{
+        try {
             Artisan::call('up');
-        }
-        catch( Exception $e )
-        {
+        } catch (Exception $e) {
             return redirect()->back()->withErrors(['Unable to disable Maintenance Mode']);
         }
 
         LogEvent::dispatch(
-            "Maintenance Mode disabled",
-            get_class( $this ), 'notice', json_encode([]), Auth::user()->id ?? null
+            'Maintenance Mode disabled',
+            get_class($this), 'notice', json_encode([]), Auth::user()->id ?? null
         );
 
         return redirect()->back()->with('status', 'Maintenance Mode has been disabled');

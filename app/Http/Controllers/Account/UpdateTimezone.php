@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Account;
 
+use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateTimezone extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -21,17 +20,18 @@ class UpdateTimezone extends Controller
         $validator = Validator::make($request->all(), [
             'timezone' => 'required|timezone',
         ]);
-        if( $validator->fails())
-        {
-            return redirect()->back()->withErrors( $validator->errors() );
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors());
         }
 
         $user = Auth::user();
         $user->timezone = $request->input('timezone');
-        try{
+        try {
             $user->save();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
         }
-        catch( Exception $e ){ return redirect()->back()->withErrors( [$e->getMessage()]); }
+
         return redirect()->back()->withStatus('Your timezone has been updated!');
     }
 }

@@ -13,6 +13,6 @@ return [
     /* Default value: CURL_SSLVERSION_TLSv1_2 ( TLSv1.2+ )
     */
 
-    # string name of curl constant, passed through constant() so we can use .env
-    'protocol_support' => env('TLS_PROTOCOL_SUPPORT', "CURL_SSLVERSION_MAX_DEFAULT") //"CURL_SSLVERSION_TLSv1_2"
+    // string name of curl constant, passed through constant() so we can use .env
+    'protocol_support' => env('TLS_PROTOCOL_SUPPORT', 'CURL_SSLVERSION_MAX_DEFAULT'), //"CURL_SSLVERSION_TLSv1_2"
 ];

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 
 class VerifyEmail extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -14,6 +13,6 @@ class VerifyEmail extends Controller
 
     public function __invoke()
     {
-        return view('account.verify' );
+        return view('account.verify');
     }
 }

@@ -25,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('carriers', function (Blueprint $table) {
-            $table->dropColumn(['bandwidth_api_username','bandwidth_api_password', 'bandwidth_api_account_id', 'bandwidth_api_application_id']);
+            $table->dropColumn(['bandwidth_api_username', 'bandwidth_api_password', 'bandwidth_api_account_id', 'bandwidth_api_application_id']);
         });
     }
 };

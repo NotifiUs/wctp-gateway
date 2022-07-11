@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Models\User;
 use App\Mail\LoginEmail;
+use App\Models\User;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 
 class SendEmailLoginNotification implements ShouldQueue
 {
@@ -28,15 +28,14 @@ class SendEmailLoginNotification implements ShouldQueue
      */
     public function handle(Login $event)
     {
-        Mail::to( $event->user['email'] )->send(new LoginEmail());
+        Mail::to($event->user['email'])->send(new LoginEmail());
     }
 
-    public function shouldQueue( Login $event )
+    public function shouldQueue(Login $event)
     {
-        $user = User::where('email', $event->user['email'] )->first();
+        $user = User::where('email', $event->user['email'])->first();
 
-        if( $user === null )
-        {
+        if ($user === null) {
             return false;
         }
 

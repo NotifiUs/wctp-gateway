@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\System;
 
+use App\Http\Controllers\Controller;
+use App\Jobs\LogEvent;
+use App\Mail\SendWelcomeEmail;
 use App\Models\User;
 use Exception;
-use App\Jobs\LogEvent;
 use Illuminate\Http\Request;
-use App\Mail\SendWelcomeEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 
 class CreateUser extends Controller
@@ -23,9 +23,9 @@ class CreateUser extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|min:3|max:255',
-            'email' => "required|email|unique:users,email",
+            'email' => 'required|email|unique:users,email',
             'email_notifications' => 'nullable',
-            'timezone' => 'required|timezone'
+            'timezone' => 'required|timezone',
         ]);
 
         try {
@@ -48,13 +48,13 @@ class CreateUser extends Controller
             return redirect()->back()->withErrors([$e->getMessage()]);
         }
 
-        Mail::to($user->email)->send(new SendWelcomeEmail($user->email,$password));
+        Mail::to($user->email)->send(new SendWelcomeEmail($user->email, $password));
 
         LogEvent::dispatch(
-            "New user created",
-            get_class( $this ), 'info',json_encode( $user->toArray()) , Auth::user()->id ?? null
+            'New user created',
+            get_class($this), 'info', json_encode($user->toArray()), Auth::user()->id ?? null
         );
 
-        return redirect()->back()->with('status', "User created and welcome email sent.");
+        return redirect()->back()->with('status', 'User created and welcome email sent.');
     }
 }

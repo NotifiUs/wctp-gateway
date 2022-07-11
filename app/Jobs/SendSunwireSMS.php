@@ -2,31 +2,48 @@
 
 namespace App\Jobs;
 
-use Throwable;
-use Exception;
-use Carbon\Carbon;
 use App\Models\Carrier;
-use Illuminate\Bus\Queueable;
 use App\Models\EnterpriseHost;
+use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client as Guzzle;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 10;
-    public int $timeout = 60;
-    public int $uniqueFor = 3600;
-    public bool $failOnTimeout = true;
-    public bool $deleteWhenMissingModels = true;
-    protected $host, $carrier, $recipient, $message, $messageID, $reply_with, $from;
 
-    public function __construct( EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int|null $messageID, $reply_with  )
+    public int $timeout = 60;
+
+    public int $uniqueFor = 3600;
+
+    public bool $failOnTimeout = true;
+
+    public bool $deleteWhenMissingModels = true;
+
+    protected $host;
+
+    protected $carrier;
+
+    protected $recipient;
+
+    protected $message;
+
+    protected $messageID;
+
+    protected $reply_with;
+
+    protected $from;
+
+    public function __construct(EnterpriseHost $host, Carrier $carrier, string $recipient, string $message, int|null $messageID, $reply_with)
     {
         $this->onQueue('outbound');
         $this->host = $host;
@@ -35,102 +52,94 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
         $this->message = $message;
         $this->messageID = $messageID;
         $this->reply_with = $reply_with;
-        $this->from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id )->first();
-        if( $this->from === null )
-        {
+        $this->from = $this->carrier->numbers()->inRandomOrder()->where('enabled', 1)->where('enterprise_host_id', $this->host->id)->first();
+        if ($this->from === null) {
             LogEvent::dispatch(
-                "Failure submitting message",
-                get_class( $this ), 'error', json_encode("No enabled numbers assigned to host"), null
+                'Failure submitting message',
+                get_class($this), 'error', json_encode('No enabled numbers assigned to host'), null
             );
-            $this->release(60 );
+            $this->release(60);
         }
     }
 
     public function handle()
     {
         //API URLs: https://mars2.sunwire.ca/sms/ or https://mars1.sunwire.ca/sms/
-        try{
+        try {
             $json_array = [
                 'From' => str_replace('+', '', "{$this->from->identifier}"), //the identifier will need to be the short code, 10, or 11 digit without +
                 'To' => str_replace('+', '', "{$this->recipient}"), //10 or 11 digit per docs
                 'Body' => "{$this->message}",
-                'Receipt' => 'no' //only supported on short-codes
+                'Receipt' => 'no', //only supported on short-codes
             ];
 
             $shared_config = [
                 'timeout' => 10.0,
-                'headers' => [ 'content-type' => 'application/json' ],
+                'headers' => ['content-type' => 'application/json'],
 
             ];
 
-            if(config('app.guzzle_allow_selfsigned') === true)
-            {
+            if (config('app.guzzle_allow_selfsigned') === true) {
                 $shared_config['verify'] = false;
             }
 
             $sunwire1 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars1.sunwire.ca']));
             $sunwire2 = new Guzzle(array_merge($shared_config, ['base_uri' => 'https://mars2.sunwire.ca']));
-        }
-        catch( Exception $e ){
+        } catch (Exception $e) {
             LogEvent::dispatch(
-                "Failed creating Sunwire JSON request",
-                get_class( $this ), 'error', json_encode(['error' => $e->getMessage(), $this->carrier->toArray()]), null
+                'Failed creating Sunwire JSON request',
+                get_class($this), 'error', json_encode(['error' => $e->getMessage(), $this->carrier->toArray()]), null
             );
-            $this->release(60 );
+            $this->release(60);
         }
 
         //Try the primary mars1, and if it fails, try mars2
         //then finally mark as failed if mars2 fails
-        try{
+        try {
             $result = $sunwire1->post('/sms', [
-                'json' => $json_array
+                'json' => $json_array,
             ]);
-        }
-        catch( Exception $e ){
+        } catch (Exception $e) {
             LogEvent::dispatch(
-                "Sunwire mars1 host failed, trying mars2",
-                get_class( $this ), 'info', json_encode($e->getMessage()), null
+                'Sunwire mars1 host failed, trying mars2',
+                get_class($this), 'info', json_encode($e->getMessage()), null
             );
 
-            try{
+            try {
                 $result = $sunwire2->post('/sms', [
-                    'json' => $json_array
+                    'json' => $json_array,
                 ]);
-            }
-            catch( Exception $e2 ){
+            } catch (Exception $e2) {
                 LogEvent::dispatch(
-                    "Sunwire mars2 host failed",
-                    get_class( $this ), 'info', json_encode($e2->getMessage()), null
+                    'Sunwire mars2 host failed',
+                    get_class($this), 'info', json_encode($e2->getMessage()), null
                 );
-                $this->release(60 );
+                $this->release(60);
             }
         }
 
-        if( $result->getStatusCode() != 200 )
-        {
+        if ($result->getStatusCode() != 200) {
             LogEvent::dispatch(
-                "Failure submitting message",
-                get_class( $this ), 'error', json_encode($result->getReasonPhrase()), null
+                'Failure submitting message',
+                get_class($this), 'error', json_encode($result->getReasonPhrase()), null
             );
-            $this->release(60 );
+            $this->release(60);
         }
         $body = $result->getBody();
         $json = $body->getContents();
-        $arr = json_decode( $json, true );
-        if( ! isset( $arr['Status']))
-        {
+        $arr = json_decode($json, true);
+        if (! isset($arr['Status'])) {
             LogEvent::dispatch(
-                "Improper JSON response received from Sunwire",
-                get_class( $this ), 'error', json_encode($arr), null
+                'Improper JSON response received from Sunwire',
+                get_class($this), 'error', json_encode($arr), null
             );
-            $this->release(60 );
+            $this->release(60);
         }
 
-        if($arr['Status'] !== 'OK')
-        {
+        if ($arr['Status'] !== 'OK') {
             LogEvent::dispatch(
-                "Failure submitting message",
-                get_class( $this ), 'error', json_encode([
+                'Failure submitting message',
+                get_class($this), 'error', json_encode([
                     'json_response' => $arr,
                     'json_request_array' => $json_array,
                     'recipient' => $this->recipient,
@@ -139,7 +148,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
                         'protocol' => $result->getProtocolVersion(),
                         'reason' => $result->getReasonPhrase(),
                         'status' => $result->getStatusCode(),
-                    ]
+                    ],
                 ]), null
             );
             $this->release(60);
@@ -151,13 +160,14 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             $this->host->id,
             $this->recipient,
             $this->from->e164,
-            encrypt( $this->message ),
+            encrypt($this->message),
             $this->messageID,
             Carbon::now(),
             $this->reply_with,
             $arr['ID'] ?? null,
             'outbound'
         );
+
         return 0;
     }
 
@@ -174,7 +184,7 @@ class SendSunwireSMS implements ShouldQueue, ShouldBeUnique
             $this->host->id,
             $this->recipient,
             $this->from->e164,
-            encrypt( $this->message ),
+            encrypt($this->message),
             $this->messageID,
             Carbon::now(),
             $this->reply_with,

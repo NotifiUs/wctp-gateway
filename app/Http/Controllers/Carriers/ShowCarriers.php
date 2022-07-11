@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Carriers;
 
-use App\Models\Carrier;
 use App\Http\Controllers\Controller;
+use App\Models\Carrier;
 
 class ShowCarriers extends Controller
 {
@@ -16,6 +16,6 @@ class ShowCarriers extends Controller
     {
         $carriers = Carrier::all()->sortBy('priority')->sortBy('enabled', null, true);
 
-        return view('carriers.show')->with('carriers', $carriers );
+        return view('carriers.show')->with('carriers', $carriers);
     }
 }

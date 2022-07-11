@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
-use Laravel\Horizon\Console\StatusCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Laravel\Horizon\Console\StatusCommand;
 
 class Kernel extends ConsoleKernel
 {

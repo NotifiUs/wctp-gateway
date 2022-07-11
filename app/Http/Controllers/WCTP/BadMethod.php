@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\WCTP;
 
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class BadMethod extends Controller
 {
@@ -17,6 +17,6 @@ class BadMethod extends Controller
             'errorCode' => $code,
             'errorText' => $text,
             'errorDesc' => $desc,
-        ], 200, ['content-type'=>'application/xml']);
+        ], 200, ['content-type' => 'application/xml']);
     }
 }

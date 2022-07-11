@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Version;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\File;
@@ -51,7 +50,7 @@ class ServerStats
 
     private static function getVersion()
     {
-        return exec("uname -srm 2>&1");
+        return exec('uname -srm 2>&1');
     }
 
     private static function getServices()
@@ -80,14 +79,13 @@ class ServerStats
 
     private static function getLoad()
     {
-        $load = exec("uptime");
+        $load = exec('uptime');
         $load = explode('load average:', $load);
         if (is_array($load)) {
             return $load[1];
         }
 
         return 'Error getting info';
-
     }
 
     private static function getUptime()
@@ -115,7 +113,7 @@ class ServerStats
         $cpu_report = fopen('/proc/cpuinfo', 'r');
         $cpu = '';
         while ($line = fgets($cpu_report)) {
-            $pieces = array();
+            $pieces = [];
             if (Str::contains($line, 'cpu MHz')) {
                 $pieces = explode(':', $line);
                 $cpu = trim($pieces[1]);
@@ -124,6 +122,7 @@ class ServerStats
         }
         fclose($cpu_report);
         $cpu = round($cpu / 1024, 2);
+
         return "{$cpu} GHz";
     }
 
@@ -132,7 +131,7 @@ class ServerStats
         $memory_report = fopen('/proc/meminfo', 'r');
         $mem = 0;
         while ($line = fgets($memory_report)) {
-            $pieces = array();
+            $pieces = [];
             if (preg_match('/^MemTotal:\s+(\d+)\skB$/', $line, $pieces)) {
                 $mem = $pieces[1];
                 break;
@@ -140,6 +139,7 @@ class ServerStats
         }
         fclose($memory_report);
         $mem = round($mem / 1024 / 1024, 2);
+
         return "{$mem} GB";
     }
 
@@ -154,7 +154,7 @@ class ServerStats
         return [
             'value' => $used_disk_space_gb,
             'percent' => $used_disk_percent,
-            'total' => $total_disk_space_gb
+            'total' => $total_disk_space_gb,
         ];
     }
 }

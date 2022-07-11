@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Session;
 
 class CheckMFA
 {
-
     protected $except = [
         'mfa',
         'login',
@@ -27,18 +26,13 @@ class CheckMFA
      */
     public function handle($request, Closure $next)
     {
-        if( ! $this->inExceptArray($request) )
-        {
-            if( Auth::check() )
-            {
-                if( Auth::user()->mfa_secret && ! Session::exists('mfa_valid')  )
-                {
+        if (! $this->inExceptArray($request)) {
+            if (Auth::check()) {
+                if (Auth::user()->mfa_secret && ! Session::exists('mfa_valid')) {
                     //only redirect if we aren't on the mfa page
-                    if( $request->path() !== 'mfa')
-                    {
+                    if ($request->path() !== 'mfa') {
                         return redirect()->to('/mfa');
                     }
-
                 }
             }
         }

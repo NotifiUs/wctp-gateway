@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\System;
 
+use App\Http\Controllers\Controller;
+use App\Jobs\LogEvent;
+use App\Models\EventLog;
 use App\Models\User;
 use Exception;
-use App\Models\EventLog;
-use App\Jobs\LogEvent;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class DeleteUser extends Controller
@@ -16,35 +16,30 @@ class DeleteUser extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke( User $user)
+    public function __invoke(User $user)
     {
-        if( $user->id === Auth::user()->id )
-        {
+        if ($user->id === Auth::user()->id) {
             return redirect()->back()->withErrors(['You can\'t delete your own account']);
         }
 
-        try{
+        try {
             $user_id = $user->id;
             $user->delete();
-        }
-        catch( Exception $e )
-        {
-            return redirect()->back()->withErrors([$e->getMessage()] );
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
         }
 
-        try{
+        try {
             EventLog::where('user_id', $user_id)->update(['user_id' => null]);
-        }
-        catch( Exception $e )
-        {
-            return redirect()->back()->withErrors([$e->getMessage()] );
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
         }
 
         LogEvent::dispatch(
-            "User deleted",
-            get_class( $this ), 'info', json_encode(['deleted_user_id' => $user_id]), Auth::user()->id ?? null
+            'User deleted',
+            get_class($this), 'info', json_encode(['deleted_user_id' => $user_id]), Auth::user()->id ?? null
         );
 
-       return redirect()->back()->with('status', 'User deleted and log events updated!');
+        return redirect()->back()->with('status', 'User deleted and log events updated!');
     }
 }

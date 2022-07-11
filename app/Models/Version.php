@@ -7,7 +7,9 @@ use Carbon\Carbon;
 class Version
 {
     const MAJOR = 1;
+
     const MINOR = 7;
+
     const PATCH = 1;
 
     public static function get()
@@ -16,7 +18,6 @@ class Version
 
         $commitDate = Carbon::parse(trim(exec('git log -n1 --pretty=%ci HEAD')), 'UTC');
 
-        return "wctpd " . sprintf('v%s.%s.%s.%s (%s)', self::MAJOR, self::MINOR, self::PATCH, $commitHash, $commitDate->format('Y-m-d H:i:s'));
+        return 'wctpd '.sprintf('v%s.%s.%s.%s (%s)', self::MAJOR, self::MINOR, self::PATCH, $commitHash, $commitDate->format('Y-m-d H:i:s'));
     }
 }
-
