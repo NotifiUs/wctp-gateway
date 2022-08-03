@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -134,9 +135,23 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
                 get_class($this), 'error', json_encode($e->getMessage()), null
             );
             $this->release(60);
+        } catch (GuzzleException $e) {
+            LogEvent::dispatch(
+                'Failure submitting message',
+                get_class($this), 'error', json_encode($e->getMessage()), null
+            );
+            $this->release(60);
         }
 
-        if ($result->getStatusCode() != 200) {
+        if (! isset($result)) {
+            LogEvent::dispatch(
+                'Failure submitting message',
+                get_class($this), 'error', json_encode('Result field not set'), null
+            );
+            $this->release(60);
+        }
+
+        if ($result->getStatusCode() !== 200) {
             LogEvent::dispatch(
                 'Failure submitting message',
                 get_class($this), 'error', json_encode([nl2br($result->getBody()->getContents()), $result->getReasonPhrase()]), null

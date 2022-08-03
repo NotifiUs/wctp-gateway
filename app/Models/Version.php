@@ -10,7 +10,7 @@ class Version
 
     const MINOR = 7;
 
-    const PATCH = 5;
+    const PATCH = 6;
 
     public static function get()
     {

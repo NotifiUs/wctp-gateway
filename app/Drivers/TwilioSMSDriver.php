@@ -315,9 +315,7 @@ class TwilioSMSDriver implements SMSDriver
             ], 100);
 
             foreach ($incomingPhoneNumbers as $record) {
-
                 if (in_array($record->sid, $exclude)) {
-
                     $available[] = [
                         'id' => $record->sid,
                         'api' => $carrier->api,
@@ -328,7 +326,6 @@ class TwilioSMSDriver implements SMSDriver
                         'sms_enabled' => 0,
                     ];
                 } else {
-
                     $available[] = [
                         'id' => $record->sid,
                         'api' => $carrier->api,
@@ -340,7 +337,8 @@ class TwilioSMSDriver implements SMSDriver
                     ];
                 }
             }
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         return [
             'available' => $available,
