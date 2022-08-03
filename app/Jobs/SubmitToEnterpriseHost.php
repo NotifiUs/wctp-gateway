@@ -117,12 +117,14 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
         }
 
         $guzzleConfig = [
-            'http_errors' => false, //don't throw exception
             'timeout' => 30.0,
             'headers' => ['content-type' => 'application/xml'],
             'body' => $xml->asXML(),
             'verify' => config('tls.verify_certificates'),
-            'curl' => [CURLOPT_SSLVERSION => constant(config('tls.protocol_support'))],
+            'curl' => [
+                CURLOPT_SSLVERSION => constant(config('tls.protocol_support')),
+                CURLOPT_SSL_CIPHER_LIST => config('tls.cipher_list')
+            ],
         ];
 
         $enterpriseHost = new Guzzle($guzzleConfig);
@@ -133,20 +135,6 @@ class SubmitToEnterpriseHost implements ShouldQueue, ShouldBeUnique
             LogEvent::dispatch(
                 'Failure submitting message',
                 get_class($this), 'error', json_encode($e->getMessage()), null
-            );
-            $this->release(60);
-        } catch (GuzzleException $e) {
-            LogEvent::dispatch(
-                'Failure submitting message',
-                get_class($this), 'error', json_encode($e->getMessage()), null
-            );
-            $this->release(60);
-        }
-
-        if (! isset($result)) {
-            LogEvent::dispatch(
-                'Failure submitting message',
-                get_class($this), 'error', json_encode('Result field not set'), null
             );
             $this->release(60);
         }

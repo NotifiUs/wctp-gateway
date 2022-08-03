@@ -15,4 +15,7 @@ return [
 
     // string name of curl constant, passed through constant() so we can use .env
     'protocol_support' => env('TLS_PROTOCOL_SUPPORT', 'CURL_SSLVERSION_MAX_DEFAULT'), //"CURL_SSLVERSION_TLSv1_2"
+
+    /* Modify cipher list for  */
+    'cipher_list' => env('TLS_CIPHER_LIST', 'DEFAULT'),
 ];
