@@ -54,6 +54,8 @@ class StatusHandler extends Controller
         $message->status = $request->input($this->driver->getRequestInputStatusKey()) ?? '';
 
         switch (strtolower($message->status)) {
+            case 'queued':
+                break;
             case 'sent':
             case 'delivrd':
             case 'delivered':
