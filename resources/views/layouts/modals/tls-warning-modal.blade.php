@@ -43,7 +43,9 @@
                             </span>
                                 TLS_VERIFY_CERTIFICATES=false<br>
                                 TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_0<br>
-                                TLS_CIPHER_LIST="DEFAULT:@SECLEVEL=1" #This is less secure than DEFAULT, for DH key exchange issues
+                                <br>
+                                #This is less secure than DEFAULT, for DH key exchange issues<br>
+                                TLS_CIPHER_LIST="DEFAULT:@SECLEVEL=1"<br>
                                 <br>
                                 <span class="text-dark"># Sets Guzzle HTTP library to verify certificates<br>
                             # and use the latest TLS version when connecting to Enterprise Host urls.<br>
@@ -55,7 +57,7 @@
                                 <span class="text-dark"># Default configuration<br>
                             # Defaults: TLS_VERIFY_CERTIFICATES=true<br>
                             # Defaults: TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_2<br>
-                            # (omitted)<br>
+                            # (omitted)<br><br>
                             </span>
                                 <span class="text-dark"># Sets Guzzle HTTP library to verify certificates<br>
                             # and use the latest TLS version when connecting to Enterprise Host urls.<br>
