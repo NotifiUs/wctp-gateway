@@ -43,12 +43,12 @@ class BandwidthSMSDriver implements SMSDriver
 
     public function getType(string $identifier): string
     {
-        return 'PN';
+        return 'PN' ?? $identifier;
     }
 
     public function getFriendlyType(string $identifier): string
     {
-        return 'Phone Number';
+        return 'Phone Number' ?? $identifier;
     }
 
     public function getRequestInputToKey(): string
@@ -130,7 +130,9 @@ class BandwidthSMSDriver implements SMSDriver
 
     public function updateMessageStatus(Request|null $request, Carrier $carrier, Message $message): bool
     {
-        return false;
+        if ($request === null) {
+            //it's not a webhook
+        }
     }
 
     public function provisionNumber(Carrier $carrier, $identifier): bool
@@ -257,6 +259,6 @@ class BandwidthSMSDriver implements SMSDriver
 
     public function canAutoProvision(): bool
     {
-        return false;
+        return true;
     }
 }

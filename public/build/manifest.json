@@ -1,6 +1,6 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.467d355c.js",
+    "file": "assets/app.2c5a8c7d.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
@@ -9,7 +9,7 @@
       "node_modules/bootstrap/dist/js/bootstrap.esm.js"
     ],
     "css": [
-      "assets/app.19f43b5c.css"
+      "assets/app.7b300eae.css"
     ]
   },
   "_lodash.11675a96.js": {
@@ -21,7 +21,7 @@
     "isDynamicEntry": true
   },
   "node_modules/bootstrap/dist/js/bootstrap.esm.js": {
-    "file": "assets/bootstrap.esm.d39a7f8c.js",
+    "file": "assets/bootstrap.esm.635a16b8.js",
     "src": "node_modules/bootstrap/dist/js/bootstrap.esm.js",
     "isDynamicEntry": true,
     "imports": [
