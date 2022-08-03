@@ -63,8 +63,8 @@
                                 TLS_VERIFY_CERTIFICATES=true<br>
                                 TLS_PROTOCOL_SUPPORT=CURL_SSLVERSION_TLSv1_3<br>
                                 <br>
-                                <span class="text-dark"># Sunwire Only<br>
-                            #  Configuration applies to sunwire only
+                                <span class="text-dark"># Sunwire Certificates<br>
+                            #  Configuration applies to Sunwire only<br>
                             #GUZZLE_ALLOW_SELFSIGNED=true<br>
                             # (omitted)<br>
                             </span>
