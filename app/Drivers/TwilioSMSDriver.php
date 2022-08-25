@@ -90,7 +90,7 @@ class TwilioSMSDriver implements SMSDriver
     public function verifyHandlerRequest(Request $request, Carrier $carrier): bool
     {
         try {
-            $validator = new RequestValidator(decrypt($carrier->twilio_auth_token));
+            $validator = new (decrypt($carrier->twilio_auth_token));
         } catch (Exception $e) {
             LogEvent::dispatch(
                 'Failed inbound message',
@@ -102,7 +102,7 @@ class TwilioSMSDriver implements SMSDriver
 
         if ($validator->validate(
             $request->header('X-Twilio-Signature') ?? $_SERVER['HTTP_X_TWILIO_SIGNATURE'],
-            $request->fullUrl(),
+            $request->url(), //from fullUrl()
             $request->post()
         )) {
             return true;
@@ -110,7 +110,7 @@ class TwilioSMSDriver implements SMSDriver
 
         LogEvent::dispatch(
             'Failed inbound message',
-            get_class($this), 'error', json_encode(['Unable to verify Twilio request', 'request' => $_REQUEST]), null
+            get_class($this), 'error', json_encode(['Unable to verify Twilio request', 'request' => $_REQUEST, 'request_signature' => $request->header('X-Twilio-Signature'), 'http_signature' => $_SERVER['HTTP_X_TWILIO_SIGNATURE']]), null
         );
 
         return false;

@@ -26,20 +26,20 @@ class PrimaryHandler extends Controller
         $number = Number::where('enabled', 1)->where('identifier', $identifier)->first();
 
         if ($number === null) {
-            return $this->fail();
+            return $this->fail('There is no number here');
         }
 
         $this->carrier = Carrier::where('enabled', 1)->where('id', $number->carrier_id)->first();
 
         if ($this->carrier === null) {
-            return $this->fail();
+            return $this->fail('This isn\'t the carrier you are looking for');
         }
 
         try {
             $driverFactory = new DriverFactory($this->carrier->api);
             $this->driver = $driverFactory->loadDriver();
         } catch (Exception $e) {
-            return $this->fail();
+            return $this->fail('Unable to load SMS driver');
         }
 
         $host = EnterpriseHost::where('enabled', 1)->where('id', $number->enterprise_host_id)->first();
@@ -81,8 +81,8 @@ class PrimaryHandler extends Controller
         return $this->driver->getHandlerResponse();
     }
 
-    protected function fail(): JsonResponse|Response
+    protected function fail(string $error = null): JsonResponse|Response
     {
-        return response()->json(['error' => 400, 'desc' => 'bad request'], 400, [], JSON_PRETTY_PRINT);
+        return response()->json(['error' => 400, 'desc' => $error ?? 'bad request'], 400, [], JSON_PRETTY_PRINT);
     }
 }
