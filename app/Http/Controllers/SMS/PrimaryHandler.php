@@ -56,7 +56,7 @@ class PrimaryHandler extends Controller
 
         $reply_phrase = preg_match('/\b\d+( ?ok(ay)?)\b/i', $request->input($this->driver->getRequestInputMessageKey()), $matches);
         if ($reply_phrase && isset($matches[0])) {
-            $reply_with = str_replace(['okay', 'ok'], '', $matches[0]);
+            $reply_with = str_replace(['okay', 'ok', 'OK', 'OKAY'], '', $matches[0]);
         }
 
         $this->driver->saveInboundMessage(
