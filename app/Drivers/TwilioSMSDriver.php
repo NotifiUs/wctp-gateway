@@ -90,7 +90,7 @@ class TwilioSMSDriver implements SMSDriver
     public function verifyHandlerRequest(Request $request, Carrier $carrier): bool
     {
         try {
-            $validator = new (decrypt($carrier->twilio_auth_token));
+            $validator = new RequestValidator(decrypt($carrier->twilio_auth_token));
         } catch (Exception $e) {
             LogEvent::dispatch(
                 'Failed inbound message',
