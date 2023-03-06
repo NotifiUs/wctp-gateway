@@ -14,5 +14,9 @@ class TrimStrings extends Middleware
     protected $except = [
         'password',
         'password_confirmation',
+        //https://www.twilio.com/docs/usage/security#validating-requests
+        // See *A Few Notes* section on RequestValidator failures from trailing whitespaces being trimmed
+        // Thanks Alex @ i24 for finding this bug
+        'body',
     ];
 }
