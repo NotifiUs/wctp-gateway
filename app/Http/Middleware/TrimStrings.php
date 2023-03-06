@@ -16,7 +16,7 @@ class TrimStrings extends Middleware
         'password_confirmation',
         //https://www.twilio.com/docs/usage/security#validating-requests
         // See *A Few Notes* section on RequestValidator failures from trailing whitespaces being trimmed
-        // Thanks Alex @ i24 for finding this bug
-        'body',
+        // Thanks Alex @ i24 for finding this bug (and confirming the fix didnt work without the capital B)
+        'Body',
     ];
 }
