@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SMS;
 
+use App\Jobs\LogEvent;
 use App\Drivers\DriverFactory;
 use App\Http\Controllers\Controller;
 use App\Models\Carrier;
@@ -44,11 +45,15 @@ class PrimaryHandler extends Controller
 
         $host = EnterpriseHost::where('enabled', 1)->where('id', $number->enterprise_host_id)->first();
 
-        if ($host === null) {
-            return $this->respond();
+        if (! $this->driver->verifyHandlerRequest($request, $this->carrier)) {
+            return $this->fail('Handler failed');
         }
 
-        if (! $this->driver->verifyHandlerRequest($request, $this->carrier)) {
+        if ($host === null) {
+            LogEvent::dispatch(
+                'Failed inbound message',
+                get_class($this), 'error', json_encode(['No enabled Enterprise Host found']), null
+            );
             return $this->respond();
         }
 
@@ -83,6 +88,13 @@ class PrimaryHandler extends Controller
 
     protected function fail(string $error = null): JsonResponse|Response
     {
-        return response()->json(['error' => 400, 'desc' => $error ?? 'bad request'], 400, [], JSON_PRETTY_PRINT);
+        $json_error = ['error' => 400, 'desc' => $error ?? 'bad request'];
+
+        LogEvent::dispatch(
+            'Failed inbound message',
+            get_class($this), 'error', json_encode($json_error), null
+        );
+
+        return response()->json($json_error, 400, [], JSON_PRETTY_PRINT);
     }
 }
