@@ -21,6 +21,7 @@
 <body>
 <div id="app">
     @include('layouts.nav')
+
     @if( Auth::check() && ( constant( config('tls.protocol_support') ) < CURL_SSLVERSION_TLSv1_2 || config('tls.verify_certificates') === false )  )
         @include('layouts.tls-warning')
     @endif

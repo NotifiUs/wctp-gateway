@@ -2,14 +2,8 @@
     <div class="container mx-auto">
         @include('layouts.brand')
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-
         <ul class="navbar-nav mr-0">
-            <div class="navbar-collapse collapse mx-auto" id="navbarSupportedContent">
+            <div class="mx-auto">
             @guest
                 <li class="nav-item">
                     <a class="nav-link fw-bold" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -22,7 +16,7 @@
             @else
                 <li class="nav-item dropdown ">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user-circle"></i> {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
 

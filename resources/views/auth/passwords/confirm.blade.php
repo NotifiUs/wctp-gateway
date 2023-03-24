@@ -3,7 +3,7 @@
 @section('title', __('Confirm Password'))
 
 @push('css')
-    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
+
 @endpush
 
 @section('content')

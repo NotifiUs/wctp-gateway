@@ -12,7 +12,6 @@
         "ext-intl": "*",
         "bandwidth/sdk": "^10.0",
         "endroid/qr-code": "^4.4.7",
-        "fruitcake/laravel-cors": "^3.0.0",
         "guzzlehttp/guzzle": "^7.4.1",
         "laravel/framework": "^9.0",
         "laravel/helpers": "^1.5.0",
@@ -25,11 +24,11 @@
         "predis/predis": "^1.1.10",
         "robthree/twofactorauth": "^1.8.1",
         "twilio/sdk": "^6.35.1",
-        "fakerphp/faker": "^1.19.0",
-        "laravel/pint": "^0.2.3",
-        "laravel/sail": "^1.13"
+        "fakerphp/faker": "^1.19.0"
     },
     "require-dev": {
+        "laravel/pint": "^0.2.3",
+        "laravel/sail": "^1.13",
         "mockery/mockery": "^1.5.0",
         "nunomaduro/collision": "^6.1.0",
         "phpunit/phpunit": "^9.5.18",

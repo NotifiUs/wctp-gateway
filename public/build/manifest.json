@@ -1,31 +1,31 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.b030c72e.js",
+    "file": "assets/app.06e82125.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
       "_lodash.11675a96.js",
-      "_index.c4438b98.js",
+      "_index.915a88f4.js",
       "node_modules/bootstrap/dist/js/bootstrap.esm.js"
     ],
     "css": [
-      "assets/app.987dbf50.css"
+      "assets/app.1342504d.css"
     ]
   },
   "_lodash.11675a96.js": {
     "file": "assets/lodash.11675a96.js",
     "isDynamicEntry": true
   },
-  "_index.c4438b98.js": {
-    "file": "assets/index.c4438b98.js",
+  "_index.915a88f4.js": {
+    "file": "assets/index.915a88f4.js",
     "isDynamicEntry": true
   },
   "node_modules/bootstrap/dist/js/bootstrap.esm.js": {
-    "file": "assets/bootstrap.esm.fd6f10b5.js",
+    "file": "assets/bootstrap.esm.b3e43afc.js",
     "src": "node_modules/bootstrap/dist/js/bootstrap.esm.js",
     "isDynamicEntry": true,
     "imports": [
-      "_index.c4438b98.js"
+      "_index.915a88f4.js"
     ]
   }
 }

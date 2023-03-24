@@ -14,4 +14,4 @@ The following versions are currently being supported with security updates.
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability within WCTP Gateway, 
-please send an e-mail to [patrick.labbett@notifi.us](mailto:patrick.labbett@notifi.us).
+please send an e-mail to [support@calltheory.com](mailto:support@calltheory.com).
