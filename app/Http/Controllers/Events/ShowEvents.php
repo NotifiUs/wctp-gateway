@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Events;
 
 use App\Http\Controllers\Controller;
 use App\Models\EventLog;
+use Illuminate\Http\Request;
 
 class ShowEvents extends Controller
 {
@@ -12,10 +13,21 @@ class ShowEvents extends Controller
         $this->middleware('auth');
     }
 
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $events = EventLog::orderBy('created_at', 'desc')->paginate(10);
+        $sourceList = collect(EventLog::distinct('source')->get('source')->toArray() ?? [])->flatten();
+        $sourceFilter = $request->get('source') ?? null;
 
-        return view('events.show')->with('events', $events);
+        if($sourceFilter === null){
+            $events = EventLog::orderBy('created_at', 'desc')->paginate(25);
+        }
+        else{
+            $events = EventLog::where('source', $sourceFilter)->orderBy('created_at', 'desc')->paginate(25);
+        }
+
+        return view('events.show')
+            ->with('events', $events)
+            ->with('sourceList', $sourceList)
+            ->with('sourceFilter', $sourceFilter);
     }
 }

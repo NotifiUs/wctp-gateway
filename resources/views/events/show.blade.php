@@ -14,6 +14,35 @@
         @if( request('page') )
         &middot; Page {{ request('page') }}
         @endif
+        @if(isset($sourceFilter))
+            <span class="font-weight-normal inline mx-2 pull-right badge badge-secondary">
+                {{ ucwords($sourceFilter) }}
+            </span>
+        @endif
+    </h5>
+
+    <h5 class="text-sm inline">
+        @if(isset($sourceList))
+            <form method="get">
+                <div class="input-group input-group-sm mb-2 w-25">
+                    <select class="form-control bg-white form-control-sm" name="source">
+                        <option value="">Any Source</option>
+                        @foreach($sourceList as $source)
+                            @if(isset($sourceList) && $sourceList === $source)
+                                <option selected="selected" value="{{ $source }}">{{ucwords($source)}}</option>
+                            @else
+                                <option value="{{ $source }}">{{ucwords($source)}}</option>
+                            @endif
+
+                        @endforeach
+                    </select>
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">
+                        <i class="fas fa-filter"></i>
+                    </button>
+
+                </div>
+            </form>
+        @endif
     </h5>
 
     <div class="card py-0 my-0 mx-0">
