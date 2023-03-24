@@ -29,11 +29,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        //in hours
+        $telescope_prune_length = config('telescope.prune_length') ?? 1;
+        $pending_check_length = config('app.outbound_pending_length') ?? 1;
+
         $schedule->command('messages:purge')->daily();
         $schedule->command('eventlog:purge')->daily();
-        $schedule->command('telescope:prune --hours=1')->hourly();
+        $schedule->command("telescope:prune --hours={$telescope_prune_length}")->hourly();
         $schedule->command('pending:inbound')->everyMinute();
-        $schedule->command('pending:outbound --hours=1')->everyMinute();
+        $schedule->command("pending:outbound --hours={$pending_check_length}")->everyMinute();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
 

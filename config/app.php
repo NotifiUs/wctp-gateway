@@ -2,6 +2,8 @@
 
 return [
 
+    'outbound_pending_length' => env('OUTBOUND_PENDING_LENGTH', 1),
+
     /*
      * Should the guzzle implementation allow self-signed certificates?
      *

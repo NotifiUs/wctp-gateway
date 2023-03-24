@@ -5,6 +5,8 @@ use Laravel\Telescope\Watchers;
 
 return [
 
+    'prune_length' => env('TELESCOPE_PRUNE_LENGTH', 1),
+
     /*
     |--------------------------------------------------------------------------
     | Telescope Domain
