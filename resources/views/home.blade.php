@@ -3,6 +3,14 @@
 @push('css')
 @endpush
 @push('scripts')
+    <script>
+        function refreshPage() {
+            window.location.reload();
+        }
+
+        setInterval(refreshPage, 30000);
+
+    </script>
 @endpush
 @push('modals')
     @include('setup-instructions')
@@ -11,10 +19,9 @@
 @section('content')
     <h5 class="text-muted-light mt-2 mt-md-0">
         {{ __('Quick Glance') }}
-        <small class="text-small float-end text-muted">
-            <a href="/home"
-               title="{{ $activityPeriod->timezone(Auth::user()->timezone)->format("m/d/Y g:i:sA T") }} &mdash; {{ $activityPeriod->copy()->addHours(24)->format("m/d/Y g:i:sA T") }}">
-                <i class="fas fa-sync text-small"></i> Refresh
+        <small class="text-small float-end text-muted inline-flex">
+            Auto Refresh &middot; 30s  <a class="ml-2" href="/home"
+               title="{{ $activityPeriod->timezone(Auth::user()->timezone)->format("m/d/Y g:i:sA T") }} &mdash; {{ $activityPeriod->copy()->addHours(24)->format("m/d/Y g:i:sA T") }}"><i class="fas fa-sync text-small"></i> Last Refresh {{ \Carbon\Carbon::now(Auth::user()->timezone)->format("g:i:sA T") }}
             </a>
         </small>
     </h5>
