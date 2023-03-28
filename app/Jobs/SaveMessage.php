@@ -38,7 +38,7 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
 
     protected string $message;
 
-    protected string $messageID;
+    protected string|null $messageID;
 
     protected int|null $reply_with;
 
