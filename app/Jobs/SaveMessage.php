@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\LogEvent;
 use App\Models\Message;
 use Carbon\Carbon;
 use Exception;
@@ -25,29 +26,32 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
 
     public bool $failOnTimeout = true;
 
-    protected $carrier_id;
+    protected int $carrier_id;
 
-    protected $number_id;
+    protected int $number_id;
 
-    protected $enterprise_host_id;
+    protected int $enterprise_host_id;
 
-    protected $to;
+    protected string $to;
 
-    protected $from;
+    protected string $from;
 
-    protected $message;
+    protected string $message;
 
-    protected $messageID;
+    protected string $messageID;
+
+    protected int|null $reply_with;
+
+    protected string $carrier_message_uid;
+
+    protected string $direction;
+
+    protected string $status;
+
+    //DateTime,Carbon\Carbon,Illuminate\Support\Carbon?
+    protected $processed_at;
 
     protected $submitted_at;
-
-    protected $reply_with;
-
-    protected $carrier_message_uid;
-
-    protected $direction;
-
-    protected $status;
 
     public function __construct($carrier_id, $number_id, $enterprise_host_id, $to, $from, $message, $messageID, $submitted_at, $reply_with, $carrier_message_uid, $direction, string $status = 'pending')
     {
@@ -64,28 +68,34 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
         $this->carrier_message_uid = $carrier_message_uid;
         $this->direction = $direction;
         $this->status = $status;
+        $this->processed_at = Carbon::now();
     }
 
     public function handle()
     {
+        $message = new Message;
+        $message->carrier_id = $this->carrier_id;
+        $message->number_id = $this->number_id;
+        $message->enterprise_host_id = $this->enterprise_host_id;
+        $message->to = $this->to;
+        $message->from = $this->from;
+        $message->message = $this->message;
+        $message->messageID = $this->messageID;
+        $message->submitted_at = $this->submitted_at;
+        $message->processed_at =
+        $message->reply_with = $this->reply_with;
+        $message->carrier_message_uid = $this->carrier_message_uid;
+        $message->direction = $this->direction;
+        $message->status = $this->status;
+
         try {
-            $message = new Message;
-            $message->carrier_id = $this->carrier_id;
-            $message->number_id = $this->number_id;
-            $message->enterprise_host_id = $this->enterprise_host_id;
-            $message->to = $this->to;
-            $message->from = $this->from;
-            $message->message = $this->message;
-            $message->messageID = $this->messageID;
-            $message->submitted_at = $this->submitted_at;
-            $message->processed_at = Carbon::now();
-            $message->reply_with = $this->reply_with;
-            $message->carrier_message_uid = $this->carrier_message_uid;
-            $message->direction = $this->direction;
-            $message->status = $this->status;
             $message->save();
         } catch (Exception $e) {
             Log::error('Unable to save message: '.$e->getMessage());
+            LogEvent::dispatch(
+                'Unable to save message.',
+                get_class($this), 'error', json_encode($e->getMessage()), null
+            );
             $this->release(60);
         }
 
@@ -94,8 +104,8 @@ class SaveMessage implements ShouldQueue, ShouldBeUnique
         }
     }
 
-    public function uniqueId()
+    public function uniqueId(): string
     {
-        return $this->messageID;
+        return $this->carrier_message_uid;
     }
 }
